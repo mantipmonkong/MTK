@@ -707,5 +707,19 @@
     </main>
 
 
+    <script type="module">
+        import { supabase } from './supabase.js'
+        
+        console.log('🚀 Supabase is connecting...')
+        // ทดสอบการเชื่อมต่อ
+        setTimeout(async () => {
+            if(supabase) {
+                console.log('✅ เชื่อมต่อ Supabase สำเร็จ!', supabase)
+                // alert('เชื่อมต่อ Supabase สำเร็จแล้ว! ตรวจสอบที่ Console ได้เลย');
+            } else {
+                console.error('❌ ไม่สามารถเชื่อมต่อ Supabase ได้')
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
