@@ -1,43 +1,108 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { supabase } from '../../lib/supabase';
 
 export default function InternalDashboard() {
   const formatMoney = (num) => num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  // Dashboard States (Mock Data)
-  const [totalFund, setTotalFund] = useState(2500000); // กองทุนรวม
+  // Dashboard States
+  const [totalFund, setTotalFund] = useState(0); // กองทุนรวมที่นำเข้าทั้งหมด
+  const [totalWithdrawn, setTotalWithdrawn] = useState(0);
+  const [depositHistory, setDepositHistory] = useState([]);
+  const [accounts, setAccounts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [showDepositForm, setShowDepositForm] = useState(false);
   const [depositData, setDepositData] = useState({ amount: '', source: 'salary', note: '' });
 
-  // Sub-accounts State
-  const [accounts, setAccounts] = useState([
-    { id: 'ACC-001', name: 'บริษัท แมนทิป จำกัด', creditLimit: 1000000, withdrawn: 400000, vatIncome: 1450000 },
-    { id: 'ACC-002', name: 'กิจการค้าปลีก (ส่วนตัว)', creditLimit: 500000, withdrawn: 100000, vatIncome: 200000 },
-    { id: 'ACC-003', name: 'เฮีย A', creditLimit: 2000000, withdrawn: 1500000, vatIncome: 0 },
-  ]);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const [depositHistory, setDepositHistory] = useState([
-    { id: 1, date: '2026-08-10', source: 'dividend', amount: 1000000, note: 'ปันผลไตรมาส 2' },
-    { id: 2, date: '2026-08-12', source: 'salary', amount: 50000, note: 'เงินเดือนผู้บริหาร' },
-  ]);
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      // 1. Fetch Deposits
+      const { data: dData } = await supabase.from('fund_deposits').select('*').order('created_at', { ascending: false });
+      const deposits = dData || [];
+      const sumDeposits = deposits.reduce((s, d) => s + Number(d.amount), 0);
+      setTotalFund(sumDeposits);
+      setDepositHistory(deposits);
 
-  const handleDeposit = (e) => {
+      // 2. Fetch Withdrawals
+      const { data: wData } = await supabase.from('fund_withdrawals').select('*');
+      const withdrawals = wData || [];
+      const sumWithdrawn = withdrawals.reduce((s, w) => s + Number(w.amount), 0);
+      setTotalWithdrawn(sumWithdrawn);
+
+      // 3. Fetch Accounts & Calculate their limits
+      const { data: accData } = await supabase.from('internal_accounts').select('*');
+      const rawAccounts = accData || [];
+
+      // 4. Fetch Projects with Billings and Expenses to calculate Profit -> Credit
+      const { data: projData } = await supabase
+        .from('projects')
+        .select(`
+          internal_account_id,
+          billings ( total_amount, type ),
+          project_expenses ( amount )
+        `);
+
+      const projects = projData || [];
+
+      // Process accounts
+      const processedAccounts = rawAccounts.map(acc => {
+        // Find projects for this account
+        const accProjects = projects.filter(p => p.internal_account_id === acc.id);
+        
+        let totalProfit = 0;
+        let totalIncome = 0; // For VAT tracking
+
+        accProjects.forEach(p => {
+          const inc = p.billings ? p.billings.filter(b => b.type === 'receipt').reduce((s,b)=>s+Number(b.total_amount), 0) : 0;
+          const exp = p.project_expenses ? p.project_expenses.reduce((s,e)=>s+Number(e.amount), 0) : 0;
+          
+          totalProfit += (inc - exp);
+          totalIncome += inc; // Mock VAT tracking simply using total income
+        });
+
+        const accWithdrawn = withdrawals.filter(w => w.internal_account_id === acc.id).reduce((s,w) => s + Number(w.amount), 0);
+
+        return {
+          ...acc,
+          creditLimit: totalProfit > 0 ? totalProfit : 0,
+          withdrawn: accWithdrawn,
+          vatIncome: totalProfit > 0 ? totalProfit : 0
+        };
+      });
+
+      setAccounts(processedAccounts);
+
+    } catch (error) {
+      console.error('Error fetching internal data:', error);
+    }
+    setIsLoading(false);
+  };
+
+  const handleDeposit = async (e) => {
     e.preventDefault();
     if (!depositData.amount) return;
     const amountNum = parseFloat(depositData.amount);
     
-    setTotalFund(totalFund + amountNum);
-    setDepositHistory([{
-      id: Date.now(),
-      date: new Date().toISOString().split('T')[0],
+    const { data, error } = await supabase.from('fund_deposits').insert([{
       source: depositData.source,
       amount: amountNum,
-      note: depositData.note || '-'
-    }, ...depositHistory]);
-    
-    setShowDepositForm(false);
-    setDepositData({ amount: '', source: 'salary', note: '' });
+      note: depositData.note
+    }]).select();
+
+    if (!error && data) {
+      fetchData(); // Reload to get fresh sums
+      setShowDepositForm(false);
+      setDepositData({ amount: '', source: 'salary', note: '' });
+    } else {
+      alert('เกิดข้อผิดพลาด: ' + error.message);
+    }
   };
 
   const getSourceLabel = (src) => {
@@ -50,12 +115,13 @@ export default function InternalDashboard() {
     }
   };
 
-  const totalWithdrawn = accounts.reduce((s, acc) => s + acc.withdrawn, 0);
   const availableFund = totalFund - totalWithdrawn; // เงินที่เหลือให้เบิกจริงๆ ในกองกลาง
+
+  if(isLoading) return <div className="container" style={{padding: '40px', textAlign: 'center'}}>กำลังโหลดข้อมูล...</div>;
 
   return (
     <div className="container">
-      <div className="page-header" style={{ background: 'linear-gradient(135deg, #1e293b, #0f172a)', padding: '32px', borderRadius: '20px', boxShadow: 'var(--shadow-md)', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="page-header" style={{ background: 'linear-gradient(135deg, #1e293b, #0f172a)', padding: '32px', borderRadius: '20px', boxShadow: 'var(--shadow-md)', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div className="page-title">
           <h1 style={{ color: 'white', fontSize: '28px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>ระบบกระเป๋าเงินภายใน (Internal Funds)</h1>
           <p style={{ color: '#cbd5e1', fontSize: '16px', marginTop: '8px', fontWeight: 500 }}>ศูนย์กลางกระจายเงินสดให้แอคเคาท์ย่อย และควบคุมเพดานภาษี (VAT)</p>
@@ -135,7 +201,7 @@ export default function InternalDashboard() {
               const available = acc.creditLimit - acc.withdrawn;
               const vatWarning = acc.vatIncome > 1800000;
               const vatAlert = acc.vatIncome > 1500000 && !vatWarning;
-              const progressPercent = Math.min((acc.withdrawn / acc.creditLimit) * 100, 100);
+              const progressPercent = acc.creditLimit > 0 ? Math.min((acc.withdrawn / acc.creditLimit) * 100, 100) : 0;
 
               return (
                 <Link href={`/internal/${acc.id}`} key={acc.id} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -151,7 +217,7 @@ export default function InternalDashboard() {
                         </div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>โควต้าเครดิต (Credit Limit)</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>โควต้าเครดิต (จากกำไรโปรเจกต์)</div>
                         <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--primary)' }}>฿{formatMoney(acc.creditLimit)}</div>
                       </div>
                     </div>
@@ -200,21 +266,19 @@ export default function InternalDashboard() {
           </h2>
           <div style={{ background: 'var(--surface)', padding: '24px', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {depositHistory.length === 0 ? <div style={{color:'var(--text-muted)'}}>ไม่มีประวัติ</div> : null}
               {depositHistory.map(hist => (
                 <div key={hist.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', borderBottom: '1px dashed var(--border)' }}>
                   <div>
                     <div style={{ fontSize: '14px', fontWeight: 500 }}>{getSourceLabel(hist.source)}</div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{hist.date} • {hist.note}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{new Date(hist.deposit_date || hist.created_at).toLocaleDateString('th-TH')} • {hist.note}</div>
                   </div>
                   <div style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--secondary)' }}>
-                    +฿{formatMoney(hist.amount)}
+                    +฿{formatMoney(Number(hist.amount))}
                   </div>
                 </div>
               ))}
             </div>
-            <button className="btn-outline" style={{ width: '100%', marginTop: '16px', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--primary)', fontWeight: 500 }}>
-              ดูประวัติทั้งหมด
-            </button>
           </div>
         </div>
 

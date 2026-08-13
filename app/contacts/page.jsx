@@ -1,6 +1,7 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
+import * as XLSX from 'xlsx';
 
 export default function ContactsPage() {
   const [contacts, setContacts] = useState([]);
@@ -9,6 +10,8 @@ export default function ContactsPage() {
   const [showForm, setShowForm] = useState(false);
   const [filterType, setFilterType] = useState('all'); // 'all', 'customer', 'supplier'
   const [newContact, setNewContact] = useState({ name: '', type: 'customer', tax_id: '', phone: '', address: '' });
+
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     fetchContacts();
@@ -33,7 +36,6 @@ export default function ContactsPage() {
     e.preventDefault();
     if (!newContact.name) return;
     
-    // Optimistic UI update or disable form while submitting
     const { data, error } = await supabase
       .from('contacts')
       .insert([
@@ -57,6 +59,81 @@ export default function ContactsPage() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if(!confirm('ยืนยันการลบข้อมูลคูค้านี้?')) return;
+    const { error } = await supabase.from('contacts').delete().eq('id', id);
+    if(error) {
+      alert('ไม่สามารถลบได้เนื่องจากมีการใช้งานในระบบ');
+    } else {
+      setContacts(contacts.filter(c => c.id !== id));
+    }
+  };
+
+  const handleExportExcel = () => {
+    const exportData = contacts.map(c => ({
+      'ชื่อบริษัท / ร้านค้า': c.name,
+      'ประเภท': c.type === 'customer' ? 'ลูกค้า' : 'ซัพพลายเออร์',
+      'เลขประจำตัวผู้เสียภาษี': c.tax_id || '',
+      'เบอร์โทรศัพท์': c.phone || '',
+      'ที่อยู่': c.address || ''
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Contacts");
+    
+    // Generate buffer and download
+    XLSX.writeFile(workbook, "MTK_Contacts.xlsx");
+  };
+
+  const handleImportExcel = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const bstr = evt.target.result;
+        const workbook = XLSX.read(bstr, { type: 'binary' });
+        const wsname = workbook.SheetNames[0];
+        const ws = workbook.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws);
+
+        const newContacts = data.map(row => {
+          let type = 'customer';
+          if (row['ประเภท'] === 'ซัพพลายเออร์' || row['ประเภท'] === 'supplier') {
+            type = 'supplier';
+          }
+          return {
+            name: row['ชื่อบริษัท / ร้านค้า'] || row['Name'] || 'ไม่ระบุชื่อ',
+            type: type,
+            tax_id: row['เลขประจำตัวผู้เสียภาษี'] || row['Tax ID'] || '',
+            phone: row['เบอร์โทรศัพท์'] || row['Phone'] || '',
+            address: row['ที่อยู่'] || row['Address'] || ''
+          };
+        });
+
+        if (newContacts.length > 0) {
+          setIsLoading(true);
+          const { error } = await supabase.from('contacts').insert(newContacts);
+          if (error) {
+            alert('เกิดข้อผิดพลาดในการ Import: ' + error.message);
+          } else {
+            alert(`นำเข้าข้อมูลสำเร็จ ${newContacts.length} รายการ!`);
+            fetchContacts();
+          }
+          setIsLoading(false);
+        }
+      } catch (err) {
+        alert('รูปแบบไฟล์ไม่ถูกต้อง หรือเกิดข้อผิดพลาด: ' + err.message);
+      }
+      
+      // Clear input
+      if(fileInputRef.current) fileInputRef.current.value = '';
+    };
+    reader.readAsBinaryString(file);
+  };
+
   const filteredContacts = contacts.filter(c => filterType === 'all' || c.type === filterType);
 
   return (
@@ -66,9 +143,27 @@ export default function ContactsPage() {
           <h1 style={{ fontSize: '28px', color: 'var(--text-main)', marginBottom: '4px' }}>ข้อมูลคู่ค้า (Customers & Suppliers)</h1>
           <p style={{ color: 'var(--text-muted)' }}>จัดการฐานข้อมูลลูกค้าและผู้จำหน่ายสินค้า (เชื่อมต่อฐานข้อมูลจริง)</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)} className="btn-primary" style={{ padding: '10px 16px', borderRadius: '8px', border: 'none', color: 'white', background: 'var(--primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: 'var(--shadow-sm)' }}>
-          <i className="fa-solid fa-user-plus"></i> เพิ่มคู่ค้าใหม่
-        </button>
+        
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <input 
+            type="file" 
+            accept=".xlsx, .xls" 
+            ref={fileInputRef} 
+            onChange={handleImportExcel} 
+            style={{ display: 'none' }} 
+          />
+          <button onClick={() => fileInputRef.current.click()} className="btn-outline" style={{ padding: '10px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: 'var(--shadow-sm)', color: 'var(--text-main)', fontWeight: 500 }}>
+            <i className="fa-solid fa-file-import"></i> Import Excel
+          </button>
+          
+          <button onClick={handleExportExcel} className="btn-outline" style={{ padding: '10px 16px', borderRadius: '8px', border: '1px solid var(--border)', background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: 'var(--shadow-sm)', color: 'var(--text-main)', fontWeight: 500 }}>
+            <i className="fa-solid fa-file-export"></i> Export Excel
+          </button>
+
+          <button onClick={() => setShowForm(!showForm)} className="btn-primary" style={{ padding: '10px 16px', borderRadius: '8px', border: 'none', color: 'white', background: 'var(--primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: 'var(--shadow-sm)' }}>
+            <i className="fa-solid fa-user-plus"></i> เพิ่มคู่ค้าใหม่
+          </button>
+        </div>
       </div>
 
       {showForm && (
@@ -165,8 +260,7 @@ export default function ContactsPage() {
                   <td style={{ color: 'var(--text-muted)' }}>{c.tax_id || '-'}</td>
                   <td style={{ color: 'var(--text-muted)' }}>{c.phone || '-'}</td>
                   <td style={{ textAlign: 'right' }}>
-                    <button className="btn-icon" style={{ border: 'none', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '6px' }}><i className="fa-solid fa-pen"></i></button>
-                    <button className="btn-icon" style={{ border: 'none', background: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '6px' }}><i className="fa-solid fa-trash-can"></i></button>
+                    <button onClick={() => handleDelete(c.id)} className="btn-icon" style={{ border: 'none', background: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '6px' }}><i className="fa-solid fa-trash-can"></i></button>
                   </td>
                 </tr>
               ))
