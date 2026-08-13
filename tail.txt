@@ -1,0 +1,971 @@
+        </section>
+
+        <!-- ========== JOURNAL ENTRIES ========== -->
+        <section class="content-section" id="section-journal">
+            <h2 class="section-title">📒 แบบฟอร์มบันทึกบัญชี</h2>
+            <p class="section-subtitle">ตัวอย่างการบันทึกบัญชี (Journal Entry) สำหรับรายการประจำเดือนของบริษัท — คลิกเพื่อดูรายละเอียด</p>
+
+            <!-- JE 1: เงินเดือนกรรมการ -->
+            <div class="journal-card" id="je1">
+                <div class="journal-header" onclick="toggleJournal('je1')">
+                    <div class="journal-header-left">
+                        <div class="journal-num blue">1</div>
+                        <div>
+                            <div class="journal-name">บันทึกเงินเดือนกรรมการ (พ่อ + แม่)</div>
+                            <div class="journal-freq">บันทึกทุกสิ้นเดือน | พ่อ 25,000 + แม่ 15,000 = 40,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je1-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je1-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ค่าตอบแทนกรรมการ</td>
+                                <td class="acct-code">5201</td>
+                                <td class="dr-val">40,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">40,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> กรรมการไม่ต้องหัก ปกส. | ภาษีบุคคล = 0 จึงไม่ต้องหัก WHT เงินเดือน | โอนเข้าบัญชีส่วนตัว พ่อ 25,000 + แม่ 15,000
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 2: เงินเดือนพนักงาน -->
+            <div class="journal-card" id="je2">
+                <div class="journal-header" onclick="toggleJournal('je2')">
+                    <div class="journal-header-left">
+                        <div class="journal-num purple">2</div>
+                        <div>
+                            <div class="journal-name">บันทึกเงินเดือนพนักงาน (โอปอ + เต้ย)</div>
+                            <div class="journal-freq">บันทึกทุกสิ้นเดือน | โอปอ 15,000 + เต้ย 25,000 = 40,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je2-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je2-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">เงินเดือนพนักงาน</td>
+                                <td class="acct-code">5202</td>
+                                <td class="dr-val">40,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ประกันสังคมค้างจ่าย - ส่วนพนักงาน</td>
+                                <td class="acct-code">2103</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">1,500</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">38,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> หักประกันสังคมพนักงาน 5% (โอปอ 750 + เต้ย 750 = 1,500) | โอนจริง: โอปอ 14,250 + เต้ย 24,250 = 38,500 | ภาษีบุคคล = 0 ไม่ต้องหัก WHT
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 3: ประกันสังคมบริษัทสมทบ -->
+            <div class="journal-card" id="je3">
+                <div class="journal-header" onclick="toggleJournal('je3')">
+                    <div class="journal-header-left">
+                        <div class="journal-num emerald">3</div>
+                        <div>
+                            <div class="journal-name">บันทึกประกันสังคม — ส่วนบริษัทสมทบ</div>
+                            <div class="journal-freq">บันทึกทุกสิ้นเดือน | บริษัทสมทบ 2 คน = 1,500 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je3-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je3-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ค่าประกันสังคม (ส่วนบริษัท)</td>
+                                <td class="acct-code">5208</td>
+                                <td class="dr-val">1,500</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ประกันสังคมค้างจ่าย - ส่วนบริษัท</td>
+                                <td class="acct-code">2104</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">1,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> บริษัทสมทบ 5% ของเงินเดือน (สูงสุดฐาน 15,000) คนละ 750 บาท × 2 คน | ยอดค้างจ่ายนี้จะนำส่ง สปส. ภายในวันที่ 15 ของเดือนถัดไป
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 4: นำส่งประกันสังคม -->
+            <div class="journal-card" id="je4">
+                <div class="journal-header" onclick="toggleJournal('je4')">
+                    <div class="journal-header-left">
+                        <div class="journal-num emerald">4</div>
+                        <div>
+                            <div class="journal-name">บันทึกนำส่งประกันสังคม (สปส. 1-10)</div>
+                            <div class="journal-freq">นำส่งภายในวันที่ 15 ของเดือนถัดไป | รวม 3,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je4-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je4-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ประกันสังคมค้างจ่าย - ส่วนพนักงาน</td>
+                                <td class="acct-code">2103</td>
+                                <td class="dr-val">1,500</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name">ประกันสังคมค้างจ่าย - ส่วนบริษัท</td>
+                                <td class="acct-code">2104</td>
+                                <td class="dr-val">1,500</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">3,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ล้างยอดค้างจ่ายทั้ง 2 ส่วน (พนักงาน 1,500 + บริษัท 1,500) โดยจ่ายจริง 3,000 บาท ผ่านธนาคาร
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 5: ค่าเช่ารถ -->
+            <div class="journal-card" id="je5">
+                <div class="journal-header" onclick="toggleJournal('je5')">
+                    <div class="journal-header-left">
+                        <div class="journal-num amber">5</div>
+                        <div>
+                            <div class="journal-name">บันทึกค่าเช่ารถยนต์ (แม่)</div>
+                            <div class="journal-freq">บันทึกทุกสิ้นเดือน | ค่าเช่า 10,000 บาท หัก WHT 5%</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je5-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je5-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ค่าเช่ายานพาหนะ</td>
+                                <td class="acct-code">5204</td>
+                                <td class="dr-val">10,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีหัก ณ ที่จ่ายค้างนำส่ง</td>
+                                <td class="acct-code">2108</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">500</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">9,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ค่าเช่ารถ 40(5) หัก WHT 5% = 500 บาท | โอนจริงให้แม่ 9,500 บาท | ออกใบหัก ณ ที่จ่ายให้แม่ | นำส่ง ภ.ง.ด.3 ภายในวันที่ 15
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 6: ค่าเช่าบ้าน -->
+            <div class="journal-card" id="je6">
+                <div class="journal-header" onclick="toggleJournal('je6')">
+                    <div class="journal-header-left">
+                        <div class="journal-num cyan">6</div>
+                        <div>
+                            <div class="journal-name">บันทึกค่าเช่าบ้าน/สถานที่ (โอปอ)</div>
+                            <div class="journal-freq">บันทึกทุกสิ้นเดือน | ค่าเช่า 10,000 บาท หัก WHT 5%</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je6-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je6-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ค่าเช่าอาคาร/สถานที่</td>
+                                <td class="acct-code">5203</td>
+                                <td class="dr-val">10,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีหัก ณ ที่จ่ายค้างนำส่ง</td>
+                                <td class="acct-code">2108</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">500</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">9,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ค่าเช่าบ้าน 40(5) หัก WHT 5% = 500 บาท | โอนจริงให้โอปอ 9,500 บาท | ออกใบหัก ณ ที่จ่ายให้โอปอ | นำส่ง ภ.ง.ด.3 ภายในวันที่ 15
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 7: รายได้ขาย + VAT ขาย -->
+            <div class="journal-card" id="je7">
+                <div class="journal-header" onclick="toggleJournal('je7')">
+                    <div class="journal-header-left">
+                        <div class="journal-num rose">7</div>
+                        <div>
+                            <div class="journal-name">บันทึกรายได้จากการขาย + VAT ขาย</div>
+                            <div class="journal-freq">บันทึกทุกครั้งที่ออกใบกำกับภาษี | ตัวอย่าง: งาน 100,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je7-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je7-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">เงินฝากธนาคาร / ลูกหนี้การค้า</td>
+                                <td class="acct-code">1102/1201</td>
+                                <td class="dr-val">107,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">รายได้จากการขาย</td>
+                                <td class="acct-code">4101</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">100,000</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีขาย (VAT ขาย)</td>
+                                <td class="acct-code">2107</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">7,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> รายได้ก่อน VAT = 100,000 | VAT ขาย 7% = 7,000 | รับเงินรวม 107,000 | ถ้าลูกค้าบริษัทหัก WHT 3% = ได้รับเงินจริง 104,000 (หัก 3,000 เป็นเครดิตภาษี)
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 8: รายได้ที่ถูกหัก WHT -->
+            <div class="journal-card" id="je8">
+                <div class="journal-header" onclick="toggleJournal('je8')">
+                    <div class="journal-header-left">
+                        <div class="journal-num rose">8</div>
+                        <div>
+                            <div class="journal-name">บันทึกรายได้ที่ลูกค้าหัก WHT 3%</div>
+                            <div class="journal-freq">เมื่อลูกค้าเป็นนิติบุคคล | ตัวอย่าง: งาน 100,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je8-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je8-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val">104,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name">ภาษีหัก ณ ที่จ่าย (เครดิตภาษี)</td>
+                                <td class="acct-code">1301</td>
+                                <td class="dr-val">3,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">รายได้จากการขาย</td>
+                                <td class="acct-code">4101</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">100,000</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีขาย (VAT ขาย)</td>
+                                <td class="acct-code">2107</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">7,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ลูกค้าหัก WHT 3% (3,000) จากรายได้ก่อน VAT | รับเงินจริง 107,000 - 3,000 = 104,000 | WHT 3,000 บันทึกเป็น "สินทรัพย์" เพื่อนำไปเคลมกลบภาษีนิติบุคคลปลายปี
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 9: ซื้อสินค้า + VAT ซื้อ -->
+            <div class="journal-card" id="je9">
+                <div class="journal-header" onclick="toggleJournal('je9')">
+                    <div class="journal-header-left">
+                        <div class="journal-num indigo">9</div>
+                        <div>
+                            <div class="journal-name">บันทึกซื้อวัสดุ/สินค้า + VAT ซื้อ</div>
+                            <div class="journal-freq">ทุกครั้งที่ซื้อสินค้า | ตัวอย่าง: ซื้อผ้า 50,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je9-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je9-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ซื้อวัสดุ/สินค้า</td>
+                                <td class="acct-code">5101</td>
+                                <td class="dr-val">50,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name">ภาษีซื้อ (VAT ซื้อ)</td>
+                                <td class="acct-code">1108</td>
+                                <td class="dr-val">3,500</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร / เจ้าหนี้การค้า</td>
+                                <td class="acct-code">1102/2101</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">53,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ซื้อสินค้า 50,000 + VAT 7% (3,500) = จ่ายรวม 53,500 | VAT ซื้อ 3,500 เป็นสินทรัพย์นำไปหักกับ VAT ขายตอนยื่น ภ.พ.30 | <strong>ต้องขอใบกำกับภาษีเต็มรูปเสมอ!</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 10: ค่าทำบัญชี -->
+            <div class="journal-card" id="je10">
+                <div class="journal-header" onclick="toggleJournal('je10')">
+                    <div class="journal-header-left">
+                        <div class="journal-num amber">10</div>
+                        <div>
+                            <div class="journal-name">บันทึกค่าทำบัญชี</div>
+                            <div class="journal-freq">บันทึกทุกเดือน | 3,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je10-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je10-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ค่าบริการวิชาชีพ (บัญชี)</td>
+                                <td class="acct-code">5210</td>
+                                <td class="dr-val">3,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีหัก ณ ที่จ่ายค้างนำส่ง</td>
+                                <td class="acct-code">2108</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">90</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">2,910</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ถ้าสำนักงานบัญชีเป็นนิติบุคคล หัก WHT 3% = 90 บาท (นำส่ง ภ.ง.ด.53) | ถ้าเป็นบุคคลธรรมดา หัก WHT 3% เช่นกัน (นำส่ง ภ.ง.ด.3)
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 11: นำส่ง VAT -->
+            <div class="journal-card" id="je11">
+                <div class="journal-header" onclick="toggleJournal('je11')">
+                    <div class="journal-header-left">
+                        <div class="journal-num cyan">11</div>
+                        <div>
+                            <div class="journal-name">บันทึกนำส่ง VAT (ภ.พ.30)</div>
+                            <div class="journal-freq">นำส่งภายในวันที่ 23 ของเดือนถัดไป | VAT ขาย - VAT ซื้อ = จ่ายส่วนต่าง</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je11-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je11-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ภาษีขาย (VAT ขาย)</td>
+                                <td class="acct-code">2107</td>
+                                <td class="dr-val">7,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีซื้อ (VAT ซื้อ)</td>
+                                <td class="acct-code">1108</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">3,500</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">3,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ตัวอย่าง: VAT ขาย 7,000 - VAT ซื้อ 3,500 = ต้องจ่ายเพิ่ม 3,500 | ถ้า VAT ซื้อ > VAT ขาย = มียอดยกไปเดือนหน้าหรือขอคืน | <strong>ยื่น ภ.พ.30 ภายในวันที่ 23 (e-Filing)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart of Accounts Summary -->
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(99, 102, 241, 0.15);">📚</div>
+                    <div>
+                        <div class="card-title">ผังบัญชีที่ใช้ (Chart of Accounts)</div>
+                        <div class="card-desc">รหัสบัญชีหลักที่ใช้ในการบันทึกรายการ</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>รหัส</th>
+                            <th>ชื่อบัญชี</th>
+                            <th>หมวด</th>
+                            <th>ประเภท</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="amount">1102</td><td>เงินฝากธนาคาร</td><td><span class="badge badge-blue">สินทรัพย์</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">1108</td><td>ภาษีซื้อ (VAT ซื้อ)</td><td><span class="badge badge-blue">สินทรัพย์</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">1201</td><td>ลูกหนี้การค้า</td><td><span class="badge badge-blue">สินทรัพย์</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">1301</td><td>ภาษีหัก ณ ที่จ่าย (เครดิตภาษี)</td><td><span class="badge badge-blue">สินทรัพย์</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2101</td><td>เจ้าหนี้การค้า</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2103</td><td>ประกันสังคมค้างจ่าย (พนักงาน)</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2104</td><td>ประกันสังคมค้างจ่าย (บริษัท)</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2107</td><td>ภาษีขาย (VAT ขาย)</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2108</td><td>ภาษีหัก ณ ที่จ่ายค้างนำส่ง</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">4101</td><td>รายได้จากการขาย</td><td><span class="badge badge-emerald">รายได้</span></td><td>–</td></tr>
+                        <tr><td class="amount">5101</td><td>ซื้อวัสดุ/สินค้า (ต้นทุน)</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>ต้นทุน</td></tr>
+                        <tr><td class="amount">5201</td><td>ค่าตอบแทนกรรมการ</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                        <tr><td class="amount">5202</td><td>เงินเดือนพนักงาน</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                        <tr><td class="amount">5203</td><td>ค่าเช่าอาคาร/สถานที่</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                        <tr><td class="amount">5204</td><td>ค่าเช่ายานพาหนะ</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                        <tr><td class="amount">5208</td><td>ค่าประกันสังคม (ส่วนบริษัท)</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                        <tr><td class="amount">5210</td><td>ค่าบริการวิชาชีพ (บัญชี)</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========== VAT & TAX SUBMISSION ========== -->
+        <section class="content-section" id="section-vat">
+            <h2 class="section-title">📊 VAT & ภาษีนำส่ง</h2>
+            <p class="section-subtitle">แบบฟอร์มภาษีที่ต้องนำส่ง พร้อมไทม์ไลน์การยื่นรายเดือนและรายปี</p>
+
+            <!-- VAT Calculation -->
+            <div class="vat-calc-box">
+                <div class="vat-calc-title">🧮 ตัวอย่างการคำนวณ VAT รายเดือน (สมมติยอดขายเดือนละ 800,000)</div>
+                <div class="vat-row">
+                    <span class="label">ยอดขายก่อน VAT</span>
+                    <span class="value">800,000</span>
+                </div>
+                <div class="vat-row">
+                    <span class="label">VAT ขาย (7%)</span>
+                    <span class="value negative">56,000</span>
+                </div>
+                <div class="vat-row">
+                    <span class="label">ยอดซื้อวัสดุ/สินค้า (สมมติ 500,000)</span>
+                    <span class="value">500,000</span>
+                </div>
+                <div class="vat-row">
+                    <span class="label">VAT ซื้อ (7%)</span>
+                    <span class="value positive">35,000</span>
+                </div>
+                <div class="vat-row separator">
+                    <span class="label">💰 VAT ที่ต้องนำส่งสรรพากร (ภ.พ.30)</span>
+                    <span class="value result">21,000 บาท</span>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-bottom: 32px;">
+                <strong>💡 สำคัญมาก:</strong> ถ้าเดือนไหนซื้อของเยอะ (VAT ซื้อ > VAT ขาย) จะไม่ต้องจ่าย VAT เลย และยอดส่วนต่างสามารถยกไปเดือนถัดไปหรือขอคืนได้
+            </div>
+
+            <!-- Monthly Tax Submission Timeline -->
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; color: var(--accent-blue);">📅 ไทม์ไลน์การนำส่งภาษีรายเดือน</h3>
+
+            <div class="info-box success" style="margin-bottom: 20px;">
+                <strong>📌 กฎสำคัญ:</strong> ยื่นผ่าน e-Filing ขยายเวลาได้อีก 8 วัน | ทุกรายการด้านล่างสำนักงานบัญชี (3,000/เดือน) จะเป็นคนดำเนินการยื่นให้ คุณเพียงส่งเอกสารให้ทัน
+            </div>
+
+            <div class="tax-timeline">
+                <!-- Day 15 -->
+                <div class="tax-month-group">
+                    <div class="tax-month-label">📌 ภายในวันที่ 15 ของเดือนถัดไป</div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d15">วันที่ 15</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">📄 ภ.ง.ด.1 — ภาษีหัก ณ ที่จ่าย (เงินเดือน)</div>
+                            <div class="tax-item-desc">
+                                แบบนำส่ง WHT จากเงินเดือน/ค่าตอบแทนกรรมการ 40(1)(2)<br>
+                                <strong>ในกรณีนี้:</strong> ภาษีเงินเดือนทั้ง 4 คน = 0 บาท แต่<strong>ยังต้องยื่นทุกเดือน</strong> (แจ้งว่าจ่ายเงินเดือนไปเท่าไร)
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">0 ฿</div>
+                            <div class="lbl">ภาษีนำส่ง</div>
+                        </div>
+                    </div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d15">วันที่ 15</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">📄 ภ.ง.ด.3 — ภาษีหัก ณ ที่จ่าย (บุคคลธรรมดา)</div>
+                            <div class="tax-item-desc">
+                                แบบนำส่ง WHT จากค่าเช่า/ค่าจ้างบุคคลธรรมดา 40(5)(6)(7)(8)<br>
+                                <strong>ในกรณีนี้:</strong> WHT ค่าเช่ารถ(แม่) 5% = 500 + ค่าเช่าบ้าน(โอปอ) 5% = 500<br>
+                                + ค่าบัญชี(ถ้าเป็นบุคคล) 3% = 90
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">1,090 ฿</div>
+                            <div class="lbl">ภาษีนำส่ง/เดือน</div>
+                        </div>
+                    </div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d15">วันที่ 15</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">📄 ภ.ง.ด.53 — ภาษีหัก ณ ที่จ่าย (นิติบุคคล)</div>
+                            <div class="tax-item-desc">
+                                แบบนำส่ง WHT ที่บริษัทหักจากบริษัทอื่น (จ้างผู้รับเหมาช่วงที่เป็นบริษัท หัก 3%)<br>
+                                <strong>ในกรณีนี้:</strong> ค่าบัญชี(ถ้าเป็นนิติบุคคล) 3% = 90 + ค่าจ้างช่างภายนอก(ถ้ามี)
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">ตามจริง</div>
+                            <div class="lbl">แล้วแต่เดือน</div>
+                        </div>
+                    </div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d15">วันที่ 15</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">🛡️ สปส. 1-10 — นำส่งเงินสมทบประกันสังคม</div>
+                            <div class="tax-item-desc">
+                                นำส่งเงินสมทบประกันสังคม 2 คน (โอปอ + เต้ย)<br>
+                                <strong>พนักงานหัก:</strong> 750 × 2 = 1,500 | <strong>บริษัทสมทบ:</strong> 750 × 2 = 1,500
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">3,000 ฿</div>
+                            <div class="lbl">รวมนำส่ง/เดือน</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 23 -->
+                <div class="tax-month-group">
+                    <div class="tax-month-label">📌 ภายในวันที่ 23 ของเดือนถัดไป (e-Filing)</div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d23">วันที่ 23</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">📊 ภ.พ.30 — แบบนำส่ง VAT รายเดือน</div>
+                            <div class="tax-item-desc">
+                                สรุปยอด VAT ขาย - VAT ซื้อ ของเดือนที่ผ่านมา<br>
+                                <strong>ต้องแนบ:</strong> รายงานภาษีซื้อ + รายงานภาษีขาย + สรุปยอด<br>
+                                <strong>ตัวอย่าง:</strong> ยอดขาย 800k → VAT ขาย 56k - VAT ซื้อ 35k = นำส่ง 21,000 บาท
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">~21,000 ฿</div>
+                            <div class="lbl">ตัวอย่าง/เดือน</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VAT Report Forms -->
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin: 32px 0 20px; color: var(--accent-purple);">📋 รายงานภาษี VAT ที่ต้องจัดทำ</h3>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(6, 182, 212, 0.15);">📗</div>
+                    <div>
+                        <div class="card-title">รายงานภาษีขาย (Sales VAT Report)</div>
+                        <div class="card-desc">บันทึกทุกใบกำกับภาษีที่ออกให้ลูกค้า — จัดทำทุกเดือน</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>วันที่</th>
+                            <th>เลขที่ใบกำกับ</th>
+                            <th>ชื่อลูกค้า</th>
+                            <th>เลข 13 หลัก</th>
+                            <th style="text-align:right">มูลค่าสินค้า</th>
+                            <th style="text-align:right">VAT 7%</th>
+                            <th style="text-align:right">รวม</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td style="color:var(--text-muted)">05/09/69</td>
+                            <td style="color:var(--text-muted)">INV-6909-001</td>
+                            <td style="color:var(--text-muted)">บจก. ตัวอย่าง</td>
+                            <td style="color:var(--text-muted)">0105XXXXXXXXX</td>
+                            <td class="amount" style="text-align:right">50,000</td>
+                            <td class="amount" style="text-align:right">3,500</td>
+                            <td class="amount" style="text-align:right">53,500</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td style="color:var(--text-muted)">12/09/69</td>
+                            <td style="color:var(--text-muted)">INV-6909-002</td>
+                            <td style="color:var(--text-muted)">คุณสมชาย</td>
+                            <td style="color:var(--text-muted)">1-XXXX-XXXXX-XX-X</td>
+                            <td class="amount" style="text-align:right">30,000</td>
+                            <td class="amount" style="text-align:right">2,100</td>
+                            <td class="amount" style="text-align:right">32,100</td>
+                        </tr>
+                        <tr style="color:var(--text-muted);font-style:italic">
+                            <td>...</td><td></td><td></td><td></td><td></td>
+                            <td style="text-align:right">...</td><td style="text-align:right">...</td><td style="text-align:right">...</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="5"><strong>รวมทั้งเดือน</strong></td>
+                            <td class="amount" style="text-align:right">800,000</td>
+                            <td class="amount" style="text-align:right;color:var(--accent-rose)">56,000</td>
+                            <td class="amount" style="text-align:right">856,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(16, 185, 129, 0.15);">📘</div>
+                    <div>
+                        <div class="card-title">รายงานภาษีซื้อ (Purchase VAT Report)</div>
+                        <div class="card-desc">บันทึกทุกใบกำกับภาษีที่ได้รับจากการซื้อ — จัดทำทุกเดือน</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>วันที่</th>
+                            <th>เลขที่ใบกำกับ</th>
+                            <th>ชื่อผู้ขาย</th>
+                            <th>เลข 13 หลัก</th>
+                            <th style="text-align:right">มูลค่าสินค้า</th>
+                            <th style="text-align:right">VAT 7%</th>
+                            <th style="text-align:right">รวม</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td style="color:var(--text-muted)">03/09/69</td>
+                            <td style="color:var(--text-muted)">BIL-XXXX</td>
+                            <td style="color:var(--text-muted)">บจก. ผ้าม่านไทย</td>
+                            <td style="color:var(--text-muted)">0105XXXXXXXXX</td>
+                            <td class="amount" style="text-align:right">200,000</td>
+                            <td class="amount" style="text-align:right">14,000</td>
+                            <td class="amount" style="text-align:right">214,000</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td style="color:var(--text-muted)">08/09/69</td>
+                            <td style="color:var(--text-muted)">RCP-XXXX</td>
+                            <td style="color:var(--text-muted)">ปั๊มน้ำมัน PTT</td>
+                            <td style="color:var(--text-muted)">0105XXXXXXXXX</td>
+                            <td class="amount" style="text-align:right">5,000</td>
+                            <td class="amount" style="text-align:right">350</td>
+                            <td class="amount" style="text-align:right">5,350</td>
+                        </tr>
+                        <tr style="color:var(--text-muted);font-style:italic">
+                            <td>...</td><td></td><td></td><td></td><td></td>
+                            <td style="text-align:right">...</td><td style="text-align:right">...</td><td style="text-align:right">...</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="5"><strong>รวมทั้งเดือน</strong></td>
+                            <td class="amount" style="text-align:right">500,000</td>
+                            <td class="amount" style="text-align:right;color:var(--accent-emerald)">35,000</td>
+                            <td class="amount" style="text-align:right">535,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Annual Submission Calendar -->
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin: 32px 0 20px; color: var(--accent-amber);">📆 ไทม์ไลน์ภาษีรายปี</h3>
+
+            <div class="annual-grid">
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-blue);">📅 กุมภาพันธ์</h4>
+                    <ul>
+                        <li><strong>ภ.ง.ด.1ก</strong> — สรุปเงินเดือนพนักงานทั้งปี (ทุกคน แม้ภาษี = 0)</li>
+                        <li>ส่งสำเนาให้พนักงานทุกคนเพื่อใช้ยื่น ภ.ง.ด.91/90</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-purple);">📅 มีนาคม</h4>
+                    <ul>
+                        <li><strong>ภ.ง.ด.90/91</strong> — ยื่นภาษีเงินได้บุคคลธรรมดาทุกคน</li>
+                        <li>พ่อ + แม่ + โอปอ ยื่น ภ.ง.ด.90 (มีรายได้หลายประเภท)</li>
+                        <li>เต้ย ยื่น ภ.ง.ด.91 (มีรายได้เงินเดือนอย่างเดียว)</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-emerald);">📅 เมษายน</h4>
+                    <ul>
+                        <li><strong>AGM</strong> — ประชุมใหญ่สามัญผู้ถือหุ้น ภายใน 30 เม.ย.</li>
+                        <li>อนุมัติงบการเงิน + กำหนดเงินปันผล (ถ้ามี)</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-amber);">📅 พฤษภาคม</h4>
+                    <ul>
+                        <li><strong>ภ.ง.ด.50</strong> — ยื่นภาษีเงินได้นิติบุคคลประจำปี ภายใน 150 วัน</li>
+                        <li><strong>งบการเงิน</strong> — ส่งกรมพัฒนาธุรกิจการค้า ภายใน 31 พ.ค.</li>
+                        <li><strong>บอจ.5</strong> — อัปเดตรายชื่อผู้ถือหุ้น</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-rose);">📅 สิงหาคม</h4>
+                    <ul>
+                        <li><strong>ภ.ง.ด.51</strong> — ยื่นภาษีนิติบุคคลครึ่งปี ภายใน 31 ส.ค.</li>
+                        <li>ประเมินกำไรครึ่งปี คาดการณ์ภาษีทั้งปี</li>
+                        <li>จ่ายภาษีล่วงหน้าครึ่งหนึ่ง (ถ้ามีกำไร)</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-cyan);">📅 ธันวาคม</h4>
+                    <ul>
+                        <li><strong>ตรวจนับสต็อก</strong> — นับผ้า/ฟิล์ม/อุปกรณ์คงเหลือ</li>
+                        <li><strong>เคลียร์เงินทดรอง</strong> — ปิดบัญชีค้างจ่ายทั้งหมด</li>
+                        <li>เตรียมข้อมูลให้สำนักงานบัญชีปิดงบ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Summary Table -->
+            <div class="card" style="margin-top: 32px;">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(245, 158, 11, 0.15);">📊</div>
+                    <div>
+                        <div class="card-title">สรุปแบบฟอร์มภาษีทั้งหมดที่ต้องนำส่ง</div>
+                        <div class="card-desc">รายเดือน + รายปี + หน่วยงานที่รับ</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>แบบฟอร์ม</th>
+                            <th>ความถี่</th>
+                            <th>กำหนดส่ง</th>
+                            <th>หน่วยงาน</th>
+                            <th>ยอดนำส่ง (ประมาณ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ภ.ง.ด.1</strong></td>
+                            <td><span class="badge badge-blue">รายเดือน</span></td>
+                            <td>ภายใน 15 (e-Filing: 23)</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">0 ฿</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.ง.ด.3</strong></td>
+                            <td><span class="badge badge-blue">รายเดือน</span></td>
+                            <td>ภายใน 15 (e-Filing: 23)</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">1,090 ฿/เดือน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.ง.ด.53</strong></td>
+                            <td><span class="badge badge-blue">รายเดือน</span></td>
+                            <td>ภายใน 15 (e-Filing: 23)</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">ตามจริง</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.พ.30</strong></td>
+                            <td><span class="badge badge-purple">รายเดือน</span></td>
+                            <td>ภายใน 15 (e-Filing: 23)</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">~21,000 ฿/เดือน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สปส. 1-10</strong></td>
+                            <td><span class="badge badge-emerald">รายเดือน</span></td>
+                            <td>ภายใน 15</td>
+                            <td>ประกันสังคม</td>
+                            <td class="amount">3,000 ฿/เดือน</td>
+                        </tr>
+                        <tr style="border-top: 2px solid var(--border-color);">
+                            <td><strong>ภ.ง.ด.1ก</strong></td>
+                            <td><span class="badge badge-amber">รายปี</span></td>
+                            <td>ภายใน ก.พ.</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">–</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.ง.ด.51</strong></td>
+                            <td><span class="badge badge-amber">ครึ่งปี</span></td>
+                            <td>ภายใน ส.ค.</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">ตามประมาณการ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.ง.ด.50</strong></td>
+                            <td><span class="badge badge-amber">รายปี</span></td>
+                            <td>ภายใน พ.ค.</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">ตามกำไรสุทธิ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>งบการเงิน</strong></td>
+                            <td><span class="badge badge-amber">รายปี</span></td>
+                            <td>ภายใน พ.ค.</td>
+                            <td>กรมพัฒนาธุรกิจฯ</td>
+                            <td class="amount">–</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box success" style="margin-top: 20px;">
+                <strong>💡 สำคัญ:</strong> ทุกแบบฟอร์มรายเดือนและรายปี — <strong>สำนักงานบัญชี</strong> (ค่าบริการ 3,000 บาท/เดือน) จะเป็นคนจัดทำและยื่นให้ทั้งหมด คุณเพียงแค่ส่งเอกสาร (ใบกำกับภาษี, สลิปโอน, ใบเสร็จ) ให้ทันภายในวันที่ 1-5 ของเดือนถัดไป
+            </div>
+        </section>
+
+        <!-- Footer -->

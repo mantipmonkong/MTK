@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantip ERP - Accounting & Business Management</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Prompt', 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: fixed;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .menu-item {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: var(--sidebar-hover);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Topbar */
+        .topbar {
+            height: 70px;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .topbar-search input {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 300px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        .topbar-search input:focus {
+            border-color: var(--primary);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary);
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Dashboard Container */
+        .container {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .page-title p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+            font-family: 'Prompt', sans-serif;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--primary);
+        }
+
+        .stat-card.profit::before { background-color: var(--secondary); }
+        .stat-card.expense::before { background-color: var(--danger); }
+        .stat-card.wht::before { background-color: var(--warning); }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-title {
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .bg-blue-light { background: #e0e7ff; color: var(--primary); }
+        .bg-green-light { background: #d1fae5; color: var(--secondary); }
+        .bg-red-light { background: #fee2e2; color: var(--danger); }
+        .bg-yellow-light { background: #fef3c7; color: var(--warning); }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .stat-change {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .text-green { color: var(--secondary); }
+        .text-red { color: var(--danger); }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Recent Transactions & WHT */
+        .data-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .data-card {
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .data-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .data-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 13px;
+            text-align: left;
+            padding: 12px 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status.paid { background-color: #d1fae5; color: #059669; }
+        .status.pending { background-color: #fef3c7; color: #d97706; }
+        .status.overdue { background-color: #fee2e2; color: #dc2626; }
+
+        /* WHT List */
+        .wht-list {
+            padding: 0;
+            list-style: none;
+        }
+
+        .wht-item {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wht-item:last-child { border-bottom: none; }
+
+        .wht-info h4 {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .wht-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .wht-action {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-icon:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .charts-section, .data-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">M</div>
+            <div>
+                <h2 style="font-size: 18px; font-weight: 600;">Mantip ERP</h2>
+                <span style="font-size: 12px; color: #94a3b8;">Business System</span>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="mantip_erp_dashboard.html" class="menu-item active">
+                <i class="fa-solid fa-chart-pie"></i> ภาพรวม
+            </a>
+            <a href="mantip_erp_documents.html" class="menu-item">
+                <i class="fa-solid fa-file-invoice-dollar"></i> สร้างใบเสนอราคา
+            </a>
+            <a href="mantipmonkong_accounting.html" class="menu-item">
+                <i class="fa-solid fa-building-columns"></i> บัญชีบริษัท(ส่งสรรพกร)
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-calculator"></i> บัญชีภายใน(เฉพาะบริษัท)
+            </a>
+            <a href="mantip_erp_settings.html" class="menu-item">
+                <i class="fa-solid fa-gear"></i> ตั้งค่า
+            </a>
+            <a href="mantipmonkong_simulation.html" class="menu-item">
+                <i class="fa-solid fa-layer-group"></i> รวมอื่นๆ
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-search">
+                <input type="text" placeholder="ค้นหาเอกสาร, คู่ค้า...">
+            </div>
+            <div class="topbar-actions">
+                <button class="icon-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-profile">
+                    <div class="user-avatar">A</div>
+                    <div>
+                        <div style="font-size: 14px; font-weight: 500;">Admin User</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">Administrator</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 12px; color: var(--text-muted); margin-left: 8px;"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Container -->
+        <div class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <h1>สรุปผลการดำเนินงาน (Dashboard)</h1>
+                    <p>ภาพรวมรายได้ ค่าใช้จ่าย และกำไรขั้นต้น ประจำเดือน สิงหาคม 2026</p>
+                </div>
+                <button class="btn-primary">
+                    <i class="fa-solid fa-plus"></i> สร้างเอกสารใหม่
+                </button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <!-- Revenue -->
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">รายได้รวม (Revenue)</span>
+                        <div class="stat-icon bg-blue-light"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                    </div>
+                    <div class="stat-value">฿850,000.00</div>
+                    <div class="stat-change text-green">
+                        <i class="fa-solid fa-arrow-up"></i> 12.5% เทียบกับเดือนที่แล้ว
+                    </div>
+                </div>
+
+                <!-- COGS -->
+                <div class="stat-card expense">
+                    <div class="stat-header">
+                        <span class="stat-title">ต้นทุนรวม (COGS)</span>
+                        <div class="stat-icon bg-red-light"><i class="fa-solid fa-cart-arrow-down"></i></div>
+                    </div>
+                    <div class="stat-value">฿620,000.00</div>
+                    <div class="stat-change text-red">
+                        <i class="fa-solid fa-arrow-up"></i> 5.2% เทียบกับเดือนที่แล้ว
+                    </div>
+                </div>
+
+                <!-- Gross Profit -->
+                <div class="stat-card profit">
+                    <div class="stat-header">
+                        <span class="stat-title">กำไรขั้นต้น (Gross Profit)</span>
+                        <div class="stat-icon bg-green-light"><i class="fa-solid fa-sack-dollar"></i></div>
+                    </div>
+                    <div class="stat-value">฿230,000.00</div>
+                    <div class="stat-change text-green" style="font-weight: 600; font-size: 14px;">
+                        อัตรากำไร (Margin): 27.05% <span style="color:var(--text-muted); font-size:12px; font-weight:normal;">(เป้าหมาย 25%)</span>
+                    </div>
+                </div>
+
+                <!-- Pending WHT -->
+                <div class="stat-card wht">
+                    <div class="stat-header">
+                        <span class="stat-title">ใบหัก ณ ที่จ่าย (รอดำเนินการ)</span>
+                        <div class="stat-icon bg-yellow-light"><i class="fa-solid fa-file-invoice"></i></div>
+                    </div>
+                    <div class="stat-value">8 รายการ</div>
+                    <div class="stat-change" style="color: var(--warning);">
+                        <i class="fa-solid fa-clock"></i> รอรับเอกสารตัวจริง มูลค่ารวม ฿15,400
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Data Tables -->
+            <div class="data-section">
+                <!-- Recent Sales -->
+                <div class="data-card">
+                    <div class="data-header">
+                        <span class="data-title">เอกสารขายล่าสุด (Recent Invoices)</span>
+                        <a href="#" class="view-all">ดูทั้งหมด</a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>เลขที่เอกสาร</th>
+                                <th>ลูกค้า</th>
+                                <th>วันที่</th>
+                                <th>ยอดรวม</th>
+                                <th>สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="#" style="color: var(--primary); font-weight: 500;">INV-2608-005</a></td>
+                                <td>บริษัท เอบีซี จำกัด</td>
+                                <td>12 ส.ค. 26</td>
+                                <td>฿45,000.00</td>
+                                <td><span class="status paid">ชำระแล้ว</span></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" style="color: var(--primary); font-weight: 500;">INV-2608-004</a></td>
+                                <td>บจก. เอ็กซ์วายแซด คอนสตรัคชั่น</td>
+                                <td>10 ส.ค. 26</td>
+                                <td>฿120,500.00</td>
+                                <td><span class="status pending">รอชำระเงิน</span></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" style="color: var(--primary); font-weight: 500;">INV-2608-003</a></td>
+                                <td>หจก. พัฒนาดีเยี่ยม</td>
+                                <td>05 ส.ค. 26</td>
+                                <td>฿18,200.00</td>
+                                <td><span class="status paid">ชำระแล้ว</span></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#" style="color: var(--primary); font-weight: 500;">INV-2607-042</a></td>
+                                <td>บมจ. เจริญรุ่งเรือง</td>
+                                <td>28 ก.ค. 26</td>
+                                <td>฿85,000.00</td>
+                                <td><span class="status overdue">เกินกำหนด</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- WHT Alerts -->
+                <div class="data-card">
+                    <div class="data-header">
+                        <span class="data-title">ติดตามหัก ณ ที่จ่าย</span>
+                        <a href="#" class="view-all">ดูทั้งหมด</a>
+                    </div>
+                    <ul class="wht-list">
+                        <li class="wht-item">
+                            <div class="wht-info">
+                                <h4>บจก. เอ็กซ์วายแซด</h4>
+                                <p>อ้างอิง: INV-2607-030 • หัก 3% (ค่าบริการ)</p>
+                            </div>
+                            <div class="wht-action">
+                                <button class="btn-icon" title="อัปโหลดไฟล์"><i class="fa-solid fa-upload"></i></button>
+                                <button class="btn-icon" style="color: var(--secondary);" title="ทำเครื่องหมายว่าได้รับแล้ว"><i class="fa-solid fa-check"></i></button>
+                            </div>
+                        </li>
+                        <li class="wht-item">
+                            <div class="wht-info">
+                                <h4>บมจ. เจริญรุ่งเรือง</h4>
+                                <p>อ้างอิง: INV-2607-025 • หัก 3% (ค่าบริการ)</p>
+                            </div>
+                            <div class="wht-action">
+                                <button class="btn-icon" title="อัปโหลดไฟล์"><i class="fa-solid fa-upload"></i></button>
+                                <button class="btn-icon" style="color: var(--secondary);" title="ทำเครื่องหมายว่าได้รับแล้ว"><i class="fa-solid fa-check"></i></button>
+                            </div>
+                        </li>
+                        <li class="wht-item">
+                            <div class="wht-info">
+                                <h4>บริษัท เอบีซี จำกัด</h4>
+                                <p>อ้างอิง: INV-2607-015 • หัก 1% (ค่าขนส่ง)</p>
+                            </div>
+                            <div class="wht-action">
+                                <button class="btn-icon" title="อัปโหลดไฟล์"><i class="fa-solid fa-upload"></i></button>
+                                <button class="btn-icon" style="color: var(--secondary);" title="ทำเครื่องหมายว่าได้รับแล้ว"><i class="fa-solid fa-check"></i></button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+</body>
+</html>

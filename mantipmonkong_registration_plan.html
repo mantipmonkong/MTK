@@ -1,0 +1,3621 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนจดทะเบียนบริษัท ม่านทิพย์มั่นคง จำกัด | 11-18 ส.ค. 2569</title>
+    <meta name="description" content="แผนจดทะเบียนบริษัท ม่านทิพย์มั่นคง จำกัด อย่างละเอียดรายวัน พร้อมแผนเฉพาะบุคคล 4 คน">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: #1a1f35;
+            --bg-card-hover: #212845;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-cyan: #06b6d4;
+            --accent-indigo: #6366f1;
+            --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-blue: linear-gradient(135deg, #3b82f6, #6366f1);
+            --gradient-emerald: linear-gradient(135deg, #10b981, #06b6d4);
+            --gradient-amber: linear-gradient(135deg, #f59e0b, #ef4444);
+            --gradient-purple: linear-gradient(135deg, #8b5cf6, #ec4899);
+            --border-color: rgba(148, 163, 184, 0.1);
+            --glass-bg: rgba(26, 31, 53, 0.8);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --shadow-glow-blue: 0 0 40px rgba(59, 130, 246, 0.15);
+            --shadow-glow-purple: 0 0 40px rgba(139, 92, 246, 0.15);
+            --shadow-glow-emerald: 0 0 40px rgba(16, 185, 129, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+            bottom: -200px;
+            left: -200px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(5deg); }
+            50% { transform: translate(-30px, 80px) rotate(-3deg); }
+            75% { transform: translate(40px, -20px) rotate(3deg); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--accent-indigo);
+            margin-bottom: 24px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            animation: fadeInDown 0.6s ease-out 0.1s both;
+        }
+
+        .hero .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            animation: fadeInDown 0.6s ease-out 0.2s both;
+        }
+
+        .hero .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-emerald);
+            margin-top: 16px;
+            animation: fadeInDown 0.6s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 14, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-tab {
+            padding: 10px 22px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .nav-tab:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            border-color: var(--accent-blue);
+        }
+
+        .nav-tab.active {
+            background: var(--gradient-blue);
+            color: white;
+            border-color: transparent;
+            box-shadow: var(--shadow-glow-blue);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 32px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: var(--shadow-glow-blue);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Summary Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .stat-card.blue::before { background: var(--gradient-blue); }
+        .stat-card.emerald::before { background: var(--gradient-emerald); }
+        .stat-card.amber::before { background: var(--gradient-amber); }
+        .stat-card.purple::before { background: var(--gradient-purple); }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 8px 0;
+        }
+
+        .stat-card.blue .stat-value { color: var(--accent-blue); }
+        .stat-card.emerald .stat-value { color: var(--accent-emerald); }
+        .stat-card.amber .stat-value { color: var(--accent-amber); }
+        .stat-card.purple .stat-value { color: var(--accent-purple); }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stat-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Structure Table */
+        .structure-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 16px 0;
+        }
+
+        .structure-table thead th {
+            background: rgba(99, 102, 241, 0.1);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--accent-indigo);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .structure-table thead th:first-child { border-radius: 12px 0 0 0; }
+        .structure-table thead th:last-child { border-radius: 0 12px 0 0; }
+
+        .structure-table tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .structure-table tbody tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .structure-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .structure-table .total-row {
+            background: rgba(16, 185, 129, 0.08);
+            font-weight: 700;
+        }
+
+        .structure-table .total-row td {
+            color: var(--accent-emerald);
+            border-top: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-blue {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .badge-purple {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+        }
+
+        .badge-emerald {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-emerald);
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-amber);
+        }
+
+        .badge-rose {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--accent-rose);
+        }
+
+        .amount {
+            font-weight: 700;
+            font-family: 'Inter', monospace;
+        }
+
+        .amount-positive { color: var(--accent-emerald); }
+        .amount-neutral { color: var(--text-primary); }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 16px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple), var(--accent-emerald));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.5s ease-out both;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+        .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+
+        .timeline-dot {
+            position: absolute;
+            left: -33px;
+            top: 24px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 3px solid;
+            background: var(--bg-primary);
+            z-index: 2;
+        }
+
+        .timeline-dot.blue { border-color: var(--accent-blue); }
+        .timeline-dot.green { border-color: var(--accent-emerald); box-shadow: 0 0 12px rgba(16, 185, 129, 0.5); }
+        .timeline-dot.purple { border-color: var(--accent-purple); }
+
+        .timeline-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateX(4px);
+        }
+
+        .timeline-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .timeline-content {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .timeline-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .timeline-content li {
+            padding: 6px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .timeline-content li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-emerald);
+            font-weight: 700;
+        }
+
+        .highlight-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 0;
+        }
+
+        .highlight-card .timeline-title {
+            color: var(--accent-emerald);
+        }
+
+        /* Person Cards */
+        .person-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .person-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .person-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .person-card.father { border-top: 3px solid var(--accent-blue); }
+        .person-card.father:hover { box-shadow: var(--shadow-glow-blue); }
+        .person-card.mother { border-top: 3px solid var(--accent-purple); }
+        .person-card.mother:hover { box-shadow: var(--shadow-glow-purple); }
+        .person-card.opor { border-top: 3px solid var(--accent-emerald); }
+        .person-card.opor:hover { box-shadow: var(--shadow-glow-emerald); }
+        .person-card.toey { border-top: 3px solid var(--accent-amber); }
+        .person-card.toey:hover { box-shadow: 0 0 40px rgba(245, 158, 11, 0.15); }
+
+        .person-header {
+            padding: 24px 24px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .person-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .father .person-avatar { background: rgba(59, 130, 246, 0.15); }
+        .mother .person-avatar { background: rgba(139, 92, 246, 0.15); }
+        .opor .person-avatar { background: rgba(16, 185, 129, 0.15); }
+        .toey .person-avatar { background: rgba(245, 158, 11, 0.15); }
+
+        .person-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .person-role {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .person-body {
+            padding: 0 24px 24px;
+        }
+
+        .person-detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .person-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .person-detail-label {
+            color: var(--text-secondary);
+        }
+
+        .person-detail-value {
+            font-weight: 600;
+        }
+
+        .person-total {
+            background: rgba(16, 185, 129, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .person-total-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .person-total-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-emerald);
+        }
+
+        .person-total-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .person-tax-box {
+            background: rgba(99, 102, 241, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .person-tax-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-indigo);
+            margin-bottom: 8px;
+        }
+
+        .tax-calc-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            padding: 4px 0;
+            color: var(--text-secondary);
+        }
+
+        .tax-calc-line.total {
+            border-top: 1px dashed var(--border-color);
+            margin-top: 4px;
+            padding-top: 8px;
+            font-weight: 700;
+            color: var(--accent-emerald);
+        }
+
+        .tax-result {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 10px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 10px;
+            font-weight: 700;
+            color: var(--accent-emerald);
+        }
+
+        /* Todo list */
+        .todo-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .todo-list li {
+            padding: 8px 0 8px 28px;
+            position: relative;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .todo-list li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            font-size: 1.1rem;
+        }
+
+        /* Cost breakdown */
+        .cost-section {
+            margin-bottom: 32px;
+        }
+
+        .cost-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .cost-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cost-header-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .cost-header-total {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+        }
+
+        .cost-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .cost-row:hover {
+            background: rgba(99, 102, 241, 0.03);
+        }
+
+        .cost-row:last-child {
+            border-bottom: none;
+        }
+
+        .cost-row-label {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cost-row-value {
+            font-weight: 600;
+            font-family: 'Inter', monospace;
+        }
+
+        .cost-total-row {
+            background: rgba(59, 130, 246, 0.08);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border-top: 2px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .cost-total-row .cost-row-value {
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+        }
+
+        /* Monthly duties */
+        .duty-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .duty-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .duty-row:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .duty-date-badge {
+            flex-shrink: 0;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .duty-date-badge.start { background: rgba(59, 130, 246, 0.12); color: var(--accent-blue); }
+        .duty-date-badge.mid { background: rgba(245, 158, 11, 0.12); color: var(--accent-amber); }
+        .duty-date-badge.end { background: rgba(139, 92, 246, 0.12); color: var(--accent-purple); }
+
+        .duty-info {
+            flex: 1;
+        }
+
+        .duty-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .duty-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Summary Section */
+        .summary-highlight {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            margin: 32px 0;
+        }
+
+        .summary-highlight h3 {
+            font-size: 1.3rem;
+            margin-bottom: 24px;
+            color: var(--accent-indigo);
+        }
+
+        .summary-big-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent-emerald);
+            margin: 8px 0;
+            font-family: 'Inter', monospace;
+        }
+
+        .summary-big-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .tax-zero-banner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.12));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .tax-zero-banner .icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .tax-zero-banner h4 {
+            font-size: 1.2rem;
+            color: var(--accent-emerald);
+            margin-bottom: 4px;
+        }
+
+        .tax-zero-banner p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Info box */
+        .info-box {
+            background: rgba(59, 130, 246, 0.08);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .info-box.warning {
+            background: rgba(245, 158, 11, 0.08);
+            border-left-color: var(--accent-amber);
+        }
+
+        .info-box.success {
+            background: rgba(16, 185, 129, 0.08);
+            border-left-color: var(--accent-emerald);
+        }
+
+        .info-box strong {
+            color: var(--text-primary);
+        }
+
+        /* Journal Entry Styles */
+        .journal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .journal-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: var(--shadow-glow-blue);
+        }
+
+        .journal-header {
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .journal-header:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .journal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .journal-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .journal-num.blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+        .journal-num.purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+        .journal-num.emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
+        .journal-num.amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+        .journal-num.cyan { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); }
+        .journal-num.rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+        .journal-num.indigo { background: rgba(99, 102, 241, 0.15); color: var(--accent-indigo); }
+
+        .journal-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .journal-freq {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .journal-toggle {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .journal-toggle.open {
+            transform: rotate(180deg);
+        }
+
+        .journal-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .journal-body.open {
+            max-height: 800px;
+        }
+
+        .journal-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .journal-table thead th {
+            padding: 10px 20px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .journal-table thead th.dr-col { color: var(--accent-emerald); }
+        .journal-table thead th.cr-col { color: var(--accent-rose); }
+
+        .journal-table tbody td {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.05);
+        }
+
+        .journal-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .journal-table .acct-name {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .journal-table .acct-name.indent {
+            padding-left: 40px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .journal-table .acct-code {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-family: 'Inter', monospace;
+        }
+
+        .journal-table .dr-val {
+            color: var(--accent-emerald);
+            font-weight: 600;
+            font-family: 'Inter', monospace;
+            text-align: right;
+        }
+
+        .journal-table .cr-val {
+            color: var(--accent-rose);
+            font-weight: 600;
+            font-family: 'Inter', monospace;
+            text-align: right;
+        }
+
+        .journal-table .total-line td {
+            border-top: 2px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        .journal-note {
+            padding: 12px 20px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            background: rgba(99, 102, 241, 0.04);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .journal-note strong {
+            color: var(--accent-indigo);
+        }
+
+        /* VAT & Tax Submission Timeline */
+        .tax-timeline {
+            position: relative;
+        }
+
+        .tax-month-group {
+            margin-bottom: 24px;
+        }
+
+        .tax-month-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent-indigo);
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .tax-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 14px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .tax-item:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateX(4px);
+        }
+
+        .tax-deadline {
+            flex-shrink: 0;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .tax-deadline.d7 { background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald); }
+        .tax-deadline.d15 { background: rgba(59, 130, 246, 0.12); color: var(--accent-blue); }
+        .tax-deadline.d23 { background: rgba(139, 92, 246, 0.12); color: var(--accent-purple); }
+        .tax-deadline.annual { background: rgba(245, 158, 11, 0.12); color: var(--accent-amber); }
+
+        .tax-item-info {
+            flex: 1;
+        }
+
+        .tax-item-title {
+            font-weight: 600;
+            font-size: 0.92rem;
+            margin-bottom: 4px;
+        }
+
+        .tax-item-desc {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .tax-item-amount {
+            flex-shrink: 0;
+            text-align: right;
+            min-width: 120px;
+        }
+
+        .tax-item-amount .val {
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Inter', monospace;
+            color: var(--accent-amber);
+        }
+
+        .tax-item-amount .lbl {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .vat-calc-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .vat-calc-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--accent-cyan);
+        }
+
+        .vat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 0.92rem;
+        }
+
+        .vat-row.separator {
+            border-top: 2px solid var(--border-color);
+            margin-top: 8px;
+            padding-top: 12px;
+            font-weight: 700;
+        }
+
+        .vat-row .label { color: var(--text-secondary); }
+        .vat-row .value { font-family: 'Inter', monospace; font-weight: 600; }
+        .vat-row .value.positive { color: var(--accent-emerald); }
+        .vat-row .value.negative { color: var(--accent-rose); }
+        .vat-row .value.result { color: var(--accent-amber); font-size: 1.1rem; }
+
+        /* Annual calendar */
+        .annual-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+
+        .annual-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .annual-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .annual-card h4 {
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .annual-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .annual-card li {
+            padding: 5px 0 5px 20px;
+            position: relative;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .annual-card li::before {
+            content: '•';
+            position: absolute;
+            left: 4px;
+            color: var(--accent-indigo);
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .nav-tabs { gap: 4px; padding: 12px 0 20px; }
+            .nav-tab { padding: 8px 14px; font-size: 0.8rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .person-grid { grid-template-columns: 1fr; }
+            .stat-value { font-size: 1.5rem; }
+            .container { padding: 0 16px; }
+            .summary-big-number { font-size: 2rem; }
+            .annual-grid { grid-template-columns: 1fr; }
+            .tax-item { flex-direction: column; gap: 8px; }
+            .tax-item-amount { text-align: left; }
+        }
+
+        /* Print styles */
+        @media print {
+            .nav-tabs { display: none; }
+            .content-section { display: block !important; page-break-inside: avoid; }
+            .bg-animation { display: none; }
+            body { background: white; color: black; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <div class="container">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-badge">🏢 Company Registration Plan</div>
+            <h1>แผนจดทะเบียนบริษัท<br>ม่านทิพย์มั่นคง จำกัด</h1>
+            <p class="subtitle">ใช้บริษัทช่วยจด — รวมตรายาง + ป้าย + ค่าธรรมเนียมทุกอย่าง</p>
+            <div class="date-badge">📅 วันที่ 11 – 18 สิงหาคม 2569 (8 วัน)</div>
+        </section>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-tab="overview" id="tab-overview">📋 ภาพรวม</button>
+            <button class="nav-tab" data-tab="timeline" id="tab-timeline">📅 ขั้นตอนรายวัน</button>
+            <button class="nav-tab" data-tab="persons" id="tab-persons">👥 แผนเฉพาะบุคคล</button>
+            <button class="nav-tab" data-tab="costs" id="tab-costs">💰 ต้นทุน</button>
+            <button class="nav-tab" data-tab="monthly" id="tab-monthly">⏰ ภาระรายเดือน</button>
+            <button class="nav-tab" data-tab="monthly-todo" id="tab-monthly-todo">✅ สิ่งที่ต้องทำทุกเดือน</button>
+            <button class="nav-tab" data-tab="supplier" id="tab-supplier">🏪 คัดเกรดซัพพลายเออร์</button>
+            <button class="nav-tab" data-tab="dark" id="tab-dark">🌙 กลยุทธ์ภาษี</button>
+            <button class="nav-tab" data-tab="journal" id="tab-journal">📒 บันทึกบัญชี</button>
+            <button class="nav-tab" data-tab="vat" id="tab-vat">📊 ภาษีรายปี</button>
+        </nav>
+
+        <!-- ========== OVERVIEW ========== -->
+        <section class="content-section active" id="section-overview">
+            <h2 class="section-title">📋 ภาพรวมโครงสร้างบริษัท</h2>
+            <p class="section-subtitle">โครงสร้างใหม่ 4 คน — กรรมการ 2 คน + พนักงาน 2 คน</p>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="stat-label">ค่าจดทะเบียน (ครั้งเดียว)</div>
+                    <div class="stat-value">12,000</div>
+                    <div class="stat-sub">รวมตรายาง + ป้าย + ธรรมเนียม</div>
+                </div>
+                <div class="stat-card purple">
+                    <div class="stat-label">ค่าทำบัญชี (ทุกเดือน)</div>
+                    <div class="stat-value">3,000</div>
+                    <div class="stat-sub">บาท/เดือน</div>
+                </div>
+                <div class="stat-card emerald">
+                    <div class="stat-label">เงินเข้าครอบครัว</div>
+                    <div class="stat-value">100,000</div>
+                    <div class="stat-sub">บาท/เดือน (4 คนรวม)</div>
+                </div>
+                <div class="stat-card amber">
+                    <div class="stat-label">ภาษีบุคคล (ทุกคน)</div>
+                    <div class="stat-value">0 ฿</div>
+                    <div class="stat-sub">ทั้ง 4 คนเสียภาษี 0 บาท!</div>
+                </div>
+            </div>
+
+            <!-- Structure Table -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(99, 102, 241, 0.15);">🏗️</div>
+                    <div>
+                        <div class="card-title">โครงสร้างบุคลากรและรายได้</div>
+                        <div class="card-desc">เงินเดือน + ค่าเช่าทรัพย์สิน ของแต่ละคน</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>ชื่อ</th>
+                            <th>ตำแหน่ง</th>
+                            <th>เงินเดือน/เดือน</th>
+                            <th>ทรัพย์สินให้เช่า</th>
+                            <th>ค่าเช่า/เดือน</th>
+                            <th>รวมรายได้/เดือน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>พ่อ</strong></td>
+                            <td><span class="badge badge-blue">กรรมการ</span></td>
+                            <td class="amount">25,000</td>
+                            <td style="color: var(--text-muted);">–</td>
+                            <td style="color: var(--text-muted);">–</td>
+                            <td class="amount amount-positive">25,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>แม่</strong></td>
+                            <td><span class="badge badge-purple">กรรมการ</span></td>
+                            <td class="amount">25,000</td>
+                            <td style="color: var(--text-muted);">–</td>
+                            <td style="color: var(--text-muted);">–</td>
+                            <td class="amount amount-positive">25,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>โอปอ</strong></td>
+                            <td><span class="badge badge-emerald">พนักงาน</span></td>
+                            <td class="amount">25,000</td>
+                            <td style="color: var(--text-muted);">–</td>
+                            <td style="color: var(--text-muted);">–</td>
+                            <td class="amount amount-positive">25,000</td>
+                        </tr>
+                        <tr>
+                            <td><strong>เต้ย</strong></td>
+                            <td><span class="badge badge-amber">พนักงาน</span></td>
+                            <td class="amount">25,000</td>
+                            <td style="color: var(--text-muted);">–</td>
+                            <td style="color: var(--text-muted);">–</td>
+                            <td class="amount amount-positive">25,000</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="2"><strong>รวมทั้งหมด</strong></td>
+                            <td class="amount">100,000</td>
+                            <td></td>
+                            <td class="amount">0</td>
+                            <td class="amount">100,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tax Zero Banner -->
+            <div class="tax-zero-banner">
+                <div class="icon">🎉</div>
+                <h4>ภาษีเงินได้บุคคลธรรมดา = 0 บาท ทุกคน!</h4>
+                <p>โครงสร้างนี้ทำให้ทั้ง 4 คน เสียภาษีบุคคลธรรมดาปีละ 0 บาท<br>WHT ค่าเช่าที่ถูกหัก 12,000 บาท/ปี สามารถขอเครดิตภาษีคืนได้ทั้งจำนวน</p>
+            </div>
+
+            <!-- Social Security Table -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(6, 182, 212, 0.15);">🛡️</div>
+                    <div>
+                        <div class="card-title">ประกันสังคม</div>
+                        <div class="card-desc">เฉพาะพนักงาน 2 คนเท่านั้นที่ต้องจ่าย</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>ชื่อ</th>
+                            <th>ตำแหน่ง</th>
+                            <th>ต้องขึ้น ม.33?</th>
+                            <th>หักจากเงินเดือน/เดือน</th>
+                            <th>บริษัทสมทบ/เดือน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>พ่อ</td>
+                            <td><span class="badge badge-blue">กรรมการ</span></td>
+                            <td><span class="badge badge-rose">❌ ไม่ต้อง</span></td>
+                            <td class="amount">0</td>
+                            <td class="amount">0</td>
+                        </tr>
+                        <tr>
+                            <td>แม่</td>
+                            <td><span class="badge badge-purple">กรรมการ</span></td>
+                            <td><span class="badge badge-rose">❌ ไม่ต้อง</span></td>
+                            <td class="amount">0</td>
+                            <td class="amount">0</td>
+                        </tr>
+                        <tr>
+                            <td>โอปอ</td>
+                            <td><span class="badge badge-emerald">พนักงาน</span></td>
+                            <td><span class="badge badge-emerald">✅ ต้อง</span></td>
+                            <td class="amount">750</td>
+                            <td class="amount">750</td>
+                        </tr>
+                        <tr>
+                            <td>เต้ย</td>
+                            <td><span class="badge badge-amber">พนักงาน</span></td>
+                            <td><span class="badge badge-emerald">✅ ต้อง</span></td>
+                            <td class="amount">750</td>
+                            <td class="amount">750</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="3"><strong>รวม</strong></td>
+                            <td class="amount">1,500</td>
+                            <td class="amount">1,500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========== TIMELINE ========== -->
+        <section class="content-section" id="section-timeline">
+            <h2 class="section-title">📅 ขั้นตอนรายวัน</h2>
+            <p class="section-subtitle">แผนดำเนินการ 8 วัน ตั้งแต่ 11 – 18 สิงหาคม 2569</p>
+
+            <div class="timeline">
+                <!-- Day 1 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot blue"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-date">📅 จันทร์ 11 ส.ค. 69</div>
+                        <div class="timeline-title">เตรียมเอกสาร & นัดบริษัทช่วยจด</div>
+                        <div class="timeline-content">
+                            <ul>
+                                <li>ติดต่อบริษัทช่วยจด ยืนยันนัดหมาย แจ้งชื่อบริษัท + โครงสร้าง</li>
+                                <li>เตรียมเอกสารทุกคน: สำเนาบัตร ปชช. (2 ชุด) + ทะเบียนบ้าน (2 ชุด)</li>
+                                <li>เตรียมข้อมูลที่อยู่จดทะเบียน + แผนที่ + หนังสือยินยอม</li>
+                                <li>ชำระเงิน <strong>12,000 บาท</strong> ให้บริษัทช่วยจด</li>
+                            </ul>
+                            <div class="info-box">
+                                <strong>📋 สิ่งที่ต้องเตรียม:</strong> ชื่อสำรองบริษัท 2 ชื่อ กรณีชื่อหลักซ้ำ | สำเนาทะเบียนรถ (แม่) | สำเนาโฉนดบ้าน (โอปอ)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot blue"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-date">📅 อังคาร 12 ส.ค. 69 (วันหยุด)</div>
+                        <div class="timeline-title">จองชื่อบริษัทผ่านระบบออนไลน์</div>
+                        <div class="timeline-content">
+                            <ul>
+                                <li>บริษัทช่วยจด จองชื่อผ่าน DBD e-Registration (ทำออนไลน์ได้)</li>
+                                <li>ตรวจสอบหนังสือบริคณห์สนธิ (MOA) ที่ร่างให้</li>
+                            </ul>
+                            <div class="info-box warning">
+                                <strong>⏱️ หมายเหตุ:</strong> เป็นวันหยุด (วันเฉลิมพระชนมพรรษาฯ) แต่จองชื่อออนไลน์ได้ | ใช้เวลาอนุมัติ 1-2 วันทำการ
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 3-4 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot blue"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-date">📅 พุธ-พฤหัส 13-14 ส.ค. 69</div>
+                        <div class="timeline-title">จดทะเบียน MOA & ประชุมจัดตั้งบริษัท</div>
+                        <div class="timeline-content">
+                            <ul>
+                                <li>จดทะเบียนหนังสือบริคณห์สนธิ (MOA)</li>
+                                <li>จัดประชุมผู้ถือหุ้น — แต่งตั้ง <strong>พ่อ & แม่</strong> เป็นกรรมการ</li>
+                                <li>กำหนดอำนาจกรรมการ / แต่งตั้งผู้สอบบัญชี</li>
+                                <li>เรียกชำระค่าหุ้น (อย่างน้อย 25,000 บาท)</li>
+                                <li>เตรียมเอกสาร บอจ.1, 2, 3, 5 และ สสช.1</li>
+                            </ul>
+                            <div class="info-box success">
+                                <strong>💡 บริษัทช่วยจดเตรียมเอกสารทั้งหมด</strong> — คุณเพียงเซ็นตามที่กำหนด
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 5 - HIGHLIGHT -->
+                <div class="timeline-item">
+                    <div class="timeline-dot green"></div>
+                    <div class="timeline-card highlight-card">
+                        <div class="timeline-date" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald);">⭐ ศุกร์ 15 ส.ค. 69 — วันสำคัญ!</div>
+                        <div class="timeline-title">🎉 จดทะเบียนจัดตั้งบริษัทจำกัด</div>
+                        <div class="timeline-content">
+                            <ul>
+                                <li>ยื่นจดทะเบียนจัดตั้งบริษัทจำกัดที่กรมพัฒนาธุรกิจการค้า</li>
+                                <li>ได้รับ <strong>เลขทะเบียนนิติบุคคล 13 หลัก</strong></li>
+                                <li>ได้รับ <strong>หนังสือรับรองบริษัท</strong></li>
+                                <li>รับ <strong>ตรายางบริษัท</strong> (รวมในค่าบริการ)</li>
+                                <li>รับ <strong>ป้ายชื่อบริษัท</strong> (รวมในค่าบริการ)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 6 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot blue"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-date">📅 เสาร์ 16 ส.ค. 69</div>
+                        <div class="timeline-title">เปิดบัญชีธนาคารบริษัท</div>
+                        <div class="timeline-content">
+                            <ul>
+                                <li>เปิด <strong>บัญชี 1 (หลัก)</strong> — รับเงินลูกค้า, จ่ายซัพพลายเออร์, เงินเดือน</li>
+                                <li>เปิด <strong>บัญชี 2 (ภาษี)</strong> — แยกเก็บ VAT + สำรองภาษี</li>
+                                <li>พ่อ + แม่ ไปเปิดบัญชีพร้อมกัน (กรรมการทั้งสอง)</li>
+                                <li>โอนเงินทุนจดทะเบียนเข้าบัญชีบริษัท</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 7 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot purple"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-date">📅 อาทิตย์ 17 ส.ค. 69</div>
+                        <div class="timeline-title">จัดทำสัญญาเช่า & สัญญาจ้างงาน</div>
+                        <div class="timeline-content">
+                            <ul>
+                                <li><strong>สัญญาจ้างงาน</strong> โอปอ (พนักงาน 25,000) และ เต้ย (พนักงาน 25,000)</li>
+                                <li><strong>มติค่าตอบแทนกรรมการ</strong> — พ่อ 25,000 / แม่ 25,000</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 8 - HIGHLIGHT -->
+                <div class="timeline-item">
+                    <div class="timeline-dot green"></div>
+                    <div class="timeline-card highlight-card">
+                        <div class="timeline-date" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald);">🏁 จันทร์ 18 ส.ค. 69 — วันสุดท้าย</div>
+                        <div class="timeline-title">จด VAT & ขึ้นทะเบียนประกันสังคม</div>
+                        <div class="timeline-content">
+                            <ul>
+                                <li><strong>จดทะเบียน VAT</strong> — ยื่น ภ.พ.01 ที่สรรพากรพื้นที่</li>
+                                <li><strong>ขึ้นทะเบียนนายจ้างประกันสังคม</strong> — ยื่น สปส. 1-01</li>
+                                <li>ขึ้นทะเบียนลูกจ้าง (โอปอ & เต้ย) — ยื่น สปส. 1-03</li>
+                                <li>ส่งเอกสารทั้งหมดให้ <strong>สำนักงานบัญชี</strong></li>
+                                <li>ชำระค่าบัญชีเดือนแรก <strong>3,000 บาท</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== PERSONS ========== -->
+        <section class="content-section" id="section-persons">
+            <h2 class="section-title">👥 แผนเฉพาะบุคคล</h2>
+            <p class="section-subtitle">รายละเอียดรายได้ ภาษี และสิ่งที่ต้องทำของแต่ละคน</p>
+
+            <div class="person-grid">
+                <!-- Father -->
+                <div class="person-card father">
+                    <div class="person-header">
+                        <div class="person-avatar">👨</div>
+                        <div>
+                            <div class="person-name">พ่อ</div>
+                            <div class="person-role">กรรมการบริษัท | เงินเดือน 25,000</div>
+                        </div>
+                    </div>
+                    <div class="person-body">
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">เงินเดือน</span>
+                            <span class="person-detail-value">25,000 ฿/เดือน</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ค่าเช่า</span>
+                            <span class="person-detail-value" style="color: var(--text-muted);">ไม่มี</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ประกันสังคม</span>
+                            <span class="person-detail-value" style="color: var(--accent-emerald);">ไม่ต้องจ่าย ✅</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ภาษีบุคคล/ปี</span>
+                            <span class="person-detail-value" style="color: var(--accent-emerald);">0 บาท ✅</span>
+                        </div>
+
+                        <div class="person-tax-box">
+                            <div class="person-tax-title">📊 คำนวณภาษี</div>
+                            <div class="tax-calc-line">
+                                <span>รายได้เงินเดือน</span>
+                                <span>300,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ค่าใช้จ่าย 50%</span>
+                                <span>-100,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ลดหย่อนส่วนตัว</span>
+                                <span>-60,000</span>
+                            </div>
+                            <div class="tax-calc-line total">
+                                <span>เงินได้สุทธิ</span>
+                                <span>140,000</span>
+                            </div>
+                            <div class="tax-result">✅ ภาษี 0 บาท (ไม่เกิน 150,000 ยกเว้น)</div>
+                        </div>
+
+                        <div class="person-total">
+                            <div class="person-total-label">💵 เงินสดสุทธิที่ได้รับ</div>
+                            <div class="person-total-value">25,000 ฿/เดือน</div>
+                            <div class="person-total-sub">= 300,000 ฿/ปี</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mother -->
+                <div class="person-card mother">
+                    <div class="person-header">
+                        <div class="person-avatar">👩</div>
+                        <div>
+                            <div class="person-name">แม่</div>
+                            <div class="person-role">กรรมการบริษัท | เงินเดือน 25,000</div>
+                        </div>
+                    </div>
+                    <div class="person-body">
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">เงินเดือน</span>
+                            <span class="person-detail-value">25,000 ฿/เดือน</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ค่าเช่า</span>
+                            <span class="person-detail-value" style="color: var(--text-muted);">ไม่มี</span>
+                        </div>
+                            <span class="person-detail-label">ประกันสังคม</span>
+                            <span class="person-detail-value" style="color: var(--accent-emerald);">ไม่ต้องจ่าย ✅</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ภาษีบุคคล/ปี</span>
+                            <span class="person-detail-value" style="color: var(--accent-emerald);">0 บาท ✅</span>
+                        </div>
+
+                        <div class="person-tax-box">
+                            <div class="person-tax-title">📊 คำนวณภาษี</div>
+                            <div class="tax-calc-line">
+                                <span>รายได้เงินเดือน</span>
+                                <span>300,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ค่าใช้จ่าย 50%</span>
+                                <span>-100,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ลดหย่อนส่วนตัว</span>
+                                <span>-60,000</span>
+                            </div>
+                            <div class="tax-calc-line total">
+                                <span>เงินได้สุทธิ</span>
+                                <span>140,000</span>
+                            </div>
+                            <div class="tax-result">✅ ภาษี 0 บาท (ไม่เกิน 150,000 ยกเว้น)</div>
+                        </div>
+
+                        <div class="person-total">
+                            <div class="person-total-label">💵 เงินสดสุทธิที่ได้รับ</div>
+                            <div class="person-total-value">25,000 ฿/เดือน</div>
+                            <div class="person-total-sub">= 300,000 ฿/ปี</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opor -->
+                <div class="person-card opor">
+                    <div class="person-header">
+                        <div class="person-avatar">👤</div>
+                        <div>
+                            <div class="person-name">โอปอ</div>
+                            <div class="person-role">พนักงาน | เงินเดือน 25,000</div>
+                        </div>
+                    </div>
+                    <div class="person-body">
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">เงินเดือน</span>
+                            <span class="person-detail-value">25,000 ฿/เดือน</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ค่าเช่า</span>
+                            <span class="person-detail-value" style="color: var(--text-muted);">ไม่มี</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ประกันสังคม (ม.33)</span>
+                            <span class="person-detail-value" style="color: var(--accent-amber);">-750 ฿/เดือน</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ภาษีบุคคล/ปี</span>
+                            <span class="person-detail-value" style="color: var(--accent-emerald);">0 บาท ✅</span>
+                        </div>
+
+                        <div class="person-tax-box">
+                            <div class="person-tax-title">📊 คำนวณภาษี</div>
+                            <div class="tax-calc-line">
+                                <span>รายได้เงินเดือน</span>
+                                <span>300,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ค่าใช้จ่าย 50%</span>
+                                <span>-100,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ลดหย่อนส่วนตัว</span>
+                                <span>-60,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ประกันสังคม</span>
+                                <span>-9,000</span>
+                            </div>
+                            <div class="tax-calc-line total">
+                                <span>เงินได้สุทธิ</span>
+                                <span>131,000</span>
+                            </div>
+                            <div class="tax-result">✅ ภาษี 0 บาท (ไม่เกิน 150,000 ยกเว้น)</div>
+                        </div>
+
+                        <div class="person-total">
+                            <div class="person-total-label">💵 เงินสดสุทธิที่ได้รับ</div>
+                            <div class="person-total-value">24,250 ฿/เดือน</div>
+                            <div class="person-total-sub">= 291,000 ฿/ปี</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toey -->
+                <div class="person-card toey">
+                    <div class="person-header">
+                        <div class="person-avatar">👤</div>
+                        <div>
+                            <div class="person-name">เต้ย</div>
+                            <div class="person-role">พนักงาน | เงินเดือน 25,000</div>
+                        </div>
+                    </div>
+                    <div class="person-body">
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">เงินเดือน</span>
+                            <span class="person-detail-value">25,000 ฿/เดือน</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ค่าเช่า</span>
+                            <span class="person-detail-value" style="color: var(--text-muted);">ไม่มี</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ประกันสังคม (ม.33)</span>
+                            <span class="person-detail-value" style="color: var(--accent-amber);">-750 ฿/เดือน</span>
+                        </div>
+                        <div class="person-detail-row">
+                            <span class="person-detail-label">ภาษีบุคคล/ปี</span>
+                            <span class="person-detail-value" style="color: var(--accent-emerald);">0 บาท ✅</span>
+                        </div>
+
+                        <div class="person-tax-box">
+                            <div class="person-tax-title">📊 คำนวณภาษี</div>
+                            <div class="tax-calc-line">
+                                <span>รายได้เงินเดือน</span>
+                                <span>300,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ค่าใช้จ่าย 50%</span>
+                                <span>-100,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ลดหย่อนส่วนตัว</span>
+                                <span>-60,000</span>
+                            </div>
+                            <div class="tax-calc-line">
+                                <span>หัก ประกันสังคม</span>
+                                <span>-9,000</span>
+                            </div>
+                            <div class="tax-calc-line total">
+                                <span>เงินได้สุทธิ</span>
+                                <span>131,000</span>
+                            </div>
+                            <div class="tax-result">✅ ภาษี 0 บาท (ไม่เกิน 150,000 ยกเว้น)</div>
+                        </div>
+
+                        <div class="person-total">
+                            <div class="person-total-label">💵 เงินสดสุทธิที่ได้รับ</div>
+                            <div class="person-total-value">24,250 ฿/เดือน</div>
+                            <div class="person-total-sub">= 291,000 ฿/ปี</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Todo per person -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(245, 158, 11, 0.15);">📝</div>
+                    <div>
+                        <div class="card-title">สิ่งที่แต่ละคนต้องทำ (Checklist)</div>
+                        <div class="card-desc">สรุปงานที่ต้องดำเนินการก่อนและหลังจดบริษัท</div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: var(--accent-blue); margin-bottom: 8px;">👨 พ่อ (กรรมการ)</h4>
+                        <ul class="todo-list">
+                            <li>เซ็นเอกสารจดทะเบียนบริษัท</li>
+                            <li>เปิดบัญชีธนาคารบริษัท</li>
+                            <li>ลงนามเอกสาร + ประทับตรา</li>
+                            <li>อนุมัติค่าใช้จ่าย</li>
+                            <li>ยื่น ภ.ง.ด.90/91 ปีละครั้ง</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--accent-purple); margin-bottom: 8px;">👩 แม่ (กรรมการ)</h4>
+                        <ul class="todo-list">
+                            <li>เซ็นเอกสารจดทะเบียนบริษัท</li>
+                            <li>เปิดบัญชีธนาคารบริษัท</li>
+                            <li>ยื่น ภ.ง.ด.90/91 ปีละครั้ง</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--accent-emerald); margin-bottom: 8px;">👤 โอปอ (พนักงาน)</h4>
+                        <ul class="todo-list">
+                            <li>เซ็นสัญญาจ้างงาน</li>
+                            <li>ขึ้นทะเบียน ม.33 ประกันสังคม</li>
+                            <li>ยื่น ภ.ง.ด.90/91 ปีละครั้ง</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--accent-amber); margin-bottom: 8px;">👤 เต้ย (พนักงาน)</h4>
+                        <ul class="todo-list">
+                            <li>เซ็นสัญญาจ้างงาน</li>
+                            <li>ขึ้นทะเบียน ม.33 ประกันสังคม</li>
+                            <li>ยื่น ภ.ง.ด.91 ปีละครั้ง</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== COSTS ========== -->
+        <section class="content-section" id="section-costs">
+            <h2 class="section-title">💰 ต้นทุนและค่าใช้จ่าย</h2>
+            <p class="section-subtitle">ค่าใช้จ่ายเริ่มต้นและต้นทุนรายเดือนของบริษัท</p>
+
+            <!-- Initial Costs -->
+            <div class="cost-section">
+                <h3 style="font-size: 1.2rem; margin-bottom: 16px; color: var(--accent-blue);">💳 ค่าใช้จ่ายเริ่มต้น (จ่ายครั้งเดียว)</h3>
+                <div class="cost-card">
+                    <div class="cost-row">
+                        <span class="cost-row-label">🏢 ค่าบริษัทช่วยจด (รวมตรายาง+ป้าย+ค่าธรรมเนียม)</span>
+                        <span class="cost-row-value">12,000 ฿</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">📒 ค่าทำบัญชีเดือนแรก</span>
+                        <span class="cost-row-value">3,000 ฿</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">💰 เงินทุนจดทะเบียน (ค่าหุ้น) <span class="badge badge-emerald" style="margin-left:8px;">ไม่ใช่ค่าใช้จ่าย</span></span>
+                        <span class="cost-row-value">100,000 ฿</span>
+                    </div>
+                    <div class="cost-total-row">
+                        <span>รวมเงินที่ต้องเตรียม</span>
+                        <span class="cost-row-value">115,000 ฿</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Costs -->
+            <div class="cost-section">
+                <h3 style="font-size: 1.2rem; margin-bottom: 16px; color: var(--accent-purple);">📅 ต้นทุนบุคลากร + ค่าเช่า + บัญชี (รายเดือน)</h3>
+                <div class="cost-card">
+                    <div class="cost-row">
+                        <span class="cost-row-label">👨 เงินเดือนพ่อ (กรรมการ)</span>
+                        <span class="cost-row-value">25,000 ฿</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">👩 เงินเดือนแม่ (กรรมการ)</span>
+                        <span class="cost-row-value">25,000 ฿</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">👤 เงินเดือนโอปอ (พนักงาน)</span>
+                        <span class="cost-row-value">25,000 ฿</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">👤 เงินเดือนเต้ย (พนักงาน)</span>
+                        <span class="cost-row-value">25,000 ฿</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">🛡️ ประกันสังคมบริษัทสมทบ (2 คน)</span>
+                        <span class="cost-row-value">1,500 ฿</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">📒 ค่าทำบัญชี</span>
+                        <span class="cost-row-value">3,000 ฿</span>
+                    </div>
+                    <div class="cost-total-row">
+                        <span>รวมต้นทุนต่อเดือน</span>
+                        <span class="cost-row-value">104,500 ฿</span>
+                    </div>
+                </div>
+                <div class="info-box" style="margin-top: 16px;">
+                    <strong>📊 รวมต้นทุนต่อปี:</strong> 104,500 × 12 = <strong>1,254,000 บาท/ปี</strong> — เป็นรายจ่ายที่ช่วยลดกำไรบริษัท (ลดภาษีนิติบุคคล) ได้ทั้งจำนวน
+                </div>
+            </div>
+
+            <!-- Family Income Summary -->
+            <div class="summary-highlight">
+                <h3>💵 เงินสดสุทธิที่ครอบครัวได้รับ</h3>
+                <div class="stats-grid" style="margin-bottom: 0;">
+                    <div class="stat-card blue" style="background: rgba(59, 130, 246, 0.08);">
+                        <div class="stat-label">ต่อเดือน</div>
+                        <div class="stat-value">100,000</div>
+                        <div class="stat-sub">บาท/เดือน (4 คนรวม)</div>
+                    </div>
+                    <div class="stat-card emerald" style="background: rgba(16, 185, 129, 0.08);">
+                        <div class="stat-label">ต่อปี</div>
+                        <div class="stat-value">1,170,000</div>
+                        <div class="stat-sub">บาท/ปี</div>
+                    </div>
+                    <div class="stat-card amber" style="background: rgba(245, 158, 11, 0.08);">
+                        <div class="stat-label">ภาษีบุคคลรวม</div>
+                        <div class="stat-value">0 ฿</div>
+                        <div class="stat-sub">ทั้ง 4 คน เสียภาษี 0!</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section" id="section-monthly">
+            <h2 class="section-title">⏰ ภาระรายเดือนหลังจดบริษัท</h2>
+            <p class="section-subtitle">สิ่งที่ต้องทำทุกเดือนหลังจากจดทะเบียนบริษัทเสร็จแล้ว</p>
+
+            <div class="duty-grid">
+                <div class="duty-row">
+                    <div class="duty-date-badge start">ต้นเดือน</div>
+                    <div class="duty-info">
+                        <div class="duty-title">💰 จ่ายเงินเดือน 4 คน</div>
+                        <div class="duty-desc">โอนเข้าบัญชีส่วนตัวทุกคน | พ่อ 25,000 + แม่ 25,000 + โอปอ 24,250 + เต้ย 24,250 = <strong>98,500 ฿</strong> (หลังหัก ปกส.)</div>
+                    </div>
+                </div>
+                <div class="duty-row">
+                    <div class="duty-date-badge start">ต้นเดือน</div>
+                    <div class="duty-info">
+                        <div class="duty-title">📒 จ่ายค่าทำบัญชี</div>
+                        <div class="duty-desc">โอน 3,000 บาท ให้สำนักงานบัญชี</div>
+                    </div>
+                </div>
+                <div class="duty-row">
+                    <div class="duty-date-badge mid">ภายใน 15</div>
+                    <div class="duty-info">
+                        <div class="duty-title">🛡️ นำส่งประกันสังคม (สปส. 1-10)</div>
+                        <div class="duty-desc">รวม 3,000 บาท (ลูกจ้าง 1,500 + บริษัทสมทบ 1,500) | <strong>สนง.บัญชีดำเนินการยื่นให้ เราแค่สแกนจ่าย</strong></div>
+                    </div>
+                </div>
+                <div class="duty-row">
+                    <div class="duty-date-badge mid">ภายใน 15</div>
+                    <div class="duty-info">
+                        <div class="duty-title">📄 ยื่น ภ.ง.ด.1 (ภาษีเงินเดือน)</div>
+                        <div class="duty-desc">แม้ภาษีเป็น 0 ก็ต้องยื่นทุกเดือน | <strong>สนง.บัญชีดำเนินการ</strong></div>
+                    </div>
+                </div>
+                <div class="duty-row">
+                    <div class="duty-date-badge mid">ภายใน 15</div>
+                    <div class="duty-info">
+                        <div class="duty-title">📄 ยื่น ภ.ง.ด.3 (ถ้ามีการจ้างงานอื่น)</div>
+                        <div class="duty-desc">นำส่ง WHT กรณีมีการจ้างทำของบุคคลธรรมดาอื่นๆ | <strong>สนง.บัญชีดำเนินการ</strong></div>
+                    </div>
+                </div>
+                <div class="duty-row">
+                    <div class="duty-date-badge end">ภายใน 23</div>
+                    <div class="duty-info">
+                        <div class="duty-title">📊 ยื่น ภ.พ.30 (VAT รายเดือน)</div>
+                        <div class="duty-desc">สรุปยอด VAT ซื้อ-ขาย จ่ายส่วนต่าง | <strong>สนง.บัญชีดำเนินการ</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box success" style="margin-top: 24px;">
+                <strong>💡 หมายเหตุ:</strong> การยื่นภาษีรายเดือน (ภ.ง.ด.1, ภ.ง.ด.3, ภ.พ.30) และประกันสังคม — ทั้งหมดจะดำเนินการโดย <strong>สำนักงานบัญชี</strong> ที่คุณจ่ายค่าบริการ 3,000 บาท/เดือน เพียงแค่ส่งเอกสาร (ใบเสร็จ, สลิปโอนเงิน) ให้บัญชีทุกต้นเดือน
+            </div>
+
+            <!-- Example Scenario -->
+            <div class="card" style="margin-top: 24px; border-left: 4px solid var(--accent-emerald);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(16, 185, 129, 0.15);">📌</div>
+                    <div>
+                        <div class="card-title">ตัวอย่างตารางการทำงานจริง (สมมติว่าเป็นรอบเดือน สิงหาคม)</div>
+                        <div class="card-desc">เพื่อให้เห็นภาพชัดเจนว่าใครต้องทำอะไร วันไหนบ้าง</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div class="timeline" style="padding-left: 20px;">
+                        <div class="timeline-item">
+                            <div style="font-weight: 700; color: var(--accent-blue);">วันที่ 1-5 ก.ย. (จัดการธุระของรอบ ส.ค.)</div>
+                            <ul class="todo-list" style="margin-top: 8px;">
+                                <li>โอนเงินเดือน 4 คน รวม 98,500 บาท จากบัญชีบริษัทเข้าบัญชีส่วนตัว</li>
+                                <li>โอนค่าทำบัญชี 3,000 บาท ให้สำนักงานบัญชี</li>
+                                <li>รวบรวมบิล สลิปโอนเงิน Statement เดือน ส.ค. ส่งให้สำนักงานบัญชี</li>
+                            </ul>
+                        </div>
+                        <div class="timeline-item">
+                            <div style="font-weight: 700; color: var(--accent-purple);">วันที่ 10-12 ก.ย. (รับแจ้งยอดจากบัญชี)</div>
+                            <ul class="todo-list" style="margin-top: 8px;">
+                                <li>สำนักงานบัญชีจัดการคำนวณและยื่นเอกสารให้ทั้งหมดในระบบของรัฐ (ภ.ง.ด.1, ภ.ง.ด.3, สปส.)</li>
+                                <li>บัญชีจะส่ง <strong>"ใบ Pay-in / QR Code"</strong> กลับมาให้คุณทาง Line หรือ Email แจ้งว่าเดือนนี้ต้องจ่ายค่าอะไรบ้าง</li>
+                            </ul>
+                        </div>
+                        <div class="timeline-item">
+                            <div style="font-weight: 700; color: var(--accent-emerald);">วันที่ 13-15 ก.ย. (หน้าที่สแกนจ่ายของเรา)</div>
+                            <ul class="todo-list" style="margin-top: 8px;">
+                                <li>ใช้แอปธนาคารบริษัท สแกนจ่ายประกันสังคม 3,000 บาท (ตรงเข้า สปส.)</li>
+                                <li>สแกนจ่ายภาษีหัก ณ ที่จ่าย ภ.ง.ด.3 (ถ้ามีการจ้างงานบุคคลภายนอกในเดือน ส.ค. ถ้าไม่มีก็ไม่ต้องจ่าย)</li>
+                            </ul>
+                        </div>
+                        <div class="timeline-item" style="margin-bottom: 0;">
+                            <div style="font-weight: 700; color: var(--accent-amber);">ภายในวันที่ 23 ก.ย. (จ่าย VAT)</div>
+                            <ul class="todo-list" style="margin-top: 8px;">
+                                <li>บัญชีสรุปยอด ภ.พ.30 (VAT ซื้อ - VAT ขาย) และส่ง QR Code มาให้</li>
+                                <li>ถ้า VAT ขาย > VAT ซื้อ: สแกนจ่ายส่วนต่างให้สรรพากร</li>
+                                <li>ถ้า VAT ซื้อ > VAT ขาย: ไม่ต้องจ่าย แจ้งขอยกยอดไปใช้เดือนหน้า</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== MONTHLY TODO ========== -->
+        <section class="content-section" id="section-monthly-todo">
+            <h2 class="section-title">✅ สิ่งที่ต้องทำในทุกๆเดือน</h2>
+            <p class="section-subtitle">รวบรวมเอกสาร ค่าใช้จ่าย และเตรียมข้อมูลส่งสำนักงานบัญชี พร้อมตัวอย่าง</p>
+            
+            <div class="card" style="margin-top: 24px; border-left: 4px solid var(--accent-indigo);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(99, 102, 241, 0.15);">📝</div>
+                    <div>
+                        <div class="card-title">ขั้นตอนการเตรียมข้อมูลและค่าใช้จ่ายที่นำมาเคลมได้</div>
+                        <div class="card-desc">วิธีการรวบรวมเอกสารเพื่อนำส่งให้สำนักงานบัญชีทุกเดือนอย่างเป็นระบบ</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <h4 style="color: var(--accent-blue); margin-bottom: 8px;">1. วิธีการรวบรวมและบันทึกข้อมูลเบื้องต้น</h4>
+                    <ul class="todo-list" style="margin-bottom: 20px;">
+                        <li><strong>จัดทำไฟล์สรุปรายรับ-รายจ่าย (Excel/Google Sheets):</strong> บันทึกวันที่, รายการ, และจำนวนเงิน ทุกครั้งที่มีการเคลื่อนไหวของบัญชีธนาคารบริษัท เพื่อให้ตรวจทานกับ Statement ได้ง่าย</li>
+                        <li><strong>เขียนรายละเอียดบนบิล:</strong> หากเป็นบิลเงินสดหรือสลิปโอนเงินที่ดูไม่ออกว่าคือค่าอะไร ให้ใช้ปากกาเขียนกำกับไว้สั้นๆ (เช่น "ค่าวัสดุก่อสร้างงาน A", "ค่าส่งไปรษณีย์")</li>
+                        <li><strong>สแกนหรือจัดเก็บดิจิทัล:</strong> สร้าง Folder ประจำเดือน (เช่น "บัญชี_สค_69") เพื่อเก็บรูปถ่ายใบเสร็จ/สลิปโอนเงิน ป้องกันเอกสารตัวจริงสูญหายหรือหมึกจาง</li>
+                        <li><strong>เรียงเอกสารตามวันที่:</strong> นำใบเสร็จและใบกำกับภาษีมาจัดเรียงตามวันที่ให้ตรงกับ Statement ช่วยลดข้อผิดพลาดในการลงบัญชี</li>
+                    </ul>
+
+                    <h4 style="color: var(--accent-blue); margin-bottom: 8px;">2. ตัวอย่างค่าใช้จ่ายที่นำมาหักเป็นค่าใช้จ่ายบริษัทได้</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 12px;">ต้องเป็นรายจ่ายที่เกี่ยวข้องกับกิจการ และมีเอกสารหลักฐานครบถ้วน (ใบเสร็จรับเงิน/ใบกำกับภาษี ระบุชื่อบริษัท ม่านทิพย์มั่นคง จำกัด)</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 12px;">
+                        <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px;">
+                            <strong style="color: var(--text-primary);">🏢 หมวดสำนักงาน & บริหาร</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">อุปกรณ์สำนักงาน, เครื่องเขียน, กระดาษ, ค่าส่งพัสดุ, ค่าทำบัญชี, ค่าธรรมเนียมธนาคาร</p>
+                        </div>
+                        <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px;">
+                            <strong style="color: var(--text-primary);">🚗 หมวดเดินทาง & ยานพาหนะ</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">ค่าน้ำมัน (ต้องเป็นรถชื่อบริษัท หรือทำสัญญาเช่า), ค่าทางด่วน, ค่าที่พักเวลาไปทำงานต่างจังหวัด</p>
+                        </div>
+                        <div style="background: var(--bg-primary); padding: 12px; border-radius: 8px;">
+                            <strong style="color: var(--text-primary);">💻 หมวดการตลาด & โปรแกรม</strong>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">ค่าโฆษณา (Facebook/Google), ค่าจ้างทำเว็บ, ค่าลิขสิทธิ์ซอฟต์แวร์รายเดือน</p>
+                        </div>
+                    </div>
+                    <div class="info-box" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2); padding: 12px;">
+                        <strong style="color: var(--accent-amber);">⚠️ ข้อควรระวัง! บิลที่นำมาเคลมไม่ได้:</strong>
+                        <ul style="margin-top: 4px; margin-bottom: 0; padding-left: 20px; font-size: 0.85rem; color: var(--text-secondary);">
+                            <li>ค่าใช้จ่ายส่วนตัวที่ไม่เกี่ยวกับบริษัท (เช่น ค่าอาหารครอบครัว, ค่าเทอมลูก, ค่าใช้จ่ายในบ้านส่วนตัว)</li>
+                            <li>ใบเสร็จที่ไม่มีชื่อร้านค้า, ไม่มีวันที่, หรือระบุชื่อผู้ซื้อเป็นชื่อบุคคลอื่น</li>
+                            <li>บิลเงินสดที่ไม่มีสำเนาบัตรประชาชนของผู้รับเงินแนบมาด้วย (กรณีจ่ายค่าจ้าง/ค่าแรงให้บุคคลธรรมดา)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========== SUPPLIER GRADING ========== -->
+        <section class="content-section" id="section-supplier">
+            <h2 class="section-title">🏪 คัดเกรดซัพพลายเออร์</h2>
+            <p class="section-subtitle">เกณฑ์การเลือกซื้อวัสดุ — ควรซื้อกับซัพพลายเออร์แบบไหนก่อน-หลัง เพื่อประโยชน์สูงสุดทางบัญชีและภาษี</p>
+
+            <!-- Why it matters -->
+            <div class="info-box" style="margin-bottom: 24px;">
+                <strong>🎯 ทำไมต้องคัดเกรด?</strong> เพราะบริษัทเราจด VAT แล้ว ซัพพลายเออร์ที่ออก <strong>ใบกำกับภาษี</strong> ได้ → เราเอา VAT ซื้อไปหักลบกับ VAT ขายได้ ช่วยลดภาษี VAT ที่ต้องจ่ายทุกเดือน ส่วนซัพพลายเออร์ที่ออกเอกสารไม่ได้ → เงินจ่ายไปแต่นำมาลดภาษีไม่ได้เลย
+            </div>
+
+            <!-- Grade A -->
+            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--accent-emerald);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(16, 185, 129, 0.15); font-size: 1.3rem;">🅰️</div>
+                    <div>
+                        <div class="card-title" style="color: var(--accent-emerald);">Grade A — ซื้อก่อนเสมอ ✅</div>
+                        <div class="card-desc">นิติบุคคล จดทะเบียน VAT — ดีที่สุดสำหรับบริษัทเรา</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <div>
+                            <h4 style="color: var(--accent-emerald); margin-bottom: 8px;">📋 คุณสมบัติ</h4>
+                            <ul class="todo-list">
+                                <li>เป็น <strong>บริษัท/ห้างหุ้นส่วน</strong> ที่จดทะเบียน VAT</li>
+                                <li>ออก <strong>ใบกำกับภาษี (Tax Invoice)</strong> ได้ ← สำคัญมาก!</li>
+                                <li>มีเลขประจำตัวผู้เสียภาษี 13 หลัก บนเอกสาร</li>
+                                <li>มีที่อยู่ร้านค้า/บริษัท ชัดเจน</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-emerald); margin-bottom: 8px;">💰 ประโยชน์ที่ได้</h4>
+                            <ul class="todo-list">
+                                <li><strong>เคลม VAT ซื้อได้ 7%</strong> — ลดยอด VAT ที่ต้องจ่ายรัฐ</li>
+                                <li>บันทึกเป็นค่าใช้จ่ายบริษัทได้ 100%</li>
+                                <li>เอกสารครบ → บัญชีทำงานง่าย ไม่มีปัญหา</li>
+                                <li>ลดกำไรสุทธิ → ลดภาษีนิติบุคคลปลายปี</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box success" style="margin-top: 12px;">
+                        <strong>📌 ตัวอย่าง:</strong> ร้านวัสดุก่อสร้างขนาดใหญ่ (HomePro, Global House, SCG), ร้านผ้าม่านใหญ่ที่จด VAT, ร้านอะลูมิเนียมที่เป็นบริษัท, ร้านขายอุปกรณ์สำนักงานที่มีใบกำกับภาษี
+                    </div>
+                    <div style="background: rgba(16, 185, 129, 0.08); border-radius: 12px; padding: 16px; margin-top: 12px;">
+                        <strong style="color: var(--accent-emerald);">💡 ตัวอย่างสถานการณ์จริง:</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">ซื้อผ้าม่าน 10,000 บาท (รวม VAT) จากร้านที่จด VAT → ได้ใบกำกับภาษี → เคลม VAT ซื้อ 654.21 บาท → VAT ที่ต้องจ่ายสรรพากรลดลง 654.21 บาท + ค่าใช้จ่ายบริษัท 9,345.79 บาท ช่วยลดภาษีนิติบุคคลอีก</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grade B -->
+            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--accent-blue);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(59, 130, 246, 0.15); font-size: 1.3rem;">🅱️</div>
+                    <div>
+                        <div class="card-title" style="color: var(--accent-blue);">Grade B — ซื้อได้ แต่เสียสิทธิ์ VAT</div>
+                        <div class="card-desc">นิติบุคคล แต่ไม่ได้จด VAT (รายได้ไม่ถึง 1.8 ล้าน/ปี) หรือร้านค้าที่ออกใบเสร็จได้</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <div>
+                            <h4 style="color: var(--accent-blue); margin-bottom: 8px;">📋 คุณสมบัติ</h4>
+                            <ul class="todo-list">
+                                <li>เป็นร้านค้า/บริษัท แต่ <strong>ไม่ได้จด VAT</strong></li>
+                                <li>ออกได้แค่ <strong>ใบเสร็จรับเงิน / ใบส่งของ</strong></li>
+                                <li>มีชื่อร้าน, ที่อยู่, และเลขประจำตัวผู้เสียภาษีบนเอกสาร</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-blue); margin-bottom: 8px;">💰 ประโยชน์ / ข้อจำกัด</h4>
+                            <ul class="todo-list">
+                                <li><strong style="color: var(--accent-rose);">❌ เคลม VAT ซื้อไม่ได้</strong> — ขาดทุนค่า VAT 7%</li>
+                                <li>แต่ยังบันทึกเป็น <strong>ค่าใช้จ่ายบริษัท</strong> ได้</li>
+                                <li>ลดกำไรสุทธิ → ลดภาษีนิติบุคคลปลายปีได้</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box" style="margin-top: 12px;">
+                        <strong>📌 ตัวอย่าง:</strong> ร้านผ้าเล็กๆ ที่ขายไม่ถึง 1.8 ล้าน/ปี, ร้านขายอุปกรณ์ช่างที่มีหน้าร้านแต่ไม่จด VAT, ร้านค้าออนไลน์ที่ออกใบเสร็จได้
+                    </div>
+                    <div style="background: rgba(59, 130, 246, 0.08); border-radius: 12px; padding: 16px; margin-top: 12px;">
+                        <strong style="color: var(--accent-blue);">💡 ตัวอย่างสถานการณ์จริง:</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">ซื้อรางม่าน 5,000 บาท จากร้านเล็กที่ไม่จด VAT → ได้แค่ใบเสร็จรับเงิน → เคลม VAT ไม่ได้ (เสีย 327 บาท) → แต่ยังนำมาบันทึกเป็นค่าใช้จ่ายบริษัทลดภาษีนิติบุคคลได้</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grade C -->
+            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--accent-amber);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(245, 158, 11, 0.15); font-size: 1.3rem;">🅲</div>
+                    <div>
+                        <div class="card-title" style="color: var(--accent-amber);">Grade C — ซื้อได้เมื่อจำเป็น ⚠️ (ยุ่งยากขึ้น)</div>
+                        <div class="card-desc">บุคคลธรรมดา / ช่างฟรีแลนซ์ / ร้านค้าเล็กที่ออกได้แค่บิลเงินสด</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <div>
+                            <h4 style="color: var(--accent-amber); margin-bottom: 8px;">📋 คุณสมบัติ</h4>
+                            <ul class="todo-list">
+                                <li>เป็น <strong>บุคคลธรรมดา</strong> ไม่มีนิติบุคคล</li>
+                                <li>ออกได้แค่ <strong>บิลเงินสด</strong> (เขียนมือ)</li>
+                                <li>ต้องขอ <strong>สำเนาบัตรประชาชน</strong> ผู้รับเงินแนบ</li>
+                                <li>ต้อง <strong>หักภาษี ณ ที่จ่าย 3%</strong> (ภ.ง.ด.3) กรณีจ้างทำของ</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-amber); margin-bottom: 8px;">💰 ประโยชน์ / ข้อจำกัด</h4>
+                            <ul class="todo-list">
+                                <li><strong style="color: var(--accent-rose);">❌ เคลม VAT ไม่ได้</strong></li>
+                                <li>บันทึกค่าใช้จ่ายได้ <strong>ถ้ามีเอกสารครบ</strong> (บิล+สำเนาบัตร)</li>
+                                <li>ต้อง <strong>ยื่น ภ.ง.ด.3 เพิ่ม</strong> ทุกเดือนที่มีการจ้าง → งานบัญชีเพิ่ม</li>
+                                <li>ถ้าเอกสารไม่ครบ → สรรพากรอาจไม่ยอมรับเป็นค่าใช้จ่าย</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-box warning" style="margin-top: 12px;">
+                        <strong>📌 ตัวอย่าง:</strong> ช่างติดตั้งฟรีแลนซ์, ร้านตลาดนัดขายอุปกรณ์, ช่างเชื่อมที่มาจ้างเป็นรายวัน, ช่างทำเฟอร์นิเจอร์อิสระ
+                    </div>
+                    <div style="background: rgba(245, 158, 11, 0.08); border-radius: 12px; padding: 16px; margin-top: 12px;">
+                        <strong style="color: var(--accent-amber);">💡 ตัวอย่างสถานการณ์จริง:</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">จ้างช่างฟรีแลนซ์ติดตั้งม่าน 3,000 บาท → ต้องหัก WHT 3% = 90 บาท → จ่ายจริง 2,910 บาท → ออกหนังสือหัก ณ ที่จ่าย (50 ทวิ) ให้ช่าง → แนบสำเนาบัตรช่าง + บิลเงินสด ส่งบัญชี → บัญชียื่น ภ.ง.ด.3 พร้อมนำส่ง 90 บาท ให้สรรพากร</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grade D -->
+            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--accent-rose);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(244, 63, 94, 0.15); font-size: 1.3rem;">🅳</div>
+                    <div>
+                        <div class="card-title" style="color: var(--accent-rose);">Grade D — หลีกเลี่ยง ❌ (ห้ามซื้อถ้าเป็นไปได้)</div>
+                        <div class="card-desc">ร้านค้า/บุคคลที่ไม่ออกเอกสารใดๆ เลย</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <div>
+                            <h4 style="color: var(--accent-rose); margin-bottom: 8px;">📋 ลักษณะ</h4>
+                            <ul class="todo-list">
+                                <li>ไม่ออกบิล ไม่ออกใบเสร็จ ไม่มีเอกสารใดๆ เลย</li>
+                                <li>ไม่ยอมให้สำเนาบัตรประชาชน</li>
+                                <li>จ่ายเงินสดแล้วไม่มีหลักฐานอะไรกลับมา</li>
+                                <li>ซื้อออนไลน์ที่ไม่มีข้อมูลร้านค้า</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-rose); margin-bottom: 8px;">💀 ผลเสีย</h4>
+                            <ul class="todo-list">
+                                <li><strong style="color: var(--accent-rose);">❌ เคลม VAT ไม่ได้</strong></li>
+                                <li><strong style="color: var(--accent-rose);">❌ บันทึกเป็นค่าใช้จ่ายบริษัทไม่ได้</strong></li>
+                                <li><strong style="color: var(--accent-rose);">❌ ลดภาษีนิติบุคคลไม่ได้</strong></li>
+                                <li>เหมือนจ่ายเงินส่วนตัว → บริษัทไม่ได้ประโยชน์ใดเลย</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.2); border-radius: 12px; padding: 16px; margin-top: 12px;">
+                        <strong style="color: var(--accent-rose);">⚠️ ตัวอย่างสถานการณ์จริง:</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">ซื้ออุปกรณ์ 2,000 บาท จากร้านตลาดนัด ไม่ได้บิลอะไรเลย → นำมาบันทึกบัญชีไม่ได้ → VAT ก็เคลมไม่ได้ → ภาษีนิติบุคคลก็ลดไม่ได้ → <strong>เสียเงิน 2,000 บาท โดยไม่ได้ลดภาษีแม้แต่บาทเดียว</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Comparison -->
+            <div class="card" style="margin-top: 8px;">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(99, 102, 241, 0.15);">📊</div>
+                    <div>
+                        <div class="card-title">สรุปเปรียบเทียบทั้ง 4 เกรด</div>
+                        <div class="card-desc">เปรียบเทียบสิทธิประโยชน์ที่บริษัทจะได้รับจากซัพพลายเออร์แต่ละเกรด</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px; overflow-x: auto;">
+                    <table class="structure-table">
+                        <thead>
+                            <tr>
+                                <th>เกณฑ์</th>
+                                <th style="color: var(--accent-emerald);">🅰️ Grade A</th>
+                                <th style="color: var(--accent-blue);">🅱️ Grade B</th>
+                                <th style="color: var(--accent-amber);">🅲 Grade C</th>
+                                <th style="color: var(--accent-rose);">🅳 Grade D</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ประเภท</td>
+                                <td>นิติบุคคลจด VAT</td>
+                                <td>นิติบุคคลไม่จด VAT</td>
+                                <td>บุคคลธรรมดา</td>
+                                <td>ไม่มีเอกสาร</td>
+                            </tr>
+                            <tr>
+                                <td>เอกสารที่ได้</td>
+                                <td><span class="badge badge-emerald">ใบกำกับภาษี</span></td>
+                                <td><span class="badge badge-blue">ใบเสร็จรับเงิน</span></td>
+                                <td><span class="badge badge-amber">บิลเงินสด</span></td>
+                                <td><span class="badge badge-rose">ไม่มี</span></td>
+                            </tr>
+                            <tr>
+                                <td>เคลม VAT ซื้อ 7%</td>
+                                <td style="color: var(--accent-emerald);">✅ ได้</td>
+                                <td style="color: var(--accent-rose);">❌ ไม่ได้</td>
+                                <td style="color: var(--accent-rose);">❌ ไม่ได้</td>
+                                <td style="color: var(--accent-rose);">❌ ไม่ได้</td>
+                            </tr>
+                            <tr>
+                                <td>บันทึกค่าใช้จ่ายบริษัท</td>
+                                <td style="color: var(--accent-emerald);">✅ ได้ 100%</td>
+                                <td style="color: var(--accent-emerald);">✅ ได้</td>
+                                <td style="color: var(--accent-amber);">⚠️ ได้ถ้ามีเอกสารครบ</td>
+                                <td style="color: var(--accent-rose);">❌ ไม่ได้</td>
+                            </tr>
+                            <tr>
+                                <td>ลดภาษีนิติบุคคล</td>
+                                <td style="color: var(--accent-emerald);">✅ ได้</td>
+                                <td style="color: var(--accent-emerald);">✅ ได้</td>
+                                <td style="color: var(--accent-amber);">⚠️ ได้ถ้ามีเอกสาร</td>
+                                <td style="color: var(--accent-rose);">❌ ไม่ได้</td>
+                            </tr>
+                            <tr>
+                                <td>ต้องหัก WHT (ภ.ง.ด.3)</td>
+                                <td>ไม่ต้อง</td>
+                                <td>ไม่ต้อง</td>
+                                <td style="color: var(--accent-amber);">⚠️ ต้องหัก 3%</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>ความยุ่งยากเอกสาร</td>
+                                <td style="color: var(--accent-emerald);">⭐ น้อยมาก</td>
+                                <td style="color: var(--accent-blue);">⭐⭐ น้อย</td>
+                                <td style="color: var(--accent-amber);">⭐⭐⭐ ปานกลาง</td>
+                                <td style="color: var(--accent-rose);">💀 ใช้ไม่ได้เลย</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Check Tip -->
+            <div class="card" style="margin-top: 20px; border-left: 4px solid var(--accent-cyan);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(6, 182, 212, 0.15);">🔍</div>
+                    <div>
+                        <div class="card-title">วิธีเช็คเร็ว ก่อนซื้อของกับร้านไหน</div>
+                        <div class="card-desc">ถามแค่ 3 คำถามนี้ก่อนตัดสินใจซื้อ</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div class="timeline" style="padding-left: 20px;">
+                        <div class="timeline-item">
+                            <div style="font-weight: 700; color: var(--accent-emerald);">คำถามที่ 1: "ออกใบกำกับภาษีได้ไหมครับ?"</div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">ถ้าตอบ <strong>ได้</strong> → 🅰️ Grade A ✅ ซื้อเลย!<br>ถ้าตอบ <strong>ไม่ได้</strong> → ถามคำถามถัดไป</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div style="font-weight: 700; color: var(--accent-blue);">คำถามที่ 2: "ออกใบเสร็จรับเงินพร้อมชื่อร้าน/เลขภาษีได้ไหม?"</div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">ถ้าตอบ <strong>ได้</strong> → 🅱️ Grade B — ซื้อได้ แต่จะเคลม VAT ไม่ได้<br>ถ้าตอบ <strong>ไม่ได้</strong> → ถามคำถามถัดไป</p>
+                        </div>
+                        <div class="timeline-item" style="margin-bottom: 0;">
+                            <div style="font-weight: 700; color: var(--accent-amber);">คำถามที่ 3: "เขียนบิลเงินสด + ให้สำเนาบัตรประชาชนได้ไหม?"</div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">ถ้าตอบ <strong>ได้</strong> → 🅲 Grade C — ซื้อได้เมื่อจำเป็น (ต้องหัก WHT + เอกสารเยอะ)<br>ถ้าตอบ <strong>ไม่ได้</strong> → 🅳 Grade D ❌ <strong>หลีกเลี่ยง!</strong> หาร้านอื่นแทน</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========== DARK STRATEGIES ========== -->
+        <section class="content-section" id="section-dark">
+            <h2 class="section-title">🌙 กลยุทธ์ภาษี — รู้ทันสายดาร์ก</h2>
+            <p class="section-subtitle">รวมเทคนิคลดภาษีที่ถูกกฎหมาย สิ่งที่ต้องระวัง และสิ่งที่ห้ามทำเด็ดขาด — เพื่อปกป้องบริษัทของเรา</p>
+
+            <!-- GREEN: Legal Strategies -->
+            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--accent-emerald);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(16, 185, 129, 0.15);">✅</div>
+                    <div>
+                        <div class="card-title" style="color: var(--accent-emerald);">สายเขียว — ถูกกฎหมาย 100% ทำได้เลย</div>
+                        <div class="card-desc">เทคนิคที่คนทั่วไปไม่รู้ แต่ถูกต้องตามกฎหมายทุกประการ</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+
+                        <!-- Strategy 1 -->
+                        <div style="background: var(--bg-primary); padding: 16px; border-radius: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">💰</span>
+                                <strong style="color: var(--accent-emerald);">ตั้งเงินเดือนพอดีช่วงยกเว้นภาษี</strong>
+                                <span class="badge badge-emerald">กำลังทำอยู่ ✅</span>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">เงินเดือน 25,000 × 12 = 300,000 บาท/ปี → หักค่าใช้จ่าย 100,000 → หักลดหย่อน 60,000 → หักประกันสังคม 9,000 → เงินได้สุทธิ 131,000 → <strong>ภาษี 0 บาท!</strong></p>
+                            <p style="font-size: 0.85rem; color: var(--accent-emerald);">💡 ผลลัพธ์: เงินเดือนทั้ง 4 คน รวม 1,200,000 บาท/ปี เป็นค่าใช้จ่ายบริษัท ลดกำไร ลดภาษีนิติบุคคล — โดยไม่มีใครเสียภาษีบุคคลเลย</p>
+                        </div>
+
+                        <!-- Strategy 2 -->
+                        <div style="background: var(--bg-primary); padding: 16px; border-radius: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">🚗</span>
+                                <strong style="color: var(--accent-emerald);">ค่าน้ำมัน/ทางด่วน/ซ่อมรถ ใส่ชื่อบริษัท</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">ทำ "สัญญาเช่ารถ" ระหว่างกรรมการ (เจ้าของรถ) กับบริษัท → หลังจากนั้น ค่าน้ำมัน ค่าทางด่วน ค่าซ่อมบำรุง ค่าประกันรถ ทั้งหมดเป็นค่าใช้จ่ายบริษัท</p>
+                            <p style="font-size: 0.85rem; color: var(--accent-emerald);">💡 ผลลัพธ์: ค่าน้ำมัน ~3,000-5,000 บาท/เดือน × 12 = ลดกำไรบริษัทอีก 36,000-60,000 บาท/ปี + เคลม VAT น้ำมันได้ทุกใบ</p>
+                        </div>
+
+                        <!-- Strategy 3 -->
+                        <div style="background: var(--bg-primary); padding: 16px; border-radius: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">🏠</span>
+                                <strong style="color: var(--accent-emerald);">เช่าบ้านตัวเองเป็นสำนักงาน</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">ทำ "สัญญาเช่า" ให้บริษัทเช่าพื้นที่บ้านกรรมการเป็นสำนักงาน (เช่น เดือนละ 5,000-10,000 บาท) → ค่าเช่าเป็นค่าใช้จ่ายบริษัท</p>
+                            <p style="font-size: 0.85rem; color: var(--accent-emerald);">💡 ผลลัพธ์: ลดกำไรบริษัทอีก 60,000-120,000 บาท/ปี (แต่ผู้ให้เช่าต้องเสียภาษีเงินได้จากค่าเช่าด้วย — ต้องคำนวณให้คุ้ม)</p>
+                        </div>
+
+                        <!-- Strategy 4 -->
+                        <div style="background: var(--bg-primary); padding: 16px; border-radius: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">📱</span>
+                                <strong style="color: var(--accent-emerald);">ค่าโทรศัพท์/อินเทอร์เน็ต ในชื่อบริษัท</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">เปลี่ยนเบอร์โทร/แพ็คเน็ตมาเป็นชื่อบริษัท → ค่าบริการรายเดือนเป็นค่าใช้จ่ายบริษัท + เคลม VAT ได้</p>
+                            <p style="font-size: 0.85rem; color: var(--accent-emerald);">💡 ผลลัพธ์: ค่ามือถือ 2 เบอร์ + เน็ตบ้าน ~2,000 บาท/เดือน = ลดกำไร 24,000 บาท/ปี</p>
+                        </div>
+
+                        <!-- Strategy 5 -->
+                        <div style="background: var(--bg-primary); padding: 16px; border-radius: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">💻</span>
+                                <strong style="color: var(--accent-emerald);">ซื้ออุปกรณ์ IT/เฟอร์นิเจอร์ในชื่อบริษัท</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">คอมพิวเตอร์ โน้ตบุ๊ค เครื่องพิมพ์ โต๊ะทำงาน ตู้เก็บเอกสาร → ซื้อในชื่อบริษัท เป็นค่าใช้จ่าย/สินทรัพย์บริษัท + เคลม VAT ซื้อได้</p>
+                            <p style="font-size: 0.85rem; color: var(--accent-emerald);">💡 ผลลัพธ์: โน้ตบุ๊ค 30,000 บาท → เคลม VAT ได้ ~1,962 บาท + ค่าเสื่อมราคาลดกำไร 3 ปี</p>
+                        </div>
+
+                        <!-- Strategy 6 -->
+                        <div style="background: var(--bg-primary); padding: 16px; border-radius: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">🍽️</span>
+                                <strong style="color: var(--accent-emerald);">ค่าเลี้ยงรับรอง (Entertainment)</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">กินข้าวกับลูกค้า/ซัพพลายเออร์ เป็น "ค่ารับรอง" → บันทึกเป็นค่าใช้จ่ายบริษัท (หักได้ไม่เกิน 0.3% ของรายได้หรือทุน แล้วแต่อย่างไหนจะมากกว่า สูงสุดไม่เกิน 10 ล้าน)</p>
+                            <p style="font-size: 0.85rem; color: var(--accent-emerald);">💡 เคล็ดลับ: ต้องเขียนชื่อลูกค้า/บริษัทที่ไปเลี้ยง + เหตุผลกำกับบนบิลทุกครั้ง</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Summary box -->
+                    <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 16px; margin-top: 16px;">
+                        <strong style="color: var(--accent-emerald);">📊 รวมประมาณการลดกำไรจากกลยุทธ์สีเขียว:</strong>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-top: 8px;">
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">💰 เงินเดือน 4 คน: <strong>1,200,000</strong> ฿/ปี</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">🚗 ค่าเดินทาง/น้ำมัน: <strong>~48,000</strong> ฿/ปี</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">📱 ค่าสื่อสาร: <strong>~24,000</strong> ฿/ปี</div>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary);">📒 ค่าทำบัญชี: <strong>36,000</strong> ฿/ปี</div>
+                        </div>
+                        <p style="font-size: 0.9rem; color: var(--accent-emerald); margin-top: 8px; font-weight: 700;">= ลดกำไรบริษัทได้ประมาณ 1,300,000+ บาท/ปี → ถ้ากำไรไม่เกินนี้ ภาษีนิติบุคคลก็เป็น 0!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRAY: Risky Strategies -->
+            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--accent-amber);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(245, 158, 11, 0.15);">⚠️</div>
+                    <div>
+                        <div class="card-title" style="color: var(--accent-amber);">สายเทา — ถูกกฎหมาย แต่ต้องระวัง</div>
+                        <div class="card-desc">ทำได้ แต่ถ้าทำมากเกินไปหรือพิสูจน์ไม่ได้ สรรพากรอาจตั้งคำถาม</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+
+                        <div style="background: rgba(245, 158, 11, 0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.15);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">🛒</span>
+                                <strong style="color: var(--accent-amber);">ใส่ค่าใช้จ่ายส่วนตัวเป็นของบริษัท</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">เช่น ค่ากิน ค่าเสื้อผ้า ของใช้ในบ้าน → ถ้าสรรพากรตรวจแล้วพิสูจน์ไม่ได้ว่าเกี่ยวกับธุรกิจ → <strong style="color: var(--accent-rose);">ถูกเรียกเก็บภาษีเพิ่ม + เบี้ยปรับ 1-2 เท่า + เงินเพิ่ม 1.5%/เดือน</strong></p>
+                        </div>
+
+                        <div style="background: rgba(245, 158, 11, 0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.15);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">📈</span>
+                                <strong style="color: var(--accent-amber);">ตั้งเงินเดือนสูงเกินจริงเทียบกับรายได้</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">ถ้าบริษัทรายได้ 500,000/ปี แต่จ่ายเงินเดือนรวม 1,200,000/ปี → สรรพากรอาจตั้งข้อสงสัยว่าเงินเดือนสูงเกินสมควร → <strong style="color: var(--accent-rose);">อาจไม่ยอมรับเป็นค่าใช้จ่ายบางส่วน</strong></p>
+                        </div>
+
+                        <div style="background: rgba(245, 158, 11, 0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.15);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">💵</span>
+                                <strong style="color: var(--accent-amber);">รับเงินสดแล้วไม่ออกบิล (ซ่อนรายได้บางส่วน)</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">รับงานเป็นเงินสดแล้วไม่บันทึกรายได้ → ถ้าสรรพากรเช็ค Statement ธนาคาร หรือลูกค้าแจ้งว่าจ่ายให้เราแล้ว → <strong style="color: var(--accent-rose);">เจอทันที! เสียภาษีย้อนหลัง + เบี้ยปรับ</strong></p>
+                        </div>
+
+                    </div>
+
+                    <div class="info-box warning" style="margin-top: 16px;">
+                        <strong>⚠️ คำแนะนำ:</strong> ถ้าจะใช้กลยุทธ์สีเทา ต้อง <strong>มีเหตุผลทางธุรกิจพิสูจน์ได้เสมอ</strong> เช่น ซื้อของกินเลี้ยงทีมงาน → เขียนกำกับว่า "ค่าอาหารประชุมงาน" + ระบุวันที่และรายชื่อผู้เข้าร่วม
+                    </div>
+                </div>
+            </div>
+
+            <!-- RED: Illegal -->
+            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--accent-rose);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(244, 63, 94, 0.15);">🚫</div>
+                    <div>
+                        <div class="card-title" style="color: var(--accent-rose);">สายดำ — ห้ามทำเด็ดขาด ❌ (ผิดกฎหมาย มีโทษจำคุก)</div>
+                        <div class="card-desc">สิ่งที่คนทำธุรกิจบางคนทำ แต่มีโทษรุนแรงมาก — รู้ไว้เพื่อไม่ให้ใครมาชวนเราทำ</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+
+                        <div style="background: rgba(244, 63, 94, 0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(244, 63, 94, 0.15);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">📄</span>
+                                <strong style="color: var(--accent-rose);">ซื้อใบกำกับภาษีปลอม (ซื้อบิลเปล่า)</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">ซื้อ "บิลเปล่า" จากคนที่ขายใบกำกับภาษี เพื่อเอา VAT ซื้อมาเคลม หรือเพิ่มค่าใช้จ่ายเท็จ</p>
+                            <div style="background: rgba(244, 63, 94, 0.1); padding: 10px; border-radius: 8px;">
+                                <p style="font-size: 0.85rem; color: var(--accent-rose); font-weight: 700;">⚖️ โทษ: จำคุก 3 เดือน – 7 ปี + เบี้ยปรับ 2 เท่าของภาษี + เงินเพิ่ม 1.5%/เดือน</p>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(244, 63, 94, 0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(244, 63, 94, 0.15);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">👻</span>
+                                <strong style="color: var(--accent-rose);">สร้างรายจ่ายเท็จ (จ้างคนที่ไม่มีตัวตน)</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">สร้างชื่อพนักงานปลอมเพื่อบันทึกเงินเดือนเป็นค่าใช้จ่าย หรือทำรายจ่ายค่าจ้างที่ไม่ได้จ้างจริง</p>
+                            <div style="background: rgba(244, 63, 94, 0.1); padding: 10px; border-radius: 8px;">
+                                <p style="font-size: 0.85rem; color: var(--accent-rose); font-weight: 700;">⚖️ โทษ: จำคุก 3 เดือน – 7 ปี + ปรับ 2,000 – 200,000 บาท</p>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(244, 63, 94, 0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(244, 63, 94, 0.15);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">🙈</span>
+                                <strong style="color: var(--accent-rose);">ไม่ออกใบกำกับภาษีให้ลูกค้า (ซ่อนรายได้ทั้งก้อน)</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">รับงานแล้วไม่ออกบิลให้ลูกค้าเลย เพื่อไม่ให้รายได้ปรากฏในระบบ → สรรพากรตรวจจาก Statement ธนาคาร + ข้อมูลจากลูกค้าที่เคลมค่าใช้จ่ายฝั่งเขา</p>
+                            <div style="background: rgba(244, 63, 94, 0.1); padding: 10px; border-radius: 8px;">
+                                <p style="font-size: 0.85rem; color: var(--accent-rose); font-weight: 700;">⚖️ โทษ: เรียกภาษีย้อนหลัง + เบี้ยปรับ 2 เท่า + เงินเพิ่ม 1.5%/เดือน ย้อนหลังได้ถึง 10 ปี</p>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(244, 63, 94, 0.05); padding: 16px; border-radius: 12px; border: 1px solid rgba(244, 63, 94, 0.15);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <span style="font-size: 1.3rem;">📚</span>
+                                <strong style="color: var(--accent-rose);">ทำบัญชีสองชุด</strong>
+                            </div>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px;">ทำบัญชีชุดจริงไว้ดูเอง + บัญชีชุดปลอมส่งสรรพากร → ถ้าถูกจับได้ โทษหนักมาก</p>
+                            <div style="background: rgba(244, 63, 94, 0.1); padding: 10px; border-radius: 8px;">
+                                <p style="font-size: 0.85rem; color: var(--accent-rose); font-weight: 700;">⚖️ โทษ: จำคุกสูงสุด 7 ปี + ปรับ + เรียกภาษีย้อนหลังทั้งหมด</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 12px; padding: 16px; margin-top: 16px;">
+                        <strong style="color: var(--accent-rose); font-size: 1rem;">🛑 สรุป: อย่าทำเด็ดขาด!</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 4px;">สรรพากรยุคนี้เช็คข้อมูลจาก <strong>ระบบอิเล็กทรอนิกส์</strong> ทั้งหมดแล้ว — Statement ธนาคาร, ใบกำกับภาษีที่ออนไลน์, ข้อมูลจากฝั่งลูกค้า — โอกาสที่จะรอดนั้นน้อยมาก และถ้าโดนจับย้อนหลังได้ถึง 10 ปี ค่าปรับจะเป็นหลักล้านบาท</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendation -->
+            <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(6, 182, 212, 0.15);">🎯</div>
+                    <div>
+                        <div class="card-title">สรุปแนวทางที่แนะนำสำหรับ ม่านทิพย์มั่นคง จำกัด</div>
+                        <div class="card-desc">ทำแค่สายเขียว ก็เพียงพอที่จะลดภาษีได้อย่างมีประสิทธิภาพแล้ว</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <div class="timeline" style="padding-left: 20px;">
+                        <div class="timeline-item">
+                            <div style="font-weight: 700; color: var(--accent-emerald);">✅ ทำทันที (สายเขียว)</div>
+                            <ul class="todo-list" style="margin-top: 8px;">
+                                <li>เงินเดือน 4 คน × 25,000 บาท → กำลังทำอยู่แล้ว ดีมาก!</li>
+                                <li>ทำสัญญาเช่ารถ → เอาค่าน้ำมัน/ทางด่วนมาเป็นค่าใช้จ่ายบริษัท</li>
+                                <li>เปลี่ยนเบอร์โทร/เน็ตมาชื่อบริษัท</li>
+                                <li>ซื้ออุปกรณ์ทำงานทุกอย่างในชื่อบริษัท</li>
+                            </ul>
+                        </div>
+                        <div class="timeline-item">
+                            <div style="font-weight: 700; color: var(--accent-amber);">⚠️ ระวัง (สายเทา)</div>
+                            <ul class="todo-list" style="margin-top: 8px;">
+                                <li>อย่าใส่ค่าใช้จ่ายส่วนตัวที่ไม่เกี่ยวกับงานเด็ดขาด</li>
+                                <li>ถ้ารายได้ยังน้อย อย่าตั้งเงินเดือนสูงเกินไป</li>
+                            </ul>
+                        </div>
+                        <div class="timeline-item" style="margin-bottom: 0;">
+                            <div style="font-weight: 700; color: var(--accent-rose);">🚫 ห้ามทำ (สายดำ)</div>
+                            <ul class="todo-list" style="margin-top: 8px;">
+                                <li>ห้ามซื้อบิลเปล่า/ใบกำกับภาษีปลอม</li>
+                                <li>ห้ามสร้างรายจ่ายเท็จ</li>
+                                <li>ห้ามซ่อนรายได้ — ออกบิลให้ลูกค้าทุกงานเสมอ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========== JOURNAL ENTRIES ========== -->
+        <section class="content-section" id="section-journal">
+            <h2 class="section-title">📒 แบบฟอร์มบันทึกบัญชี</h2>
+            <p class="section-subtitle">ตัวอย่างการบันทึกบัญชี (Journal Entry) สำหรับรายการประจำเดือนของบริษัท — คลิกเพื่อดูรายละเอียด</p>
+
+            <!-- JE 1: เงินเดือนกรรมการ -->
+            <div class="journal-card" id="je1">
+                <div class="journal-header" onclick="toggleJournal('je1')">
+                    <div class="journal-header-left">
+                        <div class="journal-num blue">1</div>
+                        <div>
+                            <div class="journal-name">บันทึกเงินเดือนกรรมการ (พ่อ + แม่)</div>
+                            <div class="journal-freq">บันทึกทุกสิ้นเดือน | พ่อ 25,000 + แม่ 25,000 = 50,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je1-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je1-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ค่าตอบแทนกรรมการ</td>
+                                <td class="acct-code">5201</td>
+                                <td class="dr-val">50,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">50,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> กรรมการไม่ต้องหัก ปกส. | ภาษีบุคคล = 0 จึงไม่ต้องหัก WHT เงินเดือน | โอนเข้าบัญชีส่วนตัว พ่อ 25,000 + แม่ 25,000
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 2: เงินเดือนพนักงาน -->
+            <div class="journal-card" id="je2">
+                <div class="journal-header" onclick="toggleJournal('je2')">
+                    <div class="journal-header-left">
+                        <div class="journal-num purple">2</div>
+                        <div>
+                            <div class="journal-name">บันทึกเงินเดือนพนักงาน (โอปอ + เต้ย)</div>
+                            <div class="journal-freq">บันทึกทุกสิ้นเดือน | โอปอ 25,000 + เต้ย 25,000 = 50,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je2-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je2-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">เงินเดือนพนักงาน</td>
+                                <td class="acct-code">5202</td>
+                                <td class="dr-val">50,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ประกันสังคมค้างจ่าย - ส่วนพนักงาน</td>
+                                <td class="acct-code">2103</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">1,500</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">48,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> หักประกันสังคมพนักงาน 5% (โอปอ 750 + เต้ย 750 = 1,500) | โอนจริง: โอปอ 24,250 + เต้ย 24,250 = 48,500 | ภาษีบุคคล = 0 ไม่ต้องหัก WHT
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 3: ประกันสังคมบริษัทสมทบ -->
+            <div class="journal-card" id="je3">
+                <div class="journal-header" onclick="toggleJournal('je3')">
+                    <div class="journal-header-left">
+                        <div class="journal-num emerald">3</div>
+                        <div>
+                            <div class="journal-name">บันทึกประกันสังคม — ส่วนบริษัทสมทบ</div>
+                            <div class="journal-freq">บันทึกทุกสิ้นเดือน | บริษัทสมทบ 2 คน = 1,500 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je3-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je3-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ค่าประกันสังคม (ส่วนบริษัท)</td>
+                                <td class="acct-code">5208</td>
+                                <td class="dr-val">1,500</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ประกันสังคมค้างจ่าย - ส่วนบริษัท</td>
+                                <td class="acct-code">2104</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">1,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> บริษัทสมทบ 5% ของเงินเดือน (สูงสุดฐาน 15,000) คนละ 750 บาท × 2 คน | ยอดค้างจ่ายนี้จะนำส่ง สปส. ภายในวันที่ 15 ของเดือนถัดไป
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 4: นำส่งประกันสังคม -->
+            <div class="journal-card" id="je4">
+                <div class="journal-header" onclick="toggleJournal('je4')">
+                    <div class="journal-header-left">
+                        <div class="journal-num emerald">4</div>
+                        <div>
+                            <div class="journal-name">บันทึกนำส่งประกันสังคม (สปส. 1-10)</div>
+                            <div class="journal-freq">นำส่งภายในวันที่ 15 ของเดือนถัดไป | รวม 3,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je4-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je4-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ประกันสังคมค้างจ่าย - ส่วนพนักงาน</td>
+                                <td class="acct-code">2103</td>
+                                <td class="dr-val">1,500</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name">ประกันสังคมค้างจ่าย - ส่วนบริษัท</td>
+                                <td class="acct-code">2104</td>
+                                <td class="dr-val">1,500</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">3,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ล้างยอดค้างจ่ายทั้ง 2 ส่วน (พนักงาน 1,500 + บริษัท 1,500) โดยจ่ายจริง 3,000 บาท ผ่านธนาคาร
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 7: รายได้ขาย + VAT ขาย -->
+            <div class="journal-card" id="je7">
+                <div class="journal-header" onclick="toggleJournal('je7')">
+                    <div class="journal-header-left">
+                        <div class="journal-num rose">7</div>
+                        <div>
+                            <div class="journal-name">บันทึกรายได้จากการขาย + VAT ขาย</div>
+                            <div class="journal-freq">บันทึกทุกครั้งที่ออกใบกำกับภาษี | ตัวอย่าง: งาน 100,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je7-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je7-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">เงินฝากธนาคาร / ลูกหนี้การค้า</td>
+                                <td class="acct-code">1102/1201</td>
+                                <td class="dr-val">107,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">รายได้จากการขาย</td>
+                                <td class="acct-code">4101</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">100,000</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีขาย (VAT ขาย)</td>
+                                <td class="acct-code">2107</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">7,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> รายได้ก่อน VAT = 100,000 | VAT ขาย 7% = 7,000 | รับเงินรวม 107,000 | ถ้าลูกค้าบริษัทหัก WHT 3% = ได้รับเงินจริง 104,000 (หัก 3,000 เป็นเครดิตภาษี)
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 8: รายได้ที่ถูกหัก WHT -->
+            <div class="journal-card" id="je8">
+                <div class="journal-header" onclick="toggleJournal('je8')">
+                    <div class="journal-header-left">
+                        <div class="journal-num rose">8</div>
+                        <div>
+                            <div class="journal-name">บันทึกรายได้ที่ลูกค้าหัก WHT 3%</div>
+                            <div class="journal-freq">เมื่อลูกค้าเป็นนิติบุคคล | ตัวอย่าง: งาน 100,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je8-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je8-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val">104,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name">ภาษีหัก ณ ที่จ่าย (เครดิตภาษี)</td>
+                                <td class="acct-code">1301</td>
+                                <td class="dr-val">3,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">รายได้จากการขาย</td>
+                                <td class="acct-code">4101</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">100,000</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีขาย (VAT ขาย)</td>
+                                <td class="acct-code">2107</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">7,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ลูกค้าหัก WHT 3% (3,000) จากรายได้ก่อน VAT | รับเงินจริง 107,000 - 3,000 = 104,000 | WHT 3,000 บันทึกเป็น "สินทรัพย์" เพื่อนำไปเคลมกลบภาษีนิติบุคคลปลายปี
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 9: ซื้อสินค้า + VAT ซื้อ -->
+            <div class="journal-card" id="je9">
+                <div class="journal-header" onclick="toggleJournal('je9')">
+                    <div class="journal-header-left">
+                        <div class="journal-num indigo">9</div>
+                        <div>
+                            <div class="journal-name">บันทึกซื้อวัสดุ/สินค้า + VAT ซื้อ</div>
+                            <div class="journal-freq">ทุกครั้งที่ซื้อสินค้า | ตัวอย่าง: ซื้อผ้า 50,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je9-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je9-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ซื้อวัสดุ/สินค้า</td>
+                                <td class="acct-code">5101</td>
+                                <td class="dr-val">50,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name">ภาษีซื้อ (VAT ซื้อ)</td>
+                                <td class="acct-code">1108</td>
+                                <td class="dr-val">3,500</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร / เจ้าหนี้การค้า</td>
+                                <td class="acct-code">1102/2101</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">53,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ซื้อสินค้า 50,000 + VAT 7% (3,500) = จ่ายรวม 53,500 | VAT ซื้อ 3,500 เป็นสินทรัพย์นำไปหักกับ VAT ขายตอนยื่น ภ.พ.30 | <strong>ต้องขอใบกำกับภาษีเต็มรูปเสมอ!</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 10: ค่าทำบัญชี -->
+            <div class="journal-card" id="je10">
+                <div class="journal-header" onclick="toggleJournal('je10')">
+                    <div class="journal-header-left">
+                        <div class="journal-num amber">10</div>
+                        <div>
+                            <div class="journal-name">บันทึกค่าทำบัญชี</div>
+                            <div class="journal-freq">บันทึกทุกเดือน | 3,000 บาท</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je10-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je10-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ค่าบริการวิชาชีพ (บัญชี)</td>
+                                <td class="acct-code">5210</td>
+                                <td class="dr-val">3,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีหัก ณ ที่จ่ายค้างนำส่ง</td>
+                                <td class="acct-code">2108</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">90</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">2,910</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ถ้าสำนักงานบัญชีเป็นนิติบุคคล หัก WHT 3% = 90 บาท (นำส่ง ภ.ง.ด.53) | ถ้าเป็นบุคคลธรรมดา หัก WHT 3% เช่นกัน (นำส่ง ภ.ง.ด.3)
+                    </div>
+                </div>
+            </div>
+
+            <!-- JE 11: นำส่ง VAT -->
+            <div class="journal-card" id="je11">
+                <div class="journal-header" onclick="toggleJournal('je11')">
+                    <div class="journal-header-left">
+                        <div class="journal-num cyan">11</div>
+                        <div>
+                            <div class="journal-name">บันทึกนำส่ง VAT (ภ.พ.30)</div>
+                            <div class="journal-freq">นำส่งภายในวันที่ 23 ของเดือนถัดไป | VAT ขาย - VAT ซื้อ = จ่ายส่วนต่าง</div>
+                        </div>
+                    </div>
+                    <div class="journal-toggle" id="je11-toggle">▼</div>
+                </div>
+                <div class="journal-body" id="je11-body">
+                    <table class="journal-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%">ชื่อบัญชี</th>
+                                <th>รหัสบัญชี</th>
+                                <th class="dr-col" style="text-align:right">เดบิต (Dr.)</th>
+                                <th class="cr-col" style="text-align:right">เครดิต (Cr.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="acct-name">ภาษีขาย (VAT ขาย)</td>
+                                <td class="acct-code">2107</td>
+                                <td class="dr-val">7,000</td>
+                                <td class="cr-val"></td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">ภาษีซื้อ (VAT ซื้อ)</td>
+                                <td class="acct-code">1108</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">3,500</td>
+                            </tr>
+                            <tr>
+                                <td class="acct-name indent">เงินฝากธนาคาร</td>
+                                <td class="acct-code">1102</td>
+                                <td class="dr-val"></td>
+                                <td class="cr-val">3,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="journal-note">
+                        <strong>📌 หมายเหตุ:</strong> ตัวอย่าง: VAT ขาย 7,000 - VAT ซื้อ 3,500 = ต้องจ่ายเพิ่ม 3,500 | ถ้า VAT ซื้อ > VAT ขาย = มียอดยกไปเดือนหน้าหรือขอคืน | <strong>ยื่น ภ.พ.30 ภายในวันที่ 23 (e-Filing)</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart of Accounts Summary -->
+            <div class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(99, 102, 241, 0.15);">📚</div>
+                    <div>
+                        <div class="card-title">ผังบัญชีที่ใช้ (Chart of Accounts)</div>
+                        <div class="card-desc">รหัสบัญชีหลักที่ใช้ในการบันทึกรายการ</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>รหัส</th>
+                            <th>ชื่อบัญชี</th>
+                            <th>หมวด</th>
+                            <th>ประเภท</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="amount">1102</td><td>เงินฝากธนาคาร</td><td><span class="badge badge-blue">สินทรัพย์</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">1108</td><td>ภาษีซื้อ (VAT ซื้อ)</td><td><span class="badge badge-blue">สินทรัพย์</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">1201</td><td>ลูกหนี้การค้า</td><td><span class="badge badge-blue">สินทรัพย์</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">1301</td><td>ภาษีหัก ณ ที่จ่าย (เครดิตภาษี)</td><td><span class="badge badge-blue">สินทรัพย์</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2101</td><td>เจ้าหนี้การค้า</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2103</td><td>ประกันสังคมค้างจ่าย (พนักงาน)</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2104</td><td>ประกันสังคมค้างจ่าย (บริษัท)</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2107</td><td>ภาษีขาย (VAT ขาย)</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">2108</td><td>ภาษีหัก ณ ที่จ่ายค้างนำส่ง</td><td><span class="badge badge-rose">หนี้สิน</span></td><td>หมุนเวียน</td></tr>
+                        <tr><td class="amount">4101</td><td>รายได้จากการขาย</td><td><span class="badge badge-emerald">รายได้</span></td><td>–</td></tr>
+                        <tr><td class="amount">5101</td><td>ซื้อวัสดุ/สินค้า (ต้นทุน)</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>ต้นทุน</td></tr>
+                        <tr><td class="amount">5201</td><td>ค่าตอบแทนกรรมการ</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                        <tr><td class="amount">5202</td><td>เงินเดือนพนักงาน</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                        <tr><td class="amount">5203</td><td>ค่าเช่าอาคาร/สถานที่</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                        <tr><td class="amount">5208</td><td>ค่าประกันสังคม (ส่วนบริษัท)</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                        <tr><td class="amount">5210</td><td>ค่าบริการวิชาชีพ (บัญชี)</td><td><span class="badge badge-amber">ค่าใช้จ่าย</span></td><td>SG&A</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========== VAT & TAX SUBMISSION ========== -->
+        <section class="content-section" id="section-vat">
+            <h2 class="section-title">📊 VAT & ภาษีนำส่ง</h2>
+            <p class="section-subtitle">แบบฟอร์มภาษีที่ต้องนำส่ง พร้อมไทม์ไลน์การยื่นรายเดือนและรายปี</p>
+
+            <!-- VAT Calculation -->
+            <div class="vat-calc-box">
+                <div class="vat-calc-title">🧮 ตัวอย่างการคำนวณ VAT รายเดือน (สมมติยอดขายเดือนละ 800,000)</div>
+                <div class="vat-row">
+                    <span class="label">ยอดขายก่อน VAT</span>
+                    <span class="value">800,000</span>
+                </div>
+                <div class="vat-row">
+                    <span class="label">VAT ขาย (7%)</span>
+                    <span class="value negative">56,000</span>
+                </div>
+                <div class="vat-row">
+                    <span class="label">ยอดซื้อวัสดุ/สินค้า (สมมติ 500,000)</span>
+                    <span class="value">500,000</span>
+                </div>
+                <div class="vat-row">
+                    <span class="label">VAT ซื้อ (7%)</span>
+                    <span class="value positive">35,000</span>
+                </div>
+                <div class="vat-row separator">
+                    <span class="label">💰 VAT ที่ต้องนำส่งสรรพากร (ภ.พ.30)</span>
+                    <span class="value result">21,000 บาท</span>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-bottom: 32px;">
+                <strong>💡 สำคัญมาก:</strong> ถ้าเดือนไหนซื้อของเยอะ (VAT ซื้อ > VAT ขาย) จะไม่ต้องจ่าย VAT เลย และยอดส่วนต่างสามารถยกไปเดือนถัดไปหรือขอคืนได้
+            </div>
+
+            <!-- Monthly Tax Submission Timeline -->
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; color: var(--accent-blue);">📅 ไทม์ไลน์การนำส่งภาษีรายเดือน</h3>
+
+            <div class="info-box success" style="margin-bottom: 20px;">
+                <strong>📌 กฎสำคัญ:</strong> ยื่นผ่าน e-Filing ขยายเวลาได้อีก 8 วัน | ทุกรายการด้านล่างสำนักงานบัญชี (3,000/เดือน) จะเป็นคนดำเนินการยื่นให้ คุณเพียงส่งเอกสารให้ทัน
+            </div>
+
+            <div class="tax-timeline">
+                <!-- Day 15 -->
+                <div class="tax-month-group">
+                    <div class="tax-month-label">📌 ภายในวันที่ 15 ของเดือนถัดไป</div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d15">วันที่ 15</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">📄 ภ.ง.ด.1 — ภาษีหัก ณ ที่จ่าย (เงินเดือน)</div>
+                            <div class="tax-item-desc">
+                                แบบนำส่ง WHT จากเงินเดือน/ค่าตอบแทนกรรมการ 40(1)(2)<br>
+                                <strong>ในกรณีนี้:</strong> ภาษีเงินเดือนทั้ง 4 คน = 0 บาท แต่<strong>ยังต้องยื่นทุกเดือน</strong> (แจ้งว่าจ่ายเงินเดือนไปเท่าไร)
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">0 ฿</div>
+                            <div class="lbl">ภาษีนำส่ง</div>
+                        </div>
+                    </div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d15">วันที่ 15</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">📄 ภ.ง.ด.3 — ภาษีหัก ณ ที่จ่าย (บุคคลธรรมดา)</div>
+                            <div class="tax-item-desc">
+                                แบบนำส่ง WHT จากค่าเช่า/ค่าจ้างบุคคลธรรมดา 40(5)(6)(7)(8)<br>
+                                <strong>ในกรณีนี้:</strong> ค่าบัญชี(ถ้าเป็นบุคคลธรรมดา) 3% = 90
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">90 ฿</div>
+                            <div class="lbl">ภาษีนำส่ง/เดือน</div>
+                        </div>
+                    </div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d15">วันที่ 15</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">📄 ภ.ง.ด.53 — ภาษีหัก ณ ที่จ่าย (นิติบุคคล)</div>
+                            <div class="tax-item-desc">
+                                แบบนำส่ง WHT ที่บริษัทหักจากบริษัทอื่น (จ้างผู้รับเหมาช่วงที่เป็นบริษัท หัก 3%)<br>
+                                <strong>ในกรณีนี้:</strong> ค่าบัญชี(ถ้าเป็นนิติบุคคล) 3% = 90 + ค่าจ้างช่างภายนอก(ถ้ามี)
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">ตามจริง</div>
+                            <div class="lbl">แล้วแต่เดือน</div>
+                        </div>
+                    </div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d15">วันที่ 15</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">🛡️ สปส. 1-10 — นำส่งเงินสมทบประกันสังคม</div>
+                            <div class="tax-item-desc">
+                                นำส่งเงินสมทบประกันสังคม 2 คน (โอปอ + เต้ย)<br>
+                                <strong>พนักงานหัก:</strong> 750 × 2 = 1,500 | <strong>บริษัทสมทบ:</strong> 750 × 2 = 1,500
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">3,000 ฿</div>
+                            <div class="lbl">รวมนำส่ง/เดือน</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 23 -->
+                <div class="tax-month-group">
+                    <div class="tax-month-label">📌 ภายในวันที่ 23 ของเดือนถัดไป (e-Filing)</div>
+
+                    <div class="tax-item">
+                        <div class="tax-deadline d23">วันที่ 23</div>
+                        <div class="tax-item-info">
+                            <div class="tax-item-title">📊 ภ.พ.30 — แบบนำส่ง VAT รายเดือน</div>
+                            <div class="tax-item-desc">
+                                สรุปยอด VAT ขาย - VAT ซื้อ ของเดือนที่ผ่านมา<br>
+                                <strong>ต้องแนบ:</strong> รายงานภาษีซื้อ + รายงานภาษีขาย + สรุปยอด<br>
+                                <strong>ตัวอย่าง:</strong> ยอดขาย 800k → VAT ขาย 56k - VAT ซื้อ 35k = นำส่ง 21,000 บาท
+                            </div>
+                        </div>
+                        <div class="tax-item-amount">
+                            <div class="val">~21,000 ฿</div>
+                            <div class="lbl">ตัวอย่าง/เดือน</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VAT Report Forms -->
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin: 32px 0 20px; color: var(--accent-purple);">📋 รายงานภาษี VAT ที่ต้องจัดทำ</h3>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(6, 182, 212, 0.15);">📗</div>
+                    <div>
+                        <div class="card-title">รายงานภาษีขาย (Sales VAT Report)</div>
+                        <div class="card-desc">บันทึกทุกใบกำกับภาษีที่ออกให้ลูกค้า — จัดทำทุกเดือน</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>วันที่</th>
+                            <th>เลขที่ใบกำกับ</th>
+                            <th>ชื่อลูกค้า</th>
+                            <th>เลข 13 หลัก</th>
+                            <th style="text-align:right">มูลค่าสินค้า</th>
+                            <th style="text-align:right">VAT 7%</th>
+                            <th style="text-align:right">รวม</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td style="color:var(--text-muted)">05/09/69</td>
+                            <td style="color:var(--text-muted)">INV-6909-001</td>
+                            <td style="color:var(--text-muted)">บจก. ตัวอย่าง</td>
+                            <td style="color:var(--text-muted)">0105XXXXXXXXX</td>
+                            <td class="amount" style="text-align:right">50,000</td>
+                            <td class="amount" style="text-align:right">3,500</td>
+                            <td class="amount" style="text-align:right">53,500</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td style="color:var(--text-muted)">12/09/69</td>
+                            <td style="color:var(--text-muted)">INV-6909-002</td>
+                            <td style="color:var(--text-muted)">คุณสมชาย</td>
+                            <td style="color:var(--text-muted)">1-XXXX-XXXXX-XX-X</td>
+                            <td class="amount" style="text-align:right">30,000</td>
+                            <td class="amount" style="text-align:right">2,100</td>
+                            <td class="amount" style="text-align:right">32,100</td>
+                        </tr>
+                        <tr style="color:var(--text-muted);font-style:italic">
+                            <td>...</td><td></td><td></td><td></td><td></td>
+                            <td style="text-align:right">...</td><td style="text-align:right">...</td><td style="text-align:right">...</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="5"><strong>รวมทั้งเดือน</strong></td>
+                            <td class="amount" style="text-align:right">800,000</td>
+                            <td class="amount" style="text-align:right;color:var(--accent-rose)">56,000</td>
+                            <td class="amount" style="text-align:right">856,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(16, 185, 129, 0.15);">📘</div>
+                    <div>
+                        <div class="card-title">รายงานภาษีซื้อ (Purchase VAT Report)</div>
+                        <div class="card-desc">บันทึกทุกใบกำกับภาษีที่ได้รับจากการซื้อ — จัดทำทุกเดือน</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>วันที่</th>
+                            <th>เลขที่ใบกำกับ</th>
+                            <th>ชื่อผู้ขาย</th>
+                            <th>เลข 13 หลัก</th>
+                            <th style="text-align:right">มูลค่าสินค้า</th>
+                            <th style="text-align:right">VAT 7%</th>
+                            <th style="text-align:right">รวม</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td style="color:var(--text-muted)">03/09/69</td>
+                            <td style="color:var(--text-muted)">BIL-XXXX</td>
+                            <td style="color:var(--text-muted)">บจก. ผ้าม่านไทย</td>
+                            <td style="color:var(--text-muted)">0105XXXXXXXXX</td>
+                            <td class="amount" style="text-align:right">200,000</td>
+                            <td class="amount" style="text-align:right">14,000</td>
+                            <td class="amount" style="text-align:right">214,000</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td style="color:var(--text-muted)">08/09/69</td>
+                            <td style="color:var(--text-muted)">RCP-XXXX</td>
+                            <td style="color:var(--text-muted)">ปั๊มน้ำมัน PTT</td>
+                            <td style="color:var(--text-muted)">0105XXXXXXXXX</td>
+                            <td class="amount" style="text-align:right">5,000</td>
+                            <td class="amount" style="text-align:right">350</td>
+                            <td class="amount" style="text-align:right">5,350</td>
+                        </tr>
+                        <tr style="color:var(--text-muted);font-style:italic">
+                            <td>...</td><td></td><td></td><td></td><td></td>
+                            <td style="text-align:right">...</td><td style="text-align:right">...</td><td style="text-align:right">...</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="5"><strong>รวมทั้งเดือน</strong></td>
+                            <td class="amount" style="text-align:right">500,000</td>
+                            <td class="amount" style="text-align:right;color:var(--accent-emerald)">35,000</td>
+                            <td class="amount" style="text-align:right">535,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Annual Submission Calendar -->
+            <h3 style="font-size: 1.3rem; font-weight: 700; margin: 32px 0 20px; color: var(--accent-amber);">📆 ไทม์ไลน์ภาษีรายปี</h3>
+
+            <div class="annual-grid">
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-blue);">📅 กุมภาพันธ์</h4>
+                    <ul>
+                        <li><strong>ภ.ง.ด.1ก</strong> — สรุปเงินเดือนพนักงานทั้งปี (ทุกคน แม้ภาษี = 0)</li>
+                        <li>ส่งสำเนาให้พนักงานทุกคนเพื่อใช้ยื่น ภ.ง.ด.91/90</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-purple);">📅 มีนาคม</h4>
+                    <ul>
+                        <li><strong>ภ.ง.ด.90/91</strong> — ยื่นภาษีเงินได้บุคคลธรรมดาทุกคน</li>
+                        <li>พ่อ + แม่ + โอปอ ยื่น ภ.ง.ด.90 (มีรายได้หลายประเภท)</li>
+                        <li>เต้ย ยื่น ภ.ง.ด.91 (มีรายได้เงินเดือนอย่างเดียว)</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-emerald);">📅 เมษายน</h4>
+                    <ul>
+                        <li><strong>AGM</strong> — ประชุมใหญ่สามัญผู้ถือหุ้น ภายใน 30 เม.ย.</li>
+                        <li>อนุมัติงบการเงิน + กำหนดเงินปันผล (ถ้ามี)</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-amber);">📅 พฤษภาคม</h4>
+                    <ul>
+                        <li><strong>ภ.ง.ด.50</strong> — ยื่นภาษีเงินได้นิติบุคคลประจำปี ภายใน 150 วัน</li>
+                        <li><strong>งบการเงิน</strong> — ส่งกรมพัฒนาธุรกิจการค้า ภายใน 31 พ.ค.</li>
+                        <li><strong>บอจ.5</strong> — อัปเดตรายชื่อผู้ถือหุ้น</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-rose);">📅 สิงหาคม</h4>
+                    <ul>
+                        <li><strong>ภ.ง.ด.51</strong> — ยื่นภาษีนิติบุคคลครึ่งปี ภายใน 31 ส.ค.</li>
+                        <li>ประเมินกำไรครึ่งปี คาดการณ์ภาษีทั้งปี</li>
+                        <li>จ่ายภาษีล่วงหน้าครึ่งหนึ่ง (ถ้ามีกำไร)</li>
+                    </ul>
+                </div>
+                <div class="annual-card">
+                    <h4 style="color: var(--accent-cyan);">📅 ธันวาคม</h4>
+                    <ul>
+                        <li><strong>ตรวจนับสต็อก</strong> — นับผ้า/ฟิล์ม/อุปกรณ์คงเหลือ</li>
+                        <li><strong>เคลียร์เงินทดรอง</strong> — ปิดบัญชีค้างจ่ายทั้งหมด</li>
+                        <li>เตรียมข้อมูลให้สำนักงานบัญชีปิดงบ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Summary Table -->
+            <div class="card" style="margin-top: 32px;">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(245, 158, 11, 0.15);">📊</div>
+                    <div>
+                        <div class="card-title">สรุปแบบฟอร์มภาษีทั้งหมดที่ต้องนำส่ง</div>
+                        <div class="card-desc">รายเดือน + รายปี + หน่วยงานที่รับ</div>
+                    </div>
+                </div>
+                <table class="structure-table">
+                    <thead>
+                        <tr>
+                            <th>แบบฟอร์ม</th>
+                            <th>ความถี่</th>
+                            <th>กำหนดส่ง</th>
+                            <th>หน่วยงาน</th>
+                            <th>ยอดนำส่ง (ประมาณ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ภ.ง.ด.1</strong></td>
+                            <td><span class="badge badge-blue">รายเดือน</span></td>
+                            <td>ภายใน 15 (e-Filing: 23)</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">0 ฿</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.ง.ด.3</strong></td>
+                            <td><span class="badge badge-blue">รายเดือน</span></td>
+                            <td>ภายใน 15 (e-Filing: 23)</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">1,090 ฿/เดือน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.ง.ด.53</strong></td>
+                            <td><span class="badge badge-blue">รายเดือน</span></td>
+                            <td>ภายใน 15 (e-Filing: 23)</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">ตามจริง</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.พ.30</strong></td>
+                            <td><span class="badge badge-purple">รายเดือน</span></td>
+                            <td>ภายใน 15 (e-Filing: 23)</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">~21,000 ฿/เดือน</td>
+                        </tr>
+                        <tr>
+                            <td><strong>สปส. 1-10</strong></td>
+                            <td><span class="badge badge-emerald">รายเดือน</span></td>
+                            <td>ภายใน 15</td>
+                            <td>ประกันสังคม</td>
+                            <td class="amount">3,000 ฿/เดือน</td>
+                        </tr>
+                        <tr style="border-top: 2px solid var(--border-color);">
+                            <td><strong>ภ.ง.ด.1ก</strong></td>
+                            <td><span class="badge badge-amber">รายปี</span></td>
+                            <td>ภายใน ก.พ.</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">–</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.ง.ด.51</strong></td>
+                            <td><span class="badge badge-amber">ครึ่งปี</span></td>
+                            <td>ภายใน ส.ค.</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">ตามประมาณการ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ภ.ง.ด.50</strong></td>
+                            <td><span class="badge badge-amber">รายปี</span></td>
+                            <td>ภายใน พ.ค.</td>
+                            <td>สรรพากร</td>
+                            <td class="amount">ตามกำไรสุทธิ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>งบการเงิน</strong></td>
+                            <td><span class="badge badge-amber">รายปี</span></td>
+                            <td>ภายใน พ.ค.</td>
+                            <td>กรมพัฒนาธุรกิจฯ</td>
+                            <td class="amount">–</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box success" style="margin-top: 20px;">
+                <strong>💡 สำคัญ:</strong> ทุกแบบฟอร์มรายเดือนและรายปี — <strong>สำนักงานบัญชี</strong> (ค่าบริการ 3,000 บาท/เดือน) จะเป็นคนจัดทำและยื่นให้ทั้งหมด คุณเพียงแค่ส่งเอกสาร (ใบกำกับภาษี, สลิปโอน, ใบเสร็จ) ให้ทันภายในวันที่ 1-5 ของเดือนถัดไป
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>แผนจดทะเบียนบริษัท ม่านทิพย์มั่นคง จำกัด — สร้างเมื่อ สิงหาคม 2569</p>
+            <p style="margin-top: 4px; font-size: 0.8rem;">ข้อมูลนี้เป็นการจำลองเพื่อการวางแผน กรุณาปรึกษาผู้เชี่ยวชาญด้านกฎหมายและภาษีก่อนดำเนินการจริง</p>
+        </footer>
+    </div>
+
+    <script>
+        // Tab Navigation
+        const tabs = document.querySelectorAll('.nav-tab');
+        const sections = document.querySelectorAll('.content-section');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                // Update active tab
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Update active section
+                sections.forEach(s => s.classList.remove('active'));
+                document.getElementById(`section-${targetTab}`).classList.add('active');
+
+                // Scroll to top of section
+                window.scrollTo({ top: 200, behavior: 'smooth' });
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card, .stat-card, .person-card, .cost-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+
+        // Number counter animation
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(start + (end - start) * easeOut);
+                element.textContent = current.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Animate stat values on page load
+        setTimeout(() => {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(el => {
+                const text = el.textContent.replace(/[^0-9]/g, '');
+                const num = parseInt(text);
+                if (!isNaN(num) && num > 0) {
+                    const suffix = el.textContent.replace(/[0-9,]/g, '').trim();
+                    const originalText = el.textContent;
+                    animateValue(el, 0, num, 1200);
+                    setTimeout(() => {
+                        el.textContent = originalText;
+                    }, 1300);
+                }
+            });
+        }, 500);
+
+        // Toggle Journal Entries
+        function toggleJournal(id) {
+            const card = document.getElementById(id);
+            if (!card) return;
+            const body = card.querySelector('.journal-body');
+            const toggle = card.querySelector('.journal-toggle');
+            if (!body) return;
+
+            if (body.style.maxHeight && body.style.maxHeight !== '0px') {
+                body.style.maxHeight = '0px';
+                body.style.padding = '0 24px';
+                if (toggle) toggle.classList.remove('open');
+            } else {
+                body.style.maxHeight = body.scrollHeight + 40 + 'px';
+                body.style.padding = '20px 24px';
+                if (toggle) toggle.classList.add('open');
+            }
+        }
+    </script>
+    <!-- Floating Navigation Button -->
+    <a href="mantip_erp_dashboard.html" style="position: fixed; bottom: 30px; right: 30px; background-color: #4f46e5; color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4); font-family: 'Inter', 'Prompt', sans-serif; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; z-index: 9999; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(79, 70, 229, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(79, 70, 229, 0.4)';">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/><path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/></svg>
+        เมนูหลัก (Main Menu)
+    </a>
+</body>
+</html>

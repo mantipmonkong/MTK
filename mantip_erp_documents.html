@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantip ERP - Document Generation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Prompt', 'Inter', sans-serif; }
+        body { background-color: var(--background); color: var(--text-main); display: flex; min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: white; display: flex; flex-direction: column; position: fixed; height: 100vh; z-index: 50; }
+        .sidebar-header { padding: 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-header .logo { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; }
+        .sidebar-menu { padding: 20px 0; flex: 1; display: flex; flex-direction: column; gap: 5px; }
+        .menu-item { padding: 12px 24px; display: flex; align-items: center; gap: 15px; color: #cbd5e1; text-decoration: none; cursor: pointer; }
+        .menu-item:hover, .menu-item.active { background-color: var(--sidebar-hover); color: white; border-left: 4px solid var(--primary); }
+        .menu-item i { font-size: 18px; width: 24px; text-align: center; }
+
+        /* Main Content */
+        .main-content { flex: 1; margin-left: 260px; display: flex; flex-direction: column; }
+        
+        /* Topbar */
+        .topbar { height: 70px; background-color: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; position: sticky; top: 0; z-index: 40; box-shadow: var(--shadow-sm); }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .user-avatar { width: 36px; height: 36px; border-radius: 50%; background-color: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+
+        /* Container */
+        .container { padding: 30px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .page-title h1 { font-size: 24px; font-weight: 600; }
+        
+        .btn { padding: 10px 20px; border-radius: 8px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: none; font-family: 'Prompt', sans-serif; transition: all 0.2s; }
+        .btn-primary { background-color: var(--primary); color: white; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2); }
+        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+        .btn-outline { background-color: transparent; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover { background-color: #f1f5f9; }
+
+        /* Document Form */
+        .doc-card { background: var(--surface); border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); padding: 30px; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+        .form-control { padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-family: 'Prompt', sans-serif; transition: border-color 0.2s; }
+        .form-control:focus { border-color: var(--primary); }
+        
+        /* Items Table */
+        .items-section { margin-top: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        th { background-color: #f8fafc; color: var(--text-muted); font-weight: 500; font-size: 13px; text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+        td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+        
+        .type-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; display: inline-block; }
+        .type-material { background-color: #d1fae5; color: #059669; }
+        .type-labor { background-color: #fef3c7; color: #d97706; }
+
+        /* Summary Section */
+        .summary-section { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .summary-notes { width: 50%; }
+        .summary-notes textarea { width: 100%; height: 100px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; resize: none; font-family: 'Prompt', sans-serif; }
+        
+        .summary-totals { width: 35%; }
+        .total-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+        .total-row.grand-total { font-size: 18px; font-weight: 700; color: var(--primary); margin-top: 12px; padding-top: 12px; border-top: 2px dashed var(--border); }
+        .wht-row { color: var(--danger); }
+        
+        .add-row-btn { color: var(--primary); font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .add-row-btn:hover { text-decoration: underline; }
+
+        .delete-btn { color: var(--danger); cursor: pointer; background: none; border: none; font-size: 16px; }
+        
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--secondary);
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 100;
+            left: 50%;
+            bottom: 30px;
+            font-size: 16px;
+            transform: translateX(-50%);
+            box-shadow: var(--shadow-lg);
+        }
+
+        #toast.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @-webkit-keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @-webkit-keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">M</div>
+            <div>
+                <h2 style="font-size: 18px; font-weight: 600;">Mantip ERP</h2>
+                <span style="font-size: 12px; color: #94a3b8;">Business System</span>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <a href="mantip_erp_dashboard.html" class="menu-item">
+                <i class="fa-solid fa-chart-pie"></i> ภาพรวม
+            </a>
+            <a href="mantip_erp_documents.html" class="menu-item active">
+                <i class="fa-solid fa-file-invoice-dollar"></i> สร้างใบเสนอราคา
+            </a>
+            <a href="mantipmonkong_accounting.html" class="menu-item">
+                <i class="fa-solid fa-building-columns"></i> บัญชีบริษัท(ส่งสรรพกร)
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-calculator"></i> บัญชีภายใน(เฉพาะบริษัท)
+            </a>
+            <a href="mantip_erp_settings.html" class="menu-item">
+                <i class="fa-solid fa-gear"></i> ตั้งค่า
+            </a>
+            <a href="mantipmonkong_simulation.html" class="menu-item">
+                <i class="fa-solid fa-layer-group"></i> รวมอื่นๆ
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div></div>
+            <div class="user-profile">
+                <div class="user-avatar">A</div>
+                <div style="font-size: 14px; font-weight: 500;">Admin User</div>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <h1>สร้างใบเสนอราคา (Quotation)</h1>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-outline" onclick="saveDraft()"><i class="fa-solid fa-floppy-disk"></i> บันทึกร่าง</button>
+                    <button class="btn btn-primary" onclick="saveDraft()"><i class="fa-solid fa-file-pdf"></i> บันทึก & สร้าง PDF</button>
+                </div>
+            </div>
+
+            <div class="doc-card">
+                <!-- Document Details -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>ลูกค้า (Customer)</label>
+                        <select class="form-control" id="doc-customer">
+                            <option value="">เลือกบริษัทคู่ค้า...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>เลขที่เอกสาร (Document No.)</label>
+                        <input type="text" class="form-control" id="doc-no" value="QT-2608-015" readonly style="background-color: #f8fafc; color: var(--primary); font-weight: 600;">
+                    </div>
+                    <div class="form-group">
+                        <label>วันที่ (Date)</label>
+                        <input type="date" class="form-control" id="doc-date">
+                    </div>
+                    <div class="form-group">
+                        <label>อ้างอิงโปรเจกต์ (Project Ref.)</label>
+                        <input type="text" class="form-control" id="doc-ref" placeholder="เช่น สร้างโกดังสินค้า A">
+                    </div>
+                </div>
+
+                <!-- Items Section -->
+                <div class="items-section">
+                    <h3 style="font-size: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-list" style="color: var(--primary);"></i> รายการสินค้าและบริการ
+                    </h3>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">#</th>
+                                <th style="width: 35%;">รายละเอียด</th>
+                                <th style="width: 15%;">ประเภท</th>
+                                <th style="width: 10%;">จำนวน</th>
+                                <th style="width: 15%;">ราคาต่อหน่วย</th>
+                                <th style="width: 15%;">จำนวนเงิน</th>
+                                <th style="width: 5%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-tbody">
+                            <!-- Items will be generated here by JS -->
+                        </tbody>
+                    </table>
+                    
+                    <div class="add-row-btn" onclick="addRow()">
+                        <i class="fa-solid fa-circle-plus"></i> เพิ่มรายการ
+                    </div>
+                </div>
+
+                <!-- Summary Section -->
+                <div class="summary-section">
+                    <div class="summary-notes">
+                        <div class="form-group">
+                            <label>หมายเหตุ (Remarks)</label>
+                            <textarea id="doc-remarks" placeholder="ระบุเงื่อนไขการชำระเงิน หรือข้อมูลเพิ่มเติม..."></textarea>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;">
+                                <input type="checkbox" id="wht-checkbox" checked onchange="calculateTotals()" style="width: 16px; height: 16px; accent-color: var(--primary);">
+                                คำนวณภาษีหัก ณ ที่จ่าย 3% อัตโนมัติ (เฉพาะรายการค่าแรง)
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-totals">
+                        <div class="total-row">
+                            <span>รวมเป็นเงิน (Sub Total)</span>
+                            <span id="sub-total">0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>ภาษีมูลค่าเพิ่ม 7% (VAT)</span>
+                            <span id="vat-total">0.00</span>
+                        </div>
+                        <div class="total-row wht-row">
+                            <span>หัก ณ ที่จ่าย 3% (WHT) <span id="wht-note" style="font-size:12px;"></span></span>
+                            <span id="wht-total">0.00</span>
+                        </div>
+                        <div class="total-row grand-total">
+                            <span>ยอดชำระสุทธิ (Grand Total)</span>
+                            <span id="grand-total">0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="toast">บันทึกข้อมูลเรียบร้อยแล้ว!</div>
+
+    <script>
+        // Set today's date
+        document.getElementById('doc-date').valueAsDate = new Date();
+
+        // State Management
+        let items = [
+            { id: 1, desc: 'ปูนซีเมนต์ผสม (เสือ)', type: 'material', qty: 50, price: 120 },
+            { id: 2, desc: 'เหล็กเส้นกลม SR24 ขนาด 9มม.', type: 'material', qty: 100, price: 150 },
+            { id: 3, desc: 'ค่าแรงผสมปูนและเทพื้นคอนกรีต', type: 'labor', qty: 1, price: 8500 }
+        ];
+
+        // Format Currency
+        const formatMoney = (num) => {
+            return num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        };
+
+        // Render Table (Only called initially or when adding/deleting rows)
+        function renderTable() {
+            const tbody = document.getElementById('items-tbody');
+            tbody.innerHTML = '';
+            
+            items.forEach((item, index) => {
+                const total = item.qty * item.price;
+                const tr = document.createElement('tr');
+                if(item.type === 'labor') tr.style.backgroundColor = '#fef3c733';
+                
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><input type="text" class="form-control" value="${item.desc}" oninput="updateItem(${index}, 'desc', this.value)"></td>
+                    <td>
+                        <select class="form-control" style="padding: 8px; font-size: 13px; ${item.type === 'labor' ? 'border-color: var(--warning);' : ''}" onchange="updateItemType(${index}, this)">
+                            <option value="material" ${item.type === 'material' ? 'selected' : ''}>ค่าของ (Material)</option>
+                            <option value="labor" ${item.type === 'labor' ? 'selected' : ''}>ค่าแรง (Labor)</option>
+                        </select>
+                    </td>
+                    <td><input type="number" class="form-control" value="${item.qty}" min="1" oninput="updateItemAmount(${index}, 'qty', this.value, this)"></td>
+                    <td><input type="number" class="form-control" value="${item.price}" min="0" oninput="updateItemAmount(${index}, 'price', this.value, this)"></td>
+                    <td><div class="row-total" style="text-align: right; padding-right: 10px;">${formatMoney(total)}</div></td>
+                    <td><button class="delete-btn" onclick="deleteRow(${index})"><i class="fa-solid fa-trash-can"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            calculateTotals();
+        }
+
+        // Update Item Description (No DOM changes needed)
+        function updateItem(index, field, value) {
+            items[index][field] = value;
+        }
+
+        // Update Item Amount (Updates specific total column)
+        function updateItemAmount(index, field, value, element) {
+            value = Number(value) || 0;
+            items[index][field] = value;
+            
+            // Update the total for this row visually
+            const total = items[index].qty * items[index].price;
+            element.closest('tr').querySelector('.row-total').innerText = formatMoney(total);
+            
+            calculateTotals();
+        }
+        
+        // Update Item Type (Changes background color)
+        function updateItemType(index, selectElement) {
+            const type = selectElement.value;
+            items[index].type = type;
+            const tr = selectElement.closest('tr');
+            
+            if (type === 'labor') {
+                tr.style.backgroundColor = '#fef3c733';
+                selectElement.style.borderColor = 'var(--warning)';
+            } else {
+                tr.style.backgroundColor = 'transparent';
+                selectElement.style.borderColor = 'var(--border)';
+            }
+            
+            calculateTotals();
+        }
+
+        // Add Row
+        function addRow() {
+            items.push({ id: Date.now(), desc: '', type: 'material', qty: 1, price: 0 });
+            renderTable();
+        }
+
+        // Delete Row
+        function deleteRow(index) {
+            items.splice(index, 1);
+            renderTable();
+        }
+
+        // Calculate Totals
+        function calculateTotals() {
+            let subTotal = 0;
+            let laborTotal = 0;
+
+            items.forEach(item => {
+                const total = item.qty * item.price;
+                subTotal += total;
+                if (item.type === 'labor') {
+                    laborTotal += total;
+                }
+            });
+
+            const vat = subTotal * 0.07;
+            
+            // WHT 3% only on Labor if checked
+            const applyWht = document.getElementById('wht-checkbox').checked;
+            const wht = applyWht ? (laborTotal * 0.03) : 0;
+            
+            const grandTotal = subTotal + vat - wht;
+
+            // Update DOM
+            document.getElementById('sub-total').innerText = formatMoney(subTotal);
+            document.getElementById('vat-total').innerText = formatMoney(vat);
+            
+            const whtNote = applyWht && laborTotal > 0 ? `(คิดจากค่าแรง ${formatMoney(laborTotal)})` : '';
+            document.getElementById('wht-note').innerText = whtNote;
+            document.getElementById('wht-total').innerText = `-${formatMoney(wht)}`;
+            
+            document.getElementById('grand-total').innerText = formatMoney(grandTotal);
+        }
+
+        // Save Function (Mock)
+        function saveDraft() {
+            // In a real app, this would send an API request
+            const docData = {
+                no: document.getElementById('doc-no').value,
+                date: document.getElementById('doc-date').value,
+                customer: document.getElementById('doc-customer').value,
+                ref: document.getElementById('doc-ref').value,
+                items: items,
+                remarks: document.getElementById('doc-remarks').value
+            };
+            
+            // Save to LocalStorage
+            localStorage.setItem('draft_doc', JSON.stringify(docData));
+            
+            // Show Toast
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        // Load Customers from LocalStorage
+        function loadCustomers() {
+            const customerSelect = document.getElementById('doc-customer');
+            const contacts = JSON.parse(localStorage.getItem('mantip_contacts')) || [];
+            
+            // Filter only customers
+            const customers = contacts.filter(c => c.type === 'customer');
+            
+            customers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer.name; // Use name as value for simplicity in this demo
+                option.textContent = customer.name;
+                customerSelect.appendChild(option);
+            });
+            
+            // If there's a drafted doc, try to pre-select it
+            const drafted = JSON.parse(localStorage.getItem('draft_doc'));
+            if(drafted && drafted.customer) {
+                customerSelect.value = drafted.customer;
+            }
+        }
+
+        // Initialize Table and Customers
+        renderTable();
+        loadCustomers();
+    </script>
+</body>
+</html>

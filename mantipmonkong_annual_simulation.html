@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MANTIPMONKONG - จำลองรายรับรายจ่าย 1 ปี</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0f172a;
+  --accent: #3b82f6;
+  --accent-dark: #2563eb;
+  --gold: #f59e0b;
+  --green: #10b981;
+  --green-bg: #ecfdf5;
+  --red: #ef4444;
+  --red-bg: #fef2f2;
+  --blue-bg: #eff6ff;
+  --purple: #8b5cf6;
+  --purple-bg: #f5f3ff;
+  --orange: #f97316;
+  --orange-bg: #fff7ed;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-900: #0f172a;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --card-shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Kanit',sans-serif; background:var(--gray-50); color:var(--gray-900); line-height:1.7; font-weight:300; }
+.header { background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#1e40af 100%); color:white; padding:3rem 2rem; text-align:center; position:relative; overflow:hidden; }
+.header::after { content:''; position:absolute; top:-50%; right:-20%; width:500px; height:500px; background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 70%); border-radius:50%; }
+.header h1 { font-size:2rem; font-weight:600; margin-bottom:.25rem; position:relative; z-index:1; }
+.header p { font-weight:200; opacity:.85; font-size:1.05rem; position:relative; z-index:1; }
+.container { max-width:1280px; margin:0 auto; padding:2rem 1.5rem; }
+.section-title { display:flex; align-items:center; gap:.75rem; margin:2.5rem 0 1.25rem; font-size:1.4rem; font-weight:500; color:var(--primary); }
+.section-title .icon { width:36px; height:36px; background:var(--accent); color:white; border-radius:.5rem; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+.kpi-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-bottom:2rem; }
+.kpi { background:white; border-radius:.75rem; padding:1.25rem; box-shadow:var(--card-shadow); border-left:4px solid var(--accent); transition:transform .2s; }
+.kpi:hover { transform:translateY(-2px); box-shadow:var(--card-shadow-lg); }
+.kpi-label { font-size:.8rem; color:var(--gray-500); text-transform:uppercase; letter-spacing:.04em; margin-bottom:.25rem; }
+.kpi-value { font-size:1.5rem; font-weight:600; color:var(--primary); }
+.kpi-sub { font-size:.75rem; color:var(--gray-400); margin-top:.15rem; }
+.kpi.green { border-left-color:var(--green); }
+.kpi.red { border-left-color:var(--red); }
+.kpi.gold { border-left-color:var(--gold); }
+.kpi.purple { border-left-color:var(--purple); }
+.card { background:white; border-radius:.75rem; box-shadow:var(--card-shadow); overflow:hidden; margin-bottom:1.5rem; transition:box-shadow .2s; }
+.card:hover { box-shadow:var(--card-shadow-lg); }
+.card-head { padding:1rem 1.5rem; font-weight:500; font-size:1rem; display:flex; align-items:center; gap:.5rem; border-bottom:1px solid var(--gray-200); }
+.card-head.blue { background:var(--blue-bg); color:var(--accent-dark); }
+.card-head.green { background:var(--green-bg); color:#065f46; }
+.card-head.red { background:var(--red-bg); color:#991b1b; }
+.card-head.purple { background:var(--purple-bg); color:#5b21b6; }
+.card-head.orange { background:var(--orange-bg); color:#9a3412; }
+table { width:100%; border-collapse:collapse; font-size:.9rem; }
+th { background:var(--gray-100); padding:.75rem 1rem; text-align:left; font-weight:400; color:var(--gray-500); font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid var(--gray-200); position:sticky; top:0; }
+td { padding:.65rem 1rem; border-bottom:1px solid var(--gray-100); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:var(--gray-50); }
+.r { text-align:right; font-family:'Kanit',monospace; }
+.total-row td { background:var(--gray-100); font-weight:500; border-top:2px solid var(--gray-300); }
+.subtotal-row td { background:#f0f9ff; font-weight:400; }
+.dr { color:var(--green); font-weight:400; }
+.cr { color:var(--red); font-weight:400; }
+.amt-positive { color:var(--green); }
+.amt-negative { color:var(--red); }
+.text-muted { color:var(--gray-400); font-size:.82rem; }
+.tag { display:inline-block; padding:.15rem .5rem; border-radius:.25rem; font-size:.72rem; font-weight:400; }
+.tag-blue { background:#dbeafe; color:#1d4ed8; }
+.tag-green { background:#d1fae5; color:#065f46; }
+.tag-red { background:#fee2e2; color:#991b1b; }
+.tag-purple { background:#ede9fe; color:#5b21b6; }
+.tag-orange { background:#ffedd5; color:#9a3412; }
+.tag-gray { background:#f1f5f9; color:#475569; }
+.note-box { background:linear-gradient(135deg,#fffbeb,#fef3c7); border:1px solid #fcd34d; border-radius:.5rem; padding:1rem 1.25rem; margin:1rem 0; font-size:.88rem; color:#92400e; }
+.note-box strong { font-weight:500; }
+.month-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(580px,1fr)); gap:1.5rem; }
+@media (max-width:768px) {
+  .container { padding:1rem; }
+  .kpi-strip { grid-template-columns:repeat(2,1fr); }
+  .month-grid { grid-template-columns:1fr; }
+  th, td { padding:.5rem .6rem; font-size:.82rem; }
+}
+
+/* ══════════ PRINT STYLES (A4) ══════════ */
+@page {
+  size: A4 portrait;
+  margin: 15mm 12mm 20mm 12mm;
+}
+
+@media print {
+  /* Reset */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  body { background: white !important; font-size: 9pt; line-height: 1.5; }
+
+  /* Header - compact for print */
+  .header {
+    background: #0f172a !important;
+    color: white !important;
+    padding: 1.2rem 1.5rem !important;
+    border-radius: 0 !important;
+    page-break-after: avoid;
+  }
+  .header::after { display: none !important; }
+  .header h1 { font-size: 16pt !important; }
+  .header p { font-size: 9pt !important; }
+
+  /* Container */
+  .container { max-width: 100% !important; padding: 0 !important; }
+
+  /* Section titles */
+  .section-title {
+    font-size: 11pt !important;
+    margin: 1.2rem 0 0.6rem !important;
+    page-break-after: avoid;
+  }
+  .section-title .icon {
+    width: 24px !important; height: 24px !important;
+    font-size: .7rem !important;
+    border-radius: .25rem !important;
+  }
+
+  /* KPI Strip */
+  .kpi-strip {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: .4rem !important;
+    margin-bottom: .8rem !important;
+  }
+  .kpi {
+    padding: .5rem .6rem !important;
+    border-radius: .3rem !important;
+    box-shadow: none !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+  .kpi-label { font-size: 6pt !important; }
+  .kpi-value { font-size: 11pt !important; }
+  .kpi-sub { font-size: 6pt !important; }
+
+  /* Cards */
+  .card {
+    border-radius: .3rem !important;
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    margin-bottom: .8rem !important;
+    page-break-inside: avoid;
+  }
+  .card:hover { box-shadow: none !important; }
+  .card-head {
+    padding: .5rem .75rem !important;
+    font-size: 9pt !important;
+  }
+
+  /* Tables */
+  table { font-size: 7.5pt !important; }
+  th {
+    padding: .3rem .5rem !important;
+    font-size: 6.5pt !important;
+    position: static !important;
+  }
+  td { padding: .25rem .5rem !important; }
+  tr:hover td { background: transparent !important; }
+
+  /* Tags */
+  .tag { font-size: 6pt !important; padding: .1rem .3rem !important; border: 1px solid currentColor !important; }
+
+  /* Note boxes */
+  .note-box {
+    padding: .5rem .75rem !important;
+    font-size: 7.5pt !important;
+    border-radius: .2rem !important;
+    margin: .5rem 0 !important;
+    page-break-inside: avoid;
+  }
+
+  /* Journal entries grid */
+  .month-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: .6rem !important;
+  }
+
+  /* Page breaks */
+  .page-break { page-break-before: always; }
+  .no-break { page-break-inside: avoid; }
+
+  /* Footer on every page */
+  body::after {
+    content: "บริษัท ม่านทิพย์มั่นคง จำกัด — เอกสารจำลองการเงินประจำปี (Confidential)";
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 7pt;
+    color: #94a3b8;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 4px;
+  }
+
+  /* Hide hover effects */
+  .kpi:hover, .card:hover { transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>บริษัท ม่านทิพย์มั่นคง จำกัด</h1>
+  <p>MANTIPMONKONG CO., LTD. — จำลองรายรับ-รายจ่าย 1 ปีเต็ม (ม.ค. – ธ.ค.)</p>
+</div>
+
+<div class="container">
+
+<div class="section-title"><div class="icon">📊</div> ภาพรวมทั้งปี (Annual Summary)</div>
+
+<div class="kpi-strip">
+  <div class="kpi"><div class="kpi-label">ยอดขายรวม (ก่อน VAT)</div><div class="kpi-value">10,060,000</div><div class="kpi-sub">บาท/ปี</div></div>
+  <div class="kpi green"><div class="kpi-label">กำไรขั้นต้น (GP)</div><div class="kpi-value">4,024,000</div><div class="kpi-sub">Gross Margin 40%</div></div>
+  <div class="kpi gold"><div class="kpi-label">กำไรสุทธิ (หลังภาษี)</div><div class="kpi-value">966,400</div><div class="kpi-sub">บาท/ปี</div></div>
+  <div class="kpi purple"><div class="kpi-label">ภาษีนิติบุคคล</div><div class="kpi-value">117,600</div><div class="kpi-sub">SME Rate</div></div>
+  <div class="kpi red"><div class="kpi-label">VAT นำส่งรวม</div><div class="kpi-value">401,520</div><div class="kpi-sub">บาท/ปี</div></div>
+</div>
+
+<!-- ═══ MONTHLY REVENUE ═══ -->
+<div class="section-title"><div class="icon">💰</div> รายได้ประจำเดือน (Monthly Revenue)</div>
+
+<div class="card">
+  <div class="card-head blue">📋 สรุปยอดขายรายเดือน — จำแนกตามประเภทงาน (ก่อน VAT)</div>
+  <div style="overflow-x:auto;">
+  <table>
+    <thead>
+      <tr><th>เดือน</th><th class="r">งานผ้าม่าน</th><th class="r">งานฟิล์ม</th><th class="r">วอลล์เปเปอร์</th><th class="r">ม่านม้วน/มู่ลี่</th><th class="r">รวมรายได้</th><th class="r">VAT ขาย 7%</th><th class="r">ลูกค้าจ่ายรวม</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>มกราคม</td><td class="r">420,000</td><td class="r">150,000</td><td class="r">50,000</td><td class="r">80,000</td><td class="r" style="font-weight:500;">700,000</td><td class="r text-muted">49,000</td><td class="r">749,000</td></tr>
+      <tr><td>กุมภาพันธ์</td><td class="r">480,000</td><td class="r">120,000</td><td class="r">60,000</td><td class="r">90,000</td><td class="r" style="font-weight:500;">750,000</td><td class="r text-muted">52,500</td><td class="r">802,500</td></tr>
+      <tr><td>มีนาคม</td><td class="r">550,000</td><td class="r">200,000</td><td class="r">80,000</td><td class="r">120,000</td><td class="r" style="font-weight:500;">950,000</td><td class="r text-muted">66,500</td><td class="r">1,016,500</td></tr>
+      <tr><td>เมษายน</td><td class="r">350,000</td><td class="r">100,000</td><td class="r">40,000</td><td class="r">60,000</td><td class="r" style="font-weight:500;">550,000</td><td class="r text-muted">38,500</td><td class="r">588,500</td></tr>
+      <tr><td>พฤษภาคม</td><td class="r">500,000</td><td class="r">180,000</td><td class="r">70,000</td><td class="r">100,000</td><td class="r" style="font-weight:500;">850,000</td><td class="r text-muted">59,500</td><td class="r">909,500</td></tr>
+      <tr><td>มิถุนายน</td><td class="r">520,000</td><td class="r">200,000</td><td class="r">80,000</td><td class="r">100,000</td><td class="r" style="font-weight:500;">900,000</td><td class="r text-muted">63,000</td><td class="r">963,000</td></tr>
+      <tr><td>กรกฎาคม</td><td class="r">480,000</td><td class="r">180,000</td><td class="r">60,000</td><td class="r">80,000</td><td class="r" style="font-weight:500;">800,000</td><td class="r text-muted">56,000</td><td class="r">856,000</td></tr>
+      <tr><td>สิงหาคม</td><td class="r">550,000</td><td class="r">220,000</td><td class="r">90,000</td><td class="r">120,000</td><td class="r" style="font-weight:500;">980,000</td><td class="r text-muted">68,600</td><td class="r">1,048,600</td></tr>
+      <tr><td>กันยายน</td><td class="r">500,000</td><td class="r">180,000</td><td class="r">70,000</td><td class="r">100,000</td><td class="r" style="font-weight:500;">850,000</td><td class="r text-muted">59,500</td><td class="r">909,500</td></tr>
+      <tr><td>ตุลาคม</td><td class="r">520,000</td><td class="r">200,000</td><td class="r">80,000</td><td class="r">100,000</td><td class="r" style="font-weight:500;">900,000</td><td class="r text-muted">63,000</td><td class="r">963,000</td></tr>
+      <tr><td>พฤศจิกายน</td><td class="r">580,000</td><td class="r">250,000</td><td class="r">100,000</td><td class="r">150,000</td><td class="r" style="font-weight:500;">1,080,000</td><td class="r text-muted">75,600</td><td class="r">1,155,600</td></tr>
+      <tr><td>ธันวาคม</td><td class="r">450,000</td><td class="r">150,000</td><td class="r">50,000</td><td class="r">100,000</td><td class="r" style="font-weight:500;">750,000</td><td class="r text-muted">52,500</td><td class="r">802,500</td></tr>
+      <tr class="total-row"><td><strong>รวมทั้งปี</strong></td><td class="r"><strong>5,900,000</strong></td><td class="r"><strong>2,130,000</strong></td><td class="r"><strong>830,000</strong></td><td class="r"><strong>1,200,000</strong></td><td class="r"><strong>10,060,000</strong></td><td class="r"><strong>704,200</strong></td><td class="r"><strong>10,764,200</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="note-box">
+  <strong>💡 วิธีอ่าน:</strong> "ลูกค้าจ่ายรวม" = เงินที่ลูกค้าโอนมาจริง (รวม VAT) แต่ "รายได้" ที่บริษัทลงบัญชีคือยอดก่อน VAT เท่านั้น เพราะ VAT ไม่ใช่รายได้ แต่เป็นเงินที่บริษัทเก็บแทนสรรพากรแล้วส่งคืน
+</div>
+
+<!-- ═══ COGS ═══ -->
+<div class="section-title"><div class="icon">🏭</div> ต้นทุนขาย (Cost of Goods Sold – COGS)</div>
+
+<div class="card">
+  <div class="card-head red">📦 ต้นทุนสินค้าและบริการ — รายเดือน (ก่อน VAT)</div>
+  <div style="overflow-x:auto;">
+  <table>
+    <thead><tr><th>เดือน</th><th class="r">ค่าวัสดุ (ผ้า/ฟิล์ม/ราง)</th><th class="r">ค่าจ้างช่าง/รับเหมาช่วง</th><th class="r">ค่าขนส่ง/เดินทาง</th><th class="r">รวมต้นทุน</th><th class="r">VAT ซื้อ</th><th class="r">GM</th></tr></thead>
+    <tbody>
+      <tr><td>ม.ค.</td><td class="r">260,000</td><td class="r">130,000</td><td class="r">30,000</td><td class="r" style="font-weight:500;">420,000</td><td class="r text-muted">18,200</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>ก.พ.</td><td class="r">285,000</td><td class="r">135,000</td><td class="r">30,000</td><td class="r" style="font-weight:500;">450,000</td><td class="r text-muted">19,950</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>มี.ค.</td><td class="r">360,000</td><td class="r">170,000</td><td class="r">40,000</td><td class="r" style="font-weight:500;">570,000</td><td class="r text-muted">25,200</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>เม.ย.</td><td class="r">210,000</td><td class="r">100,000</td><td class="r">20,000</td><td class="r" style="font-weight:500;">330,000</td><td class="r text-muted">14,700</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>พ.ค.</td><td class="r">325,000</td><td class="r">155,000</td><td class="r">30,000</td><td class="r" style="font-weight:500;">510,000</td><td class="r text-muted">22,750</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>มิ.ย.</td><td class="r">340,000</td><td class="r">165,000</td><td class="r">35,000</td><td class="r" style="font-weight:500;">540,000</td><td class="r text-muted">23,800</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>ก.ค.</td><td class="r">305,000</td><td class="r">145,000</td><td class="r">30,000</td><td class="r" style="font-weight:500;">480,000</td><td class="r text-muted">21,350</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>ส.ค.</td><td class="r">375,000</td><td class="r">175,000</td><td class="r">38,000</td><td class="r" style="font-weight:500;">588,000</td><td class="r text-muted">26,250</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>ก.ย.</td><td class="r">325,000</td><td class="r">155,000</td><td class="r">30,000</td><td class="r" style="font-weight:500;">510,000</td><td class="r text-muted">22,750</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>ต.ค.</td><td class="r">340,000</td><td class="r">165,000</td><td class="r">35,000</td><td class="r" style="font-weight:500;">540,000</td><td class="r text-muted">23,800</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>พ.ย.</td><td class="r">415,000</td><td class="r">195,000</td><td class="r">38,000</td><td class="r" style="font-weight:500;">648,000</td><td class="r text-muted">29,050</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr><td>ธ.ค.</td><td class="r">280,000</td><td class="r">130,000</td><td class="r">40,000</td><td class="r" style="font-weight:500;">450,000</td><td class="r text-muted">19,600</td><td class="r"><span class="tag tag-green">40%</span></td></tr>
+      <tr class="total-row"><td><strong>รวมทั้งปี</strong></td><td class="r"><strong>3,820,000</strong></td><td class="r"><strong>1,820,000</strong></td><td class="r"><strong>396,000</strong></td><td class="r"><strong>6,036,000</strong></td><td class="r"><strong>267,400</strong></td><td class="r"><span class="tag tag-green"><strong>40%</strong></span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ═══ SG&A ═══ -->
+<div class="page-break section-title"><div class="icon">🏢</div> ค่าใช้จ่ายดำเนินงานคงที่ (SG&A — จ่ายทุกเดือน)</div>
+
+<div class="card">
+  <div class="card-head purple">👥 เงินเดือน + ค่าเช่า + Overhead</div>
+  <table>
+    <thead><tr><th>รายการ</th><th class="r">ต่อเดือน (บาท)</th><th class="r">ต่อปี (บาท)</th><th>หมายเหตุ</th></tr></thead>
+    <tbody>
+      <tr><td>เงินเดือน – พ่อ (กรรมการ)</td><td class="r">25,000</td><td class="r">300,000</td><td><span class="tag tag-green">PIT = 0</span></td></tr>
+      <tr><td>เงินเดือน – แม่ (พนักงาน)</td><td class="r">25,000</td><td class="r">300,000</td><td><span class="tag tag-green">PIT = 0</span></td></tr>
+      <tr><td>เงินเดือน – โอปอ (กรรมการ)</td><td class="r">25,000</td><td class="r">300,000</td><td><span class="tag tag-green">PIT = 0</span></td></tr>
+      <tr><td>เงินเดือน – เต้ย (พนักงาน)</td><td class="r">25,000</td><td class="r">300,000</td><td><span class="tag tag-green">PIT = 0</span></td></tr>
+      <tr><td>เงินเดือน – ญาติ 1 (พนักงาน)</td><td class="r">25,000</td><td class="r">300,000</td><td><span class="tag tag-green">PIT = 0</span></td></tr>
+      <tr><td>เงินเดือน – ญาติ 2 (พนักงาน)</td><td class="r">25,000</td><td class="r">300,000</td><td><span class="tag tag-green">PIT = 0</span></td></tr>
+      <tr class="subtotal-row"><td><strong>รวมเงินเดือน</strong></td><td class="r"><strong>150,000</strong></td><td class="r"><strong>1,800,000</strong></td><td></td></tr>
+      <tr><td>ประกันสังคม – นายจ้างสมทบ (4 คน)</td><td class="r">3,000</td><td class="r">36,000</td><td><span class="tag tag-gray">750 x 4 คน</span></td></tr>
+
+      <tr><td>ค่าน้ำ/ไฟ</td><td class="r">4,000</td><td class="r">48,000</td><td></td></tr>
+      <tr><td>Internet</td><td class="r">1,200</td><td class="r">14,400</td><td></td></tr>
+      <tr><td>โทรศัพท์บริษัท</td><td class="r">1,000</td><td class="r">12,000</td><td></td></tr>
+      <tr><td>Ads (Facebook / Google / TikTok)</td><td class="r">10,000</td><td class="r">120,000</td><td><span class="tag tag-purple">มี VAT ซื้อ</span></td></tr>
+      <tr><td>Website / Hosting / Domain</td><td class="r">1,250</td><td class="r">15,000</td><td></td></tr>
+      <tr><td>Software (บัญชี / ออกแบบ / Cloud)</td><td class="r">4,000</td><td class="r">48,000</td><td></td></tr>
+      <tr><td>สำนักงานบัญชี</td><td class="r">8,000</td><td class="r">96,000</td><td><span class="tag tag-orange">หัก WHT 3%</span></td></tr>
+      <tr><td>สอบบัญชี (เฉลี่ย)</td><td class="r">1,667</td><td class="r">20,000</td><td></td></tr>
+      <tr><td>ค่าธรรมเนียมธนาคาร</td><td class="r">2,000</td><td class="r">24,000</td><td></td></tr>
+      <tr><td>น้ำมันรถ (ส่วนกลาง)</td><td class="r">12,000</td><td class="r">144,000</td><td><span class="tag tag-purple">มี VAT ซื้อ</span></td></tr>
+      <tr><td>ทางด่วน / ที่จอดรถ</td><td class="r">4,000</td><td class="r">48,000</td><td></td></tr>
+      <tr><td>ซ่อมรถ (เฉลี่ย)</td><td class="r">3,000</td><td class="r">36,000</td><td></td></tr>
+      <tr><td>ประกันรถ (เฉลี่ย)</td><td class="r">2,083</td><td class="r">25,000</td><td></td></tr>
+      <tr><td>PPE / เสื้อ / เครื่องมือ / ซ่อม</td><td class="r">10,000</td><td class="r">120,000</td><td></td></tr>
+      <tr><td>เครื่องเขียน / หมึก / อื่นๆ</td><td class="r">4,500</td><td class="r">54,000</td><td></td></tr>
+      <tr><td>ขนส่ง / Grab / Lalamove</td><td class="r">11,000</td><td class="r">132,000</td><td></td></tr>
+      <tr><td>อบรม / ตรวจสุขภาพ (เฉลี่ย)</td><td class="r">3,500</td><td class="r">42,000</td><td></td></tr>
+      <tr><td>อื่นๆ (Catalog / ป้ายร้าน / ที่พัก)</td><td class="r">8,800</td><td class="r">105,600</td><td></td></tr>
+      <tr class="subtotal-row"><td><strong>รวม Overhead</strong></td><td class="r"><strong>92,000</strong></td><td class="r"><strong>1,104,000</strong></td><td></td></tr>
+      <tr class="total-row"><td><strong>รวมค่าใช้จ่ายคงที่ทั้งหมด (SG&A)</strong></td><td class="r"><strong>245,000</strong></td><td class="r"><strong>2,940,000</strong></td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ P&L ═══ -->
+<div class="page-break section-title"><div class="icon">📈</div> งบกำไรขาดทุน (Profit & Loss Statement)</div>
+
+<div class="card">
+  <div class="card-head green">💹 งบกำไรขาดทุน สำหรับปีสิ้นสุด 31 ธันวาคม 2569</div>
+  <table>
+    <thead><tr><th width="55%">รายการ</th><th class="r">จำนวนเงิน (บาท)</th><th>หมายเหตุ</th></tr></thead>
+    <tbody>
+      <tr><td><strong>รายได้จากการขายและบริการ</strong></td><td class="r" style="font-weight:500;">10,060,000</td><td>ก่อน VAT</td></tr>
+      <tr><td style="padding-left:2rem;">หัก ต้นทุนสินค้าขาย (COGS)</td><td class="r amt-negative">(6,036,000)</td><td>ผ้า + ฟิล์ม + ช่าง + ขนส่ง</td></tr>
+      <tr class="subtotal-row"><td><strong>กำไรขั้นต้น (Gross Profit)</strong></td><td class="r" style="font-weight:500;">4,024,000</td><td><span class="tag tag-green">40%</span></td></tr>
+      <tr><td style="padding-left:2rem;">หัก เงินเดือนกรรมการและพนักงาน</td><td class="r amt-negative">(1,800,000)</td><td>6 คน x 25,000 x 12</td></tr>
+      <tr><td style="padding-left:2rem;">หัก เงินสมทบประกันสังคม</td><td class="r amt-negative">(36,000)</td><td>4 คน x 750 x 12</td></tr>
+      <tr><td style="padding-left:2rem;">หัก ค่าใช้จ่ายดำเนินงาน (Overhead)</td><td class="r amt-negative">(1,104,000)</td><td>92,000 x 12</td></tr>
+      <tr class="subtotal-row"><td><strong>รวมค่าใช้จ่าย SG&A</strong></td><td class="r amt-negative" style="font-weight:500;">(2,940,000)</td><td></td></tr>
+      <tr style="background:#fffbeb;"><td><strong>กำไรก่อนภาษี (EBT)</strong></td><td class="r" style="font-weight:600;font-size:1.05rem;">1,084,000</td><td></td></tr>
+      <tr><td style="padding-left:2rem;">หัก ภาษีเงินได้นิติบุคคล (SME)</td><td class="r amt-negative">(117,600)</td><td>ดูรายละเอียดด้านล่าง</td></tr>
+      <tr style="background:#ecfdf5;"><td><strong>กำไรสุทธิ (Net Profit)</strong></td><td class="r amt-positive" style="font-weight:700;font-size:1.15rem;">966,400</td><td><span class="tag tag-green">9.6% ของยอดขาย</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ CIT ═══ -->
+<div class="section-title"><div class="icon">🧮</div> การคำนวณภาษีนิติบุคคล (CIT Calculation)</div>
+
+<div class="card">
+  <div class="card-head orange">🏛️ คำนวณภาษีเงินได้นิติบุคคล (อัตรา SME)</div>
+  <table>
+    <tbody>
+      <tr><td width="60%">กำไรสุทธิก่อนภาษี</td><td class="r" style="font-weight:500;">1,084,000 บาท</td></tr>
+      <tr><td style="padding-left:2rem;">300,000 บาทแรก</td><td class="r"><span class="tag tag-green">ยกเว้นภาษี = 0</span></td></tr>
+      <tr><td style="padding-left:2rem;">ส่วนที่เกิน 300,000 (= 784,000 บาท)</td><td class="r">x 15% = <strong>117,600</strong></td></tr>
+      <tr style="background:#fff7ed;"><td><strong>ภาษีนิติบุคคลที่ต้องจ่าย</strong></td><td class="r" style="font-weight:600;">117,600 บาท</td></tr>
+      <tr><td style="padding-left:2rem;">หัก เครดิตภาษี (WHT ถูกหัก 3% จากลูกค้า)</td><td class="r amt-positive">ประมาณ 150,000 บาท</td></tr>
+      <tr style="background:#ecfdf5;"><td><strong>ภาษีนิติบุคคลที่จ่ายเงินสดเพิ่ม</strong></td><td class="r" style="font-weight:600;color:var(--green);">0 บาท (ขอคืนได้ ~32,400)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note-box">
+  <strong>💡 สำคัญมาก:</strong> ลูกค้านิติบุคคลหัก ณ ที่จ่าย 3% ไว้ (สมมติ 50% ของรายได้ = 5M x 3% = 150,000) บริษัทมีเครดิตภาษี 150,000 บาท แต่ภาษีที่ต้องจ่ายแค่ 117,600 บาท ดังนั้น <strong>ไม่ต้องจ่ายภาษีเพิ่มเลย</strong> และยัง <strong>ขอคืนได้ ~32,400 บาท!</strong>
+</div>
+
+<!-- ═══ VAT ═══ -->
+<div class="page-break section-title"><div class="icon">🧾</div> สรุป VAT รายเดือน (ภ.พ.30)</div>
+
+<div class="card">
+  <div class="card-head blue">📊 ภาษีมูลค่าเพิ่ม — สรุปรายเดือน</div>
+  <div style="overflow-x:auto;">
+  <table>
+    <thead><tr><th>เดือน</th><th class="r">VAT ขาย</th><th class="r">VAT ซื้อ (COGS)</th><th class="r">VAT ซื้อ (Overhead)</th><th class="r">รวม VAT ซื้อ</th><th class="r">VAT นำส่ง</th><th>สถานะ</th></tr></thead>
+    <tbody>
+      <tr><td>ม.ค.</td><td class="r">49,000</td><td class="r">18,200</td><td class="r">2,940</td><td class="r">21,140</td><td class="r" style="font-weight:500;">27,860</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>ก.พ.</td><td class="r">52,500</td><td class="r">19,950</td><td class="r">2,940</td><td class="r">22,890</td><td class="r" style="font-weight:500;">29,610</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>มี.ค.</td><td class="r">66,500</td><td class="r">25,200</td><td class="r">2,940</td><td class="r">28,140</td><td class="r" style="font-weight:500;">38,360</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>เม.ย.</td><td class="r">38,500</td><td class="r">14,700</td><td class="r">2,940</td><td class="r">17,640</td><td class="r" style="font-weight:500;">20,860</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>พ.ค.</td><td class="r">59,500</td><td class="r">22,750</td><td class="r">2,940</td><td class="r">25,690</td><td class="r" style="font-weight:500;">33,810</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>มิ.ย.</td><td class="r">63,000</td><td class="r">23,800</td><td class="r">2,940</td><td class="r">26,740</td><td class="r" style="font-weight:500;">36,260</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>ก.ค.</td><td class="r">56,000</td><td class="r">21,350</td><td class="r">2,940</td><td class="r">24,290</td><td class="r" style="font-weight:500;">31,710</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>ส.ค.</td><td class="r">68,600</td><td class="r">26,250</td><td class="r">2,940</td><td class="r">29,190</td><td class="r" style="font-weight:500;">39,410</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>ก.ย.</td><td class="r">59,500</td><td class="r">22,750</td><td class="r">2,940</td><td class="r">25,690</td><td class="r" style="font-weight:500;">33,810</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>ต.ค.</td><td class="r">63,000</td><td class="r">23,800</td><td class="r">2,940</td><td class="r">26,740</td><td class="r" style="font-weight:500;">36,260</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>พ.ย.</td><td class="r">75,600</td><td class="r">29,050</td><td class="r">2,940</td><td class="r">31,990</td><td class="r" style="font-weight:500;">43,610</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr><td>ธ.ค.</td><td class="r">52,500</td><td class="r">19,600</td><td class="r">2,940</td><td class="r">22,540</td><td class="r" style="font-weight:500;">29,960</td><td><span class="tag tag-red">จ่ายสรรพากร</span></td></tr>
+      <tr class="total-row"><td><strong>รวมทั้งปี</strong></td><td class="r"><strong>704,200</strong></td><td class="r"><strong>267,400</strong></td><td class="r"><strong>35,280</strong></td><td class="r"><strong>302,680</strong></td><td class="r"><strong>401,520</strong></td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ═══ WHT ═══ -->
+<div class="page-break section-title"><div class="icon">📄</div> ภาษีหัก ณ ที่จ่าย (WHT) ที่บริษัทนำส่งทุกเดือน</div>
+
+<div class="card">
+  <div class="card-head orange">🏦 ภาษีหัก ณ ที่จ่าย — บริษัทหักแล้วนำส่งสรรพากรให้</div>
+  <table>
+    <thead><tr><th>รายการ</th><th>แบบนำส่ง</th><th class="r">ฐานจ่าย/ด.</th><th class="r">อัตรา</th><th class="r">หัก/เดือน</th><th class="r">หัก/ปี</th></tr></thead>
+    <tbody>
+      <tr><td>เงินเดือนพ่อ</td><td><span class="tag tag-blue">ภ.ง.ด.1</span></td><td class="r">25,000</td><td class="r">-</td><td class="r">0</td><td class="r">0</td></tr>
+      <tr><td>เงินเดือนแม่</td><td><span class="tag tag-blue">ภ.ง.ด.1</span></td><td class="r">25,000</td><td class="r">-</td><td class="r">0</td><td class="r">0</td></tr>
+      <tr><td>เงินเดือนโอปอ</td><td><span class="tag tag-blue">ภ.ง.ด.1</span></td><td class="r">25,000</td><td class="r">-</td><td class="r">0</td><td class="r">0</td></tr>
+      <tr><td>เงินเดือนเต้ย</td><td><span class="tag tag-blue">ภ.ง.ด.1</span></td><td class="r">25,000</td><td class="r">-</td><td class="r">0</td><td class="r">0</td></tr>
+      <tr><td>เงินเดือนญาติ 1</td><td><span class="tag tag-blue">ภ.ง.ด.1</span></td><td class="r">25,000</td><td class="r">-</td><td class="r">0</td><td class="r">0</td></tr>
+      <tr><td>เงินเดือนญาติ 2</td><td><span class="tag tag-blue">ภ.ง.ด.1</span></td><td class="r">25,000</td><td class="r">-</td><td class="r">0</td><td class="r">0</td></tr>
+      <tr class="subtotal-row"><td colspan="4"><strong>รวม ภ.ง.ด.1</strong></td><td class="r"><strong>0</strong></td><td class="r"><strong>0</strong></td></tr>
+      <tr><td>ค่าจ้างสำนักงานบัญชี</td><td><span class="tag tag-purple">ภ.ง.ด.53</span></td><td class="r">8,000</td><td class="r">3%</td><td class="r">240</td><td class="r">2,880</td></tr>
+      <tr class="total-row"><td colspan="4"><strong>รวม WHT นำส่งทุกเดือน</strong></td><td class="r"><strong>240</strong></td><td class="r"><strong>2,880</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+<!-- ═══ Journal Entries ═══ -->
+<div class="page-break section-title"><div class="icon">📝</div> ตัวอย่างการบันทึกบัญชี (Journal Entries) — เดือนมีนาคม</div>
+
+<div class="month-grid">
+
+<div class="card">
+  <div class="card-head blue">📗 JV01 – รายได้ลูกค้าบุคคลธรรมดา (ไม่หัก WHT)</div>
+  <table>
+    <thead><tr><th width="55%">รายการ</th><th class="r">Dr.</th><th class="r">Cr.</th></tr></thead>
+    <tbody>
+      <tr><td><span class="dr">Dr.</span> เงินฝากธนาคาร</td><td class="r dr">321,000</td><td></td></tr>
+      <tr><td><span class="cr">Cr.</span> รายได้-งานผ้าม่าน</td><td></td><td class="r cr">300,000</td></tr>
+      <tr><td><span class="cr">Cr.</span> ภาษีขาย (VAT Output)</td><td></td><td class="r cr">21,000</td></tr>
+    </tbody>
+  </table>
+  <div style="padding:.5rem 1rem;font-size:.82rem;color:var(--gray-400);">ลูกค้าบุคคลธรรมดา ไม่หัก WHT โอนเข้าเต็ม 321,000</div>
+</div>
+
+<div class="card">
+  <div class="card-head blue">📗 JV02 – รายได้ลูกค้านิติบุคคล (หัก WHT 3%)</div>
+  <table>
+    <thead><tr><th width="55%">รายการ</th><th class="r">Dr.</th><th class="r">Cr.</th></tr></thead>
+    <tbody>
+      <tr><td><span class="dr">Dr.</span> เงินฝากธนาคาร</td><td class="r dr">201,000</td><td></td></tr>
+      <tr><td><span class="dr">Dr.</span> ภาษีหัก ณ ที่จ่ายรอเครดิต</td><td class="r dr">6,000</td><td></td></tr>
+      <tr><td><span class="cr">Cr.</span> รายได้-งานฟิล์ม</td><td></td><td class="r cr">200,000</td></tr>
+      <tr><td><span class="cr">Cr.</span> ภาษีขาย (VAT Output)</td><td></td><td class="r cr">7,000</td></tr>
+    </tbody>
+  </table>
+  <div style="padding:.5rem 1rem;font-size:.82rem;color:var(--gray-400);">ลูกค้าบริษัทหัก WHT 3% = 6,000 เงินเข้าจริง 201,000 (6,000 เป็นเครดิตภาษี)</div>
+</div>
+
+<div class="card">
+  <div class="card-head red">📕 JV03 – ซื้อวัสดุจาก Supplier (จด VAT)</div>
+  <table>
+    <thead><tr><th width="55%">รายการ</th><th class="r">Dr.</th><th class="r">Cr.</th></tr></thead>
+    <tbody>
+      <tr><td><span class="dr">Dr.</span> ต้นทุนวัสดุ-ผ้า/ฟิล์ม</td><td class="r dr">360,000</td><td></td></tr>
+      <tr><td><span class="dr">Dr.</span> ภาษีซื้อ (VAT Input)</td><td class="r dr">25,200</td><td></td></tr>
+      <tr><td><span class="cr">Cr.</span> เงินฝากธนาคาร</td><td></td><td class="r cr">385,200</td></tr>
+    </tbody>
+  </table>
+  <div style="padding:.5rem 1rem;font-size:.82rem;color:var(--gray-400);">VAT ซื้อ 25,200 นำไปหัก VAT ขายใน ภ.พ.30 ได้</div>
+</div>
+
+<div class="card">
+  <div class="card-head red">📕 JV04 – จ่ายค่าจ้างช่าง (หัก WHT 3%)</div>
+  <table>
+    <thead><tr><th width="55%">รายการ</th><th class="r">Dr.</th><th class="r">Cr.</th></tr></thead>
+    <tbody>
+      <tr><td><span class="dr">Dr.</span> ต้นทุน-ค่าจ้างช่าง</td><td class="r dr">170,000</td><td></td></tr>
+      <tr><td><span class="cr">Cr.</span> เงินฝากธนาคาร</td><td></td><td class="r cr">164,900</td></tr>
+      <tr><td><span class="cr">Cr.</span> ภาษีหัก ณ ที่จ่ายรอนำส่ง</td><td></td><td class="r cr">5,100</td></tr>
+    </tbody>
+  </table>
+  <div style="padding:.5rem 1rem;font-size:.82rem;color:var(--gray-400);">หัก WHT 3% จากช่าง = 5,100 บริษัทต้องนำส่งสรรพากรภายใน 15 เม.ย.</div>
+</div>
+
+<div class="card">
+  <div class="card-head purple">📘 JV05 – จ่ายเงินเดือน 6 คน (รวม 150,000)</div>
+  <table>
+    <thead><tr><th width="55%">รายการ</th><th class="r">Dr.</th><th class="r">Cr.</th></tr></thead>
+    <tbody>
+      <tr><td><span class="dr">Dr.</span> เงินเดือนกรรมการ</td><td class="r dr">50,000</td><td></td></tr>
+      <tr><td><span class="dr">Dr.</span> เงินเดือนพนักงาน</td><td class="r dr">100,000</td><td></td></tr>
+      <tr><td><span class="cr">Cr.</span> เงินฝากธนาคาร (โอนสุทธิ 6 คน)</td><td></td><td class="r cr">147,000</td></tr>
+      <tr><td><span class="cr">Cr.</span> เงินประกันสังคมค้างจ่าย</td><td></td><td class="r cr">3,000</td></tr>
+    </tbody>
+  </table>
+  <div style="padding:.5rem 1rem;font-size:.82rem;color:var(--gray-400);">โอนเข้าบัญชี: พ่อ 25,000 | แม่ 24,250 | โอปอ 25,000 | เต้ย 24,250 | ญาติ1 24,250 | ญาติ2 24,250</div>
+</div>
+
+
+
+</div>
+
+<!-- ═══ TAX BURDEN ═══ -->
+<div class="page-break section-title"><div class="icon">🎯</div> สรุปภาษีรวมทั้งระบบ (Total Tax Burden)</div>
+
+<div class="card">
+  <div class="card-head green">✅ ภาษีรวมที่ครอบครัวต้องจ่ายทั้งปี</div>
+  <table>
+    <thead><tr><th width="50%">รายการภาษี</th><th class="r">จำนวน (บาท)</th><th>คำอธิบาย</th></tr></thead>
+    <tbody>
+      <tr><td>ภาษีเงินได้นิติบุคคล (CIT)</td><td class="r" style="font-weight:500;">63,600</td><td>SME 15% (300k แรกยกเว้น)</td></tr>
+      <tr><td>ภาษีเงินได้บุคคลธรรมดา – พ่อ</td><td class="r" style="font-weight:500;">16,700</td><td>เงินเดือน 300k + ค่าเช่า 360k</td></tr>
+      <tr><td>ภาษีเงินได้บุคคลธรรมดา – แม่</td><td class="r" style="color:var(--green);">0</td><td>เงินได้สุทธิ ไม่เกิน 150,000</td></tr>
+      <tr><td>ภาษีเงินได้บุคคลธรรมดา – โอปอ</td><td class="r" style="color:var(--green);">0</td><td>เงินได้สุทธิ ไม่เกิน 150,000</td></tr>
+      <tr><td>ภาษีเงินได้บุคคลธรรมดา – เต้ย</td><td class="r" style="color:var(--green);">0</td><td>เงินได้สุทธิ ไม่เกิน 150,000</td></tr>
+      <tr><td>ภาษีเงินได้บุคคลธรรมดา – ญาติ 1</td><td class="r" style="color:var(--green);">0</td><td>เงินได้สุทธิ ไม่เกิน 150,000</td></tr>
+      <tr><td>ภาษีเงินได้บุคคลธรรมดา – ญาติ 2</td><td class="r" style="color:var(--green);">0</td><td>เงินได้สุทธิ ไม่เกิน 150,000</td></tr>
+      <tr><td>ภาษีหัก ณ ที่จ่าย – เงินปันผล (10%)</td><td class="r" style="font-weight:500;">60,000</td><td>สมมติปันผล 600,000</td></tr>
+      <tr class="total-row">
+        <td><strong>รวมภาษีทั้งระบบ</strong></td>
+        <td class="r" style="font-weight:700;font-size:1.1rem;">140,300 บาท</td>
+        <td><span class="tag tag-green" style="font-size:.85rem;padding:.3rem .75rem;">= 1.4% ของยอดขาย 10 ล้าน</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note-box">
+  <strong>📌 ข้อสรุป:</strong> จากยอดขาย 10 ล้านบาท ด้วยโครงสร้างนี้ ครอบครัวเสียภาษีทั้งระบบเพียง <strong>140,300 บาท (1.4%)</strong> ซึ่งเป็นอัตราที่ต่ำมากและถูกกฎหมาย 100% เพราะทุกค่าใช้จ่ายเกิดขึ้นจริงและมีเอกสารรองรับครบถ้วน
+</div>
+
+<!-- ═══ FAMILY NET CASH ═══ -->
+<div class="section-title"><div class="icon">👨‍👩‍👧‍👦</div> เงินสดสุทธิที่ครอบครัวได้รับจากบริษัททั้งปี</div>
+
+<div class="card">
+  <div class="card-head green">💚 สรุปเงินที่เข้ากระเป๋าครอบครัว (ถูกกฎหมาย 100%)</div>
+  <table>
+    <thead><tr><th width="45%">ช่องทาง</th><th class="r">ต่อเดือน</th><th class="r">ต่อปี</th><th>ผู้รับ</th></tr></thead>
+    <tbody>
+      <tr><td>เงินเดือนพ่อ (สุทธิหลังหักภาษี)</td><td class="r">23,609</td><td class="r">283,300</td><td><span class="tag tag-blue">พ่อ</span></td></tr>
+      <tr><td>ค่าเช่าร้าน+รถ (สุทธิหลังหักภาษี)</td><td class="r">28,500</td><td class="r">342,000</td><td><span class="tag tag-blue">พ่อ</span></td></tr>
+      <tr><td>เงินเดือนแม่ (สุทธิหลังหัก ปกส.)</td><td class="r">24,250</td><td class="r">291,000</td><td><span class="tag tag-green">แม่</span></td></tr>
+      <tr><td>เงินเดือนโอปอ</td><td class="r">25,000</td><td class="r">300,000</td><td><span class="tag tag-purple">โอปอ</span></td></tr>
+      <tr><td>เงินเดือนเต้ย (สุทธิหลังหัก ปกส.)</td><td class="r">24,250</td><td class="r">291,000</td><td><span class="tag tag-orange">เต้ย</span></td></tr>
+      <tr><td>เงินเดือนญาติ 1 (สุทธิหลังหัก ปกส.)</td><td class="r">24,250</td><td class="r">291,000</td><td><span class="tag tag-gray">ญาติ 1</span></td></tr>
+      <tr><td>เงินเดือนญาติ 2 (สุทธิหลังหัก ปกส.)</td><td class="r">24,250</td><td class="r">291,000</td><td><span class="tag tag-gray">ญาติ 2</span></td></tr>
+      <tr><td>เงินปันผล (สุทธิหลังหัก 10%)</td><td class="r">-</td><td class="r">540,000</td><td><span class="tag tag-purple">ผู้ถือหุ้น</span></td></tr>
+      <tr class="total-row">
+        <td><strong>รวมเงินสดเข้าครอบครัว</strong></td>
+        <td class="r"><strong>174,109</strong></td>
+        <td class="r" style="font-weight:700;font-size:1.1rem;"><strong>2,629,300 บาท/ปี</strong></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+    <!-- Floating Navigation Button -->
+    <a href="mantip_erp_dashboard.html" style="position: fixed; bottom: 30px; right: 30px; background-color: #4f46e5; color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4); font-family: 'Inter', 'Prompt', sans-serif; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; z-index: 9999; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(79, 70, 229, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(79, 70, 229, 0.4)';">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/><path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/></svg>
+        เมนูหลัก (Main Menu)
+    </a>
+</body>
+</html>

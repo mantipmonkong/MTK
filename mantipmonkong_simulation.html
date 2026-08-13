@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MANTIPMONKONG - Financial Simulation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Deep blue */
+            --secondary: #3b82f6; /* Lighter blue */
+            --accent: #f59e0b; /* Amber */
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 0 0 2rem 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        /* Ledger Table Styles */
+        .ledger-container {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .ledger-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .ledger-header {
+            background: #f1f5f9;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--text-light);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .dr { color: var(--success); font-weight: 500; }
+        .cr { color: var(--danger); font-weight: 500; text-align: right; padding-right: 3rem;}
+        .amt { font-family: monospace; font-size: 1.05rem; text-align: right; }
+
+        /* Card Grid for Personal Cash Flow */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .person-card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .person-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--secondary);
+        }
+
+        .person-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary);
+        }
+
+        .person-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .role-badge {
+            font-size: 0.75rem;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-weight: 500;
+        }
+
+        .cash-flow-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .inflow { color: var(--success); }
+        .outflow { color: var(--danger); }
+        
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 1rem 0;
+        }
+
+        .net-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container" style="padding-top: 0; padding-bottom: 0;">
+            <h1>บริษัท ม่านทิพย์มั่นคง จำกัด</h1>
+            <p class="subtitle">การจำลองการบันทึกบัญชี และ กระแสเงินสดส่วนบุคคลรายเดือน (Monthly Simulation)</p>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <h2>1. การจำลองการบันทึกบัญชีรายเดือน (Accounting Entries)</h2>
+
+        <div class="ledger-container">
+            <div class="ledger-header">1. การบันทึกรายได้ (เมื่อขายงานโปรเจค 100,000 บาท + VAT 7% หัก ณ ที่จ่าย 3%)</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="60%">รายการบัญชี (Account)</th>
+                        <th width="20%" style="text-align: right;">เดบิต (Dr.)</th>
+                        <th width="20%" style="text-align: right;">เครดิต (Cr.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="dr">Dr.</span> เงินฝากธนาคาร</td>
+                        <td class="amt dr">104,000.00</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><span class="dr">Dr.</span> ภาษีเงินได้หัก ณ ที่จ่าย รอนำส่ง</td>
+                        <td class="amt dr">3,000.00</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="cr"><span class="cr">Cr.</span> รายได้จากการขาย</td>
+                        <td></td>
+                        <td class="amt cr">100,000.00</td>
+                    </tr>
+                    <tr>
+                        <td class="cr"><span class="cr">Cr.</span> ภาษีขาย (VAT Output)</td>
+                        <td></td>
+                        <td class="amt cr">7,000.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="ledger-container">
+            <div class="ledger-header">2. การบันทึกต้นทุน (เมื่อซื้อวัสดุ 60,000 บาท + VAT 7%)</div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td width="60%"><span class="dr">Dr.</span> ต้นทุนสินค้า/ซื้อวัสดุ</td>
+                        <td width="20%" class="amt dr">60,000.00</td>
+                        <td width="20%"></td>
+                    </tr>
+                    <tr>
+                        <td><span class="dr">Dr.</span> ภาษีซื้อ (VAT Input)</td>
+                        <td class="amt dr">4,200.00</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="cr"><span class="cr">Cr.</span> เงินฝากธนาคาร</td>
+                        <td></td>
+                        <td class="amt cr">64,200.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="ledger-container">
+            <div class="ledger-header">3. การบันทึกจ่ายเงินเดือน (6 คน รวม 150,000 บาท)</div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td width="60%"><span class="dr">Dr.</span> เงินเดือนกรรมการและพนักงาน</td>
+                        <td width="20%" class="amt dr">150,000.00</td>
+                        <td width="20%"></td>
+                    </tr>
+                    <tr>
+                        <td class="cr"><span class="cr">Cr.</span> เงินฝากธนาคาร (โอนสุทธิ)</td>
+                        <td></td>
+                        <td class="amt cr">147,000.00</td>
+                    </tr>
+                    <tr>
+                        <td class="cr"><span class="cr">Cr.</span> เงินประกันสังคมค้างจ่าย (พนักงาน)</td>
+                        <td></td>
+                        <td class="amt cr">3,000.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="ledger-container">
+            <div class="ledger-header">4. การบันทึกเงินสมทบประกันสังคม (ส่วนของบริษัท)</div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td width="60%"><span class="dr">Dr.</span> เงินสมทบประกันสังคม (ค่าใช้จ่าย)</td>
+                        <td width="20%" class="amt dr">3,000.00</td>
+                        <td width="20%"></td>
+                    </tr>
+                    <tr>
+                        <td class="cr"><span class="cr">Cr.</span> เงินประกันสังคมค้างจ่าย (บริษัท)</td>
+                        <td></td>
+                        <td class="amt cr">3,000.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <h2>2. กระแสเงินสดของแต่ละบุคคล (Personal Cash Flow)</h2>
+
+        <div class="grid">
+            <!-- Card 1 -->
+            <div class="person-card">
+                <div class="person-name">
+                    คุณพ่อ <span class="role-badge">กรรมการ</span>
+                </div>
+                <div class="cash-flow-row inflow">
+                    <span>+ เงินเดือน</span>
+                    <span class="amt">25,000</span>
+                </div>
+                <div class="divider"></div>
+                <div class="cash-flow-row outflow">
+                    <span>- ภาระส่วนตัว</span>
+                    <span class="amt">ตามจริง</span>
+                </div>
+                <div class="divider"></div>
+                <div class="net-total">
+                    <span>รับเงินโอนสุทธิ</span>
+                    <span class="amt" style="color: var(--primary);">25,000 ฿</span>
+                </div>
+                <div class="note">*ภาษีบุคคลธรรมดา 0 บาท (รายได้สุทธิไม่ถึงเกณฑ์)</div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="person-card">
+                <div class="person-name">
+                    คุณแม่ <span class="role-badge">พนักงาน / บริหาร</span>
+                </div>
+                <div class="cash-flow-row inflow">
+                    <span>+ เงินเดือน</span>
+                    <span class="amt">25,000</span>
+                </div>
+                <div class="cash-flow-row outflow">
+                    <span>- ประกันสังคม</span>
+                    <span class="amt">750</span>
+                </div>
+                <div class="divider"></div>
+                <div class="cash-flow-row outflow">
+                    <span>- ค่าใช้จ่ายส่วนตัว</span>
+                    <span class="amt">ตามจริง</span>
+                </div>
+                <div class="cash-flow-row outflow">
+                    <span>- ซื้อของเข้าบ้าน/ตลาด</span>
+                    <span class="amt">ตามจริง</span>
+                </div>
+                <div class="divider"></div>
+                <div class="net-total">
+                    <span>รับเงินโอนสุทธิ</span>
+                    <span class="amt" style="color: var(--primary);">24,250 ฿</span>
+                </div>
+                <div class="note">*ช่วยลดภาระกระเป๋าคุณพ่อ และสามารถจัดการค่าใช้จ่ายในบ้านเองได้</div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="person-card">
+                <div class="person-name">
+                    โอปอ <span class="role-badge">กรรมการ / ผู้ถือหุ้น</span>
+                </div>
+                <div class="cash-flow-row inflow">
+                    <span>+ เงินเดือน</span>
+                    <span class="amt">25,000</span>
+                </div>
+                <div class="cash-flow-row inflow">
+                    <span>+ เงินปันผล</span>
+                    <span class="amt">รายปี</span>
+                </div>
+                <div class="divider"></div>
+                <div class="cash-flow-row outflow">
+                    <span>- เงินออม / ใช้ส่วนตัว</span>
+                    <span class="amt">ตามจริง</span>
+                </div>
+                <div class="divider"></div>
+                <div class="net-total">
+                    <span>รับเงินโอนรายเดือนสุทธิ</span>
+                    <span class="amt" style="color: var(--primary);">25,000 ฿</span>
+                </div>
+                <div class="note">*ไม่เข้าประกันสังคม ม.33 (เป็นกรรมการ) และฐานภาษีบุคคลเป็น 0 บาท</div>
+            </div>
+
+            <!-- Card 4, 5, 6 -->
+            <div class="person-card">
+                <div class="person-name">
+                    เต้ย, ญาติ 1, ญาติ 2 <span class="role-badge">พนักงาน</span>
+                </div>
+                <div class="cash-flow-row inflow">
+                    <span>+ เงินเดือน</span>
+                    <span class="amt">25,000</span>
+                </div>
+                <div class="cash-flow-row outflow">
+                    <span>- ประกันสังคม</span>
+                    <span class="amt">750</span>
+                </div>
+                <div class="divider"></div>
+                <div class="cash-flow-row outflow">
+                    <span>- ภาระส่วนตัว</span>
+                    <span class="amt">ตามจริง</span>
+                </div>
+                <div class="divider"></div>
+                <div class="net-total">
+                    <span>รับเงินโอนสุทธิ (ต่อคน)</span>
+                    <span class="amt" style="color: var(--primary);">24,250 ฿</span>
+                </div>
+                <div class="note">*ภาษีบุคคลธรรมดา 0 บาท ทุกคนได้รับความคุ้มครองจากประกันสังคม</div>
+            </div>
+
+        </div>
+        
+        <br><br>
+    </div>
+
+    <!-- Floating Navigation Button -->
+    <a href="mantip_erp_dashboard.html" style="position: fixed; bottom: 30px; right: 30px; background-color: #4f46e5; color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4); font-family: 'Inter', 'Prompt', sans-serif; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; z-index: 9999; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 16px rgba(79, 70, 229, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(79, 70, 229, 0.4)';">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/><path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/></svg>
+        เมนูหลัก (Main Menu)
+    </a>
+</body>
+</html>
