@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import './globals.css';
 
 export const metadata = {
@@ -23,24 +24,27 @@ export default function RootLayout({ children }) {
                 </div>
             </div>
             <div className="sidebar-menu">
-                <a href="/" className="menu-item active">
+                <Link href="/" className="menu-item active">
                     <i className="fa-solid fa-chart-pie"></i> ภาพรวม
-                </a>
-                <a href="/documents" className="menu-item">
-                    <i className="fa-solid fa-file-invoice-dollar"></i> สร้างใบเสนอราคา
-                </a>
-                <a href="/accounting" className="menu-item">
+                </Link>
+                <Link href="/projects" className="menu-item">
+                    <i className="fa-solid fa-diagram-project"></i> จัดการโปรเจกต์
+                </Link>
+                <Link href="/contacts" className="menu-item">
+                    <i className="fa-solid fa-users"></i> ข้อมูลลูกค้า/ซัพพลายเออร์
+                </Link>
+                <Link href="/accounting" className="menu-item">
                     <i className="fa-solid fa-building-columns"></i> บัญชีบริษัท(ส่งสรรพกร)
-                </a>
-                <a href="/internal" className="menu-item">
+                </Link>
+                <Link href="/internal" className="menu-item">
                     <i className="fa-solid fa-calculator"></i> บัญชีภายใน(เฉพาะบริษัท)
-                </a>
-                <a href="/settings" className="menu-item">
+                </Link>
+                <Link href="/settings" className="menu-item">
                     <i className="fa-solid fa-gear"></i> ตั้งค่า
-                </a>
-                <a href="/simulation" className="menu-item">
+                </Link>
+                <Link href="/simulation" className="menu-item">
                     <i className="fa-solid fa-layer-group"></i> รวมอื่นๆ
-                </a>
+                </Link>
             </div>
         </aside>
 
