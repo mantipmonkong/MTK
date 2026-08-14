@@ -1,14 +1,58 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { supabase } from '../../../lib/supabase';
 
 export default function IncomeAccounting() {
-  const formatMoney = (num) => num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const formatMoney = (num) => Number(num || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  const [incomes, setIncomes] = useState([
-    { id: 1, date: '2026-08-12', docNo: 'INV-2608-001', customer: 'บริษัท เอบีซี จำกัด', subTotal: 500000, vat: 35000, total: 535000, wht: 15000, net: 520000 },
-    { id: 2, date: '2026-08-14', docNo: 'INV-2608-002', customer: 'บจก. เอ็กซ์วายแซด คอนสตรัคชั่น', subTotal: 1000000, vat: 70000, total: 1070000, wht: 0, net: 1070000 },
-  ]);
+  const [incomes, setIncomes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchIncomes();
+  }, []);
+
+  const fetchIncomes = async () => {
+    setIsLoading(true);
+    
+    const { data: bData } = await supabase
+      .from('billings')
+      .select('*, projects(id, contacts(name))')
+      .eq('type', 'receipt')
+      .order('created_at', { ascending: false });
+
+    const { data: qData } = await supabase
+      .from('quotations')
+      .select('*')
+      .eq('status', 'อนุมัติแล้ว');
+
+    if (bData && qData) {
+      const processedIncomes = bData.map(bill => {
+        const quote = qData.find(q => q.id === bill.quotation_id);
+        if (!quote) return null;
+        
+        const isFullPayment = Number(bill.total_amount) >= Number(quote.total_amount);
+        const subTotal = isFullPayment ? quote.sub_total : (bill.total_amount * 100 / 107);
+        const vat = isFullPayment ? quote.vat_amount : (bill.total_amount * 7 / 107);
+        const wht = isFullPayment ? quote.wht_amount : 0;
+        
+        return {
+          id: bill.id,
+          date: new Date(bill.created_at).toLocaleDateString('th-TH'),
+          docNo: bill.id,
+          customer: bill.projects?.contacts?.name || 'ลูกค้าทั่วไป',
+          subTotal: quote.vat_rate > 0 ? Number(subTotal) : Number(bill.total_amount),
+          vat: quote.vat_rate > 0 ? Number(vat) : 0,
+          wht: Number(wht),
+          net: Number(bill.total_amount)
+        };
+      }).filter(Boolean);
+      
+      setIncomes(processedIncomes);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <div className="container">
@@ -50,7 +94,9 @@ export default function IncomeAccounting() {
             </tr>
           </thead>
           <tbody>
-            {incomes.map(item => (
+            {isLoading ? <tr><td colSpan="8" style={{textAlign:'center', padding:'20px'}}>กำลังโหลดข้อมูล...</td></tr> : null}
+            {!isLoading && incomes.length === 0 ? <tr><td colSpan="8" style={{textAlign:'center', padding:'20px'}}>ไม่มีรายการรายรับ</td></tr> : null}
+            {!isLoading && incomes.map(item => (
               <tr key={item.id} style={{ borderBottom: '1px solid var(--border)' }}>
                 <td style={{ padding: '16px 12px', fontSize: '14px' }}>{item.date}</td>
                 <td style={{ fontSize: '14px', fontWeight: 500, color: 'var(--primary)' }}>{item.docNo}</td>
@@ -60,12 +106,9 @@ export default function IncomeAccounting() {
                 <td style={{ textAlign: 'right', fontSize: '14px', color: 'var(--warning)' }}>{formatMoney(item.wht)}</td>
                 <td style={{ textAlign: 'right', fontSize: '14px', fontWeight: 'bold' }}>{formatMoney(item.net)}</td>
                 <td style={{ textAlign: 'center' }}>
-                  <button className="btn-icon" title="ดูรายละเอียด" style={{ border: 'none', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '8px' }}>
+                  <Link href={`/projects`} className="btn-icon" title="ดูรายละเอียด" style={{ border: 'none', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '8px', textDecoration: 'none' }}>
                     <i className="fa-solid fa-eye"></i>
-                  </button>
-                  <button className="btn-icon" title="พิมพ์ใบกำกับภาษี" style={{ border: 'none', background: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '8px' }}>
-                    <i className="fa-solid fa-print"></i>
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}

@@ -10,11 +10,14 @@ export default function InternalDashboard() {
   const [totalFund, setTotalFund] = useState(0); // กองทุนรวมที่นำเข้าทั้งหมด
   const [totalWithdrawn, setTotalWithdrawn] = useState(0);
   const [depositHistory, setDepositHistory] = useState([]);
+  const [withdrawHistory, setWithdrawHistory] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [activeTab, setActiveTab] = useState('accounts'); // 'accounts' or 'transactions'
+
   const [showDepositForm, setShowDepositForm] = useState(false);
-  const [depositData, setDepositData] = useState({ amount: '', source: 'salary', note: '' });
+  const [depositData, setDepositData] = useState({ amount: '', source: 'salary', note: '', internal_account_id: '' });
 
   useEffect(() => {
     fetchData();
@@ -31,10 +34,11 @@ export default function InternalDashboard() {
       setDepositHistory(deposits);
 
       // 2. Fetch Withdrawals
-      const { data: wData } = await supabase.from('fund_withdrawals').select('*');
+      const { data: wData } = await supabase.from('fund_withdrawals').select('*, internal_accounts(name)').order('created_at', { ascending: false });
       const withdrawals = wData || [];
       const sumWithdrawn = withdrawals.reduce((s, w) => s + Number(w.amount), 0);
       setTotalWithdrawn(sumWithdrawn);
+      setWithdrawHistory(withdrawals);
 
       // 3. Fetch Accounts & Calculate their limits
       const { data: accData } = await supabase.from('internal_accounts').select('*');
@@ -45,8 +49,9 @@ export default function InternalDashboard() {
         .from('projects')
         .select(`
           internal_account_id,
-          billings ( total_amount, type ),
-          project_expenses ( amount )
+          billings ( total_amount, type, quotation_id ),
+          project_expenses ( amount, vat_amount ),
+          quotations ( id, wht_amount, total_amount )
         `);
 
       const projects = projData || [];
@@ -59,21 +64,39 @@ export default function InternalDashboard() {
         let totalProfit = 0;
         let totalIncome = 0; // For VAT tracking
 
+        let totalWhtCredit = 0;
+
         accProjects.forEach(p => {
-          const inc = p.billings ? p.billings.filter(b => b.type === 'receipt').reduce((s,b)=>s+Number(b.total_amount), 0) : 0;
-          const exp = p.project_expenses ? p.project_expenses.reduce((s,e)=>s+Number(e.amount), 0) : 0;
+          const receipts = p.billings ? p.billings.filter(b => b.type === 'receipt') : [];
+          const inc = receipts.reduce((s,b)=>s+Number(b.total_amount), 0);
+          const exp = p.project_expenses ? p.project_expenses.reduce((s,e)=>s+Number(e.amount)+Number(e.vat_amount||0), 0) : 0;
           
+          let wht = 0;
+          receipts.forEach(b => {
+             const q = p.quotations?.find(q => q.id === b.quotation_id);
+             if(q && Number(q.total_amount) > 0) {
+                 const proportion = Number(b.total_amount) / Number(q.total_amount);
+                 wht += (Number(q.wht_amount || 0) * proportion);
+             }
+          });
+
           totalProfit += (inc - exp);
           totalIncome += inc; // Mock VAT tracking simply using total income
+          totalWhtCredit += wht;
         });
 
         const accWithdrawn = withdrawals.filter(w => w.internal_account_id === acc.id).reduce((s,w) => s + Number(w.amount), 0);
+        
+        // Calculate Personal Top-ups
+        const personalDeposits = deposits.filter(d => d.internal_account_id === acc.id && d.source === 'personal_transfer');
+        const totalPersonalDeposits = personalDeposits.reduce((s,d)=> s + Number(d.amount), 0);
 
         return {
           ...acc,
-          creditLimit: totalProfit > 0 ? totalProfit : 0,
+          creditLimit: (totalProfit > 0 ? totalProfit : 0) + totalPersonalDeposits,
           withdrawn: accWithdrawn,
-          vatIncome: totalProfit > 0 ? totalProfit : 0
+          vatIncome: totalProfit > 0 ? totalProfit : 0,
+          whtCredit: totalWhtCredit
         };
       });
 
@@ -93,15 +116,36 @@ export default function InternalDashboard() {
     const { data, error } = await supabase.from('fund_deposits').insert([{
       source: depositData.source,
       amount: amountNum,
-      note: depositData.note
+      note: depositData.note,
+      internal_account_id: depositData.source === 'personal_transfer' ? depositData.internal_account_id : null
     }]).select();
 
     if (!error && data) {
       fetchData(); // Reload to get fresh sums
       setShowDepositForm(false);
-      setDepositData({ amount: '', source: 'salary', note: '' });
+      setDepositData({ amount: '', source: 'salary', note: '', internal_account_id: '' });
     } else {
       alert('เกิดข้อผิดพลาด: ' + error.message);
+    }
+  };
+
+  const handleDeleteDeposit = async (id) => {
+    if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการรับเงินนี้?')) return;
+    const { error } = await supabase.from('fund_deposits').delete().eq('id', id);
+    if (!error) {
+      fetchData();
+    } else {
+      alert('ลบไม่สำเร็จ: ' + error.message);
+    }
+  };
+
+  const handleDeleteWithdrawal = async (id) => {
+    if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการเบิกเงินนี้?')) return;
+    const { error } = await supabase.from('fund_withdrawals').delete().eq('id', id);
+    if (!error) {
+      fetchData();
+    } else {
+      alert('ลบไม่สำเร็จ: ' + error.message);
     }
   };
 
@@ -111,6 +155,7 @@ export default function InternalDashboard() {
       case 'expense': return 'ค่าใช้จ่ายเงินสด';
       case 'dividend': return 'เงินปันผล';
       case 'incentive': return 'Incentive';
+      case 'personal_transfer': return 'โอนเงินเข้ากระเป๋าเอง';
       default: return 'อื่นๆ';
     }
   };
@@ -166,8 +211,21 @@ export default function InternalDashboard() {
                 <option value="expense">2. เงินสดค่าใช้จ่ายอื่นๆ (Cash Expenses)</option>
                 <option value="dividend">3. เงินปันผล (Dividends)</option>
                 <option value="incentive">4. เงินจูงใจ (Incentives)</option>
+                <option value="personal_transfer">5. โอนเงินเข้ากระเป๋าเอง (เพิ่มเครดิต)</option>
               </select>
             </div>
+
+            {depositData.source === 'personal_transfer' && (
+              <div className="form-group">
+                <label style={{ display: 'block', fontSize: '14px', marginBottom: '8px', fontWeight: 500 }}>เลือกบัญชีย่อย (คนที่โอนเข้า)</label>
+                <select value={depositData.internal_account_id} onChange={e => setDepositData({...depositData, internal_account_id: e.target.value})} className="form-control" style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--border)' }} required>
+                  <option value="">-- เลือกบัญชีย่อย --</option>
+                  {accounts.map(acc => (
+                    <option key={acc.id} value={acc.id}>{acc.name} ({acc.id})</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="form-group">
               <label style={{ display: 'block', fontSize: '14px', marginBottom: '8px', fontWeight: 500 }}>จำนวนเงิน (บาท)</label>
@@ -187,16 +245,23 @@ export default function InternalDashboard() {
         </div>
       )}
 
-      {/* Grid Layout for Accounts & History */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px' }}>
-        
-        {/* Left Col: Sub Accounts */}
+      {/* TABS */}
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', background: 'rgba(99,102,241,0.05)', padding: '6px', borderRadius: '12px', width: 'fit-content', border: '1px solid rgba(99,102,241,0.1)' }}>
+        <button 
+          onClick={() => setActiveTab('accounts')}
+          style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', background: activeTab === 'accounts' ? 'white' : 'transparent', color: activeTab === 'accounts' ? 'var(--primary)' : 'var(--text-muted)', fontWeight: activeTab === 'accounts' ? 'bold' : 'normal', cursor: 'pointer', transition: 'all 0.2s', boxShadow: activeTab === 'accounts' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none' }}>
+          <i className="fa-solid fa-users"></i> 1. รายชื่อบัญชีย่อย (Sub-Accounts)
+        </button>
+        <button 
+          onClick={() => setActiveTab('transactions')}
+          style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', background: activeTab === 'transactions' ? 'white' : 'transparent', color: activeTab === 'transactions' ? 'var(--primary)' : 'var(--text-muted)', fontWeight: activeTab === 'transactions' ? 'bold' : 'normal', cursor: 'pointer', transition: 'all 0.2s', boxShadow: activeTab === 'transactions' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none' }}>
+          <i className="fa-solid fa-money-bill-transfer"></i> 2. รายรับ รายจ่าย
+        </button>
+      </div>
+
+      {activeTab === 'accounts' && (
         <div>
-          <h2 style={{ fontSize: '20px', marginBottom: '20px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
-            <i className="fa-solid fa-users" style={{ color: 'var(--primary)' }}></i> รายชื่อบัญชีย่อย (Sub-Accounts)
-          </h2>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '24px' }}>
             {accounts.map((acc) => {
               const available = acc.creditLimit - acc.withdrawn;
               const vatWarning = acc.vatIncome > 1800000;
@@ -231,14 +296,18 @@ export default function InternalDashboard() {
                         <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>เหลือเบิกได้ (Available)</div>
                         <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--secondary)' }}>฿{formatMoney(available)}</div>
                       </div>
+                      {acc.whtCredit > 0 && (
+                        <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '12px', marginTop: '-4px' }}>
+                          <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}><i className="fa-solid fa-file-invoice-dollar" style={{ color: '#eab308' }}></i> เครดิตภาษีหัก ณ ที่จ่าย (รอเคลมคืน)</div>
+                          <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#eab308' }}>฿{formatMoney(acc.whtCredit)}</div>
+                        </div>
+                      )}
                     </div>
 
-                    {/* Credit Progress Bar */}
                     <div style={{ width: '100%', height: '6px', background: 'var(--border)', borderRadius: '4px', overflow: 'hidden', marginBottom: '16px' }}>
                       <div style={{ height: '100%', width: `${progressPercent}%`, background: progressPercent > 90 ? 'var(--danger)' : 'var(--primary)' }}></div>
                     </div>
 
-                    {/* VAT Tracking */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', borderTop: '1px dashed var(--border)' }}>
                       <div>
                         <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>ยอดรายรับจด VAT: </span>
@@ -258,31 +327,67 @@ export default function InternalDashboard() {
             })}
           </div>
         </div>
+      )}
 
-        {/* Right Col: Deposit History */}
-        <div>
-          <h2 style={{ fontSize: '20px', marginBottom: '20px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
-            <i className="fa-solid fa-clock-rotate-left" style={{ color: 'var(--text-muted)' }}></i> ประวัติเงินเข้ากองกลาง
-          </h2>
-          <div style={{ background: 'var(--surface)', padding: '24px', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {depositHistory.length === 0 ? <div style={{color:'var(--text-muted)'}}>ไม่มีประวัติ</div> : null}
-              {depositHistory.map(hist => (
-                <div key={hist.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', borderBottom: '1px dashed var(--border)' }}>
-                  <div>
-                    <div style={{ fontSize: '14px', fontWeight: 500 }}>{getSourceLabel(hist.source)}</div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{new Date(hist.deposit_date || hist.created_at).toLocaleDateString('th-TH')} • {hist.note}</div>
+      {activeTab === 'transactions' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          <div>
+            <h2 style={{ fontSize: '18px', marginBottom: '16px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
+              <i className="fa-solid fa-arrow-right-to-bracket" style={{ color: 'var(--secondary)' }}></i> รายรับ (นำเงินเข้ากองกลาง)
+            </h2>
+            <div style={{ background: 'var(--surface)', padding: '24px', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {depositHistory.length === 0 ? <div style={{color:'var(--text-muted)'}}>ไม่มีประวัติ</div> : null}
+                {depositHistory.map(hist => (
+                  <div key={hist.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', borderBottom: '1px dashed var(--border)' }}>
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: 500 }}>
+                        {getSourceLabel(hist.source)}
+                        {hist.source === 'personal_transfer' && hist.internal_account_id && ` (${accounts.find(a=>a.id===hist.internal_account_id)?.name || hist.internal_account_id})`}
+                      </div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{new Date(hist.deposit_date || hist.created_at).toLocaleDateString('th-TH')} • {hist.note}</div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--secondary)' }}>
+                        +฿{formatMoney(Number(hist.amount))}
+                      </div>
+                      <button onClick={() => handleDeleteDeposit(hist.id)} className="btn-icon" style={{ background: 'transparent', border: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '4px' }} title="ลบรายการนี้">
+                        <i className="fa-solid fa-trash-can"></i>
+                      </button>
+                    </div>
                   </div>
-                  <div style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--secondary)' }}>
-                    +฿{formatMoney(Number(hist.amount))}
+                ))}
+              </div>
+            </div>
+          </div>
+          <div>
+            <h2 style={{ fontSize: '18px', marginBottom: '16px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
+              <i className="fa-solid fa-arrow-right-from-bracket" style={{ color: 'var(--danger)' }}></i> รายจ่าย (บัญชีย่อยเบิกไปใช้)
+            </h2>
+            <div style={{ background: 'var(--surface)', padding: '24px', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {withdrawHistory.length === 0 ? <div style={{color:'var(--text-muted)'}}>ไม่มีประวัติ</div> : null}
+                {withdrawHistory.map(hist => (
+                  <div key={hist.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', borderBottom: '1px dashed var(--border)' }}>
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: 500 }}>{hist.internal_accounts?.name || hist.internal_account_id}</div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{new Date(hist.created_at).toLocaleDateString('th-TH')} • {hist.note || 'เบิกเงิน'}</div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ fontSize: '15px', fontWeight: 'bold', color: 'var(--danger)' }}>
+                        -฿{formatMoney(Number(hist.amount))}
+                      </div>
+                      <button onClick={() => handleDeleteWithdrawal(hist.id)} className="btn-icon" style={{ background: 'transparent', border: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '4px' }} title="ลบรายการนี้">
+                        <i className="fa-solid fa-trash-can"></i>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
-
-      </div>
+      )}
 
       <style>{`
         .doc-card:hover {

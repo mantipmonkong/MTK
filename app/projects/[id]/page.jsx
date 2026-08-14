@@ -10,6 +10,8 @@ export default function ProjectDetail() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [project, setProject] = useState(null);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editNameValue, setEditNameValue] = useState('');
   
   const [activeTab, setActiveTab] = useState('quotations'); 
 
@@ -33,8 +35,10 @@ export default function ProjectDetail() {
   // Expenses
   const [expenses, setExpenses] = useState([]);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
-  const [newExpense, setNewExpense] = useState({ desc: '', amount: '', type: 'other', supplier_id: '', is_tax_invoice: false, vat_amount: 0, wht_amount: 0 });
+  const [newExpense, setNewExpense] = useState({ desc: '', amount: '', type: 'other', supplier_id: '', is_tax_invoice: false, vat_amount: 0, wht_amount: 0, reference_no: '' });
   const [suppliers, setSuppliers] = useState([]);
+  const [editingRefExpenseId, setEditingRefExpenseId] = useState(null);
+  const [editRefExpenseValue, setEditRefExpenseValue] = useState('');
 
   const formatMoney = (num) => Number(num || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -58,7 +62,10 @@ export default function ProjectDetail() {
       .eq('id', projectId)
       .single();
       
-    if (pData) setProject(pData);
+    if (pData) {
+        setProject(pData);
+        setEditNameValue(pData.name || '');
+      }
 
     // Fetch Quotations
     const { data: qData } = await supabase.from('quotations').select('*').eq('project_id', projectId).order('created_at', { ascending: false });
@@ -191,6 +198,22 @@ export default function ProjectDetail() {
     fetchProjectData();
   };
 
+  const handleSaveName = async () => {
+    try {
+      const { error } = await supabase
+        .from('projects')
+        .update({ name: editNameValue || null })
+        .eq('id', projectId);
+      
+      if (error) throw error;
+      
+      setProject(prev => ({ ...prev, name: editNameValue || null }));
+      setIsEditingName(false);
+    } catch (error) {
+      alert('เกิดข้อผิดพลาดในการบันทึกชื่อโปรเจกต์: ' + error.message);
+    }
+  };
+
   const handleCreateInvoice = async (quoteId, amount) => {
     const count = billings.filter(b => b.type === 'invoice').length + 1;
     const invId = `INV-${projectId}-${count.toString().padStart(2, '0')}`;
@@ -234,7 +257,7 @@ export default function ProjectDetail() {
 
   const handleAddExpense = async (e) => {
     e.preventDefault();
-    if(!newExpense.desc || !newExpense.amount) return;
+    if(!newExpense.desc || !newExpense.amount || !newExpense.reference_no) return alert('กรุณากรอกข้อมูลให้ครบถ้วน รวมถึงเลขที่อ้างอิง');
     if(newExpense.type === 'supplier' && !newExpense.supplier_id) return alert('กรุณาเลือกซัพพลายเออร์');
 
     const insertData = {
@@ -243,9 +266,10 @@ export default function ProjectDetail() {
       amount: newExpense.amount,
       supplier_id: newExpense.type === 'supplier' ? newExpense.supplier_id : null,
       is_tax_invoice: newExpense.is_tax_invoice,
-      sub_total: newExpense.amount, // Using amount as sub_total for simplicity, but if VAT is separate it should be calculated. Assuming amount is the Net Amount for now, wait, no. Let's make amount the subtotal.
+      sub_total: newExpense.amount,
       vat_amount: newExpense.is_tax_invoice ? newExpense.vat_amount : 0,
-      wht_amount: newExpense.wht_amount || 0
+      wht_amount: newExpense.wht_amount || 0,
+      reference_no: newExpense.reference_no
     };
 
     const { data, error } = await supabase.from('project_expenses').insert([insertData]).select('*, contacts(name)');
@@ -253,9 +277,19 @@ export default function ProjectDetail() {
     if(!error && data) {
       setExpenses([data[0], ...expenses]);
       setShowExpenseForm(false);
-      setNewExpense({ desc: '', amount: '', type: 'other', supplier_id: '', is_tax_invoice: false, vat_amount: 0, wht_amount: 0 });
+      setNewExpense({ desc: '', amount: '', type: 'other', supplier_id: '', is_tax_invoice: false, vat_amount: 0, wht_amount: 0, reference_no: '' });
     } else {
       alert('เกิดข้อผิดพลาด: ' + (error?.message || ''));
+    }
+  };
+
+  const handleSaveExpenseRef = async (id) => {
+    const { error } = await supabase.from('project_expenses').update({ reference_no: editRefExpenseValue }).eq('id', id);
+    if (!error) {
+      setExpenses(expenses.map(e => e.id === id ? { ...e, reference_no: editRefExpenseValue } : e));
+      setEditingRefExpenseId(null);
+    } else {
+      alert('เกิดข้อผิดพลาดในการอัปเดต: ' + error.message);
     }
   };
 
@@ -266,10 +300,61 @@ export default function ProjectDetail() {
   
   // Calculate Totals for Header
   const totalAccruedIncome = billings.filter(b => b.type === 'receipt').reduce((sum, b) => sum + Number(b.total_amount), 0);
-  const totalExpenses = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
+  
+  // Calculate WHT from receipts
+  const receipts = billings.filter(b => b.type === 'receipt');
+  const totalWhtDeducted = receipts.reduce((sum, b) => {
+    const q = quotations.find(q => q.id === b.quotation_id);
+    if (q && Number(q.total_amount) > 0) {
+      const proportion = Number(b.total_amount) / Number(q.total_amount);
+      return sum + (Number(q.wht_amount || 0) * proportion);
+    }
+    return sum;
+  }, 0);
+  const whtRates = [...new Set(receipts.map(b => {
+    const q = quotations.find(q => q.id === b.quotation_id);
+    return q ? Number(q.wht_rate || 0) : 0;
+  }).filter(r => r > 0))];
+
+  const totalExpenses = expenses.reduce((sum, e) => sum + Number(e.amount) + Number(e.vat_amount || 0), 0);
   const expectedProfit = totalAccruedIncome - totalExpenses;
 
   const { subTotal: formSubTotal, vatAmount: formVatAmount, whtAmount: formWhtAmount, netTotal: formNetTotal } = calculateQuoteTotals();
+
+  // Group Billings
+  const groupedBillings = [];
+  const processedBillingIds = new Set();
+  
+  // Create an ascending sorted version of billings for matching purposes
+  const ascendingBillings = [...billings].reverse();
+
+  ascendingBillings.forEach(b => {
+    if (processedBillingIds.has(b.id)) return;
+    if (b.type === 'invoice') {
+      const matchingReceipt = ascendingBillings.find(r => r.type === 'receipt' && r.quotation_id === b.quotation_id && r.total_amount === b.total_amount && !processedBillingIds.has(r.id));
+      if (matchingReceipt) {
+        groupedBillings.push({ id: `${b.id}_${matchingReceipt.id}`, invoice: b, receipt: matchingReceipt, isGrouped: true, total_amount: b.total_amount, created_at: b.created_at });
+        processedBillingIds.add(b.id);
+        processedBillingIds.add(matchingReceipt.id);
+      } else {
+        groupedBillings.push({ ...b, isGrouped: false });
+        processedBillingIds.add(b.id);
+      }
+    } else {
+      const matchingInvoice = ascendingBillings.find(i => i.type === 'invoice' && i.quotation_id === b.quotation_id && i.total_amount === b.total_amount && !processedBillingIds.has(i.id));
+      if (matchingInvoice) {
+        groupedBillings.push({ id: `${matchingInvoice.id}_${b.id}`, invoice: matchingInvoice, receipt: b, isGrouped: true, total_amount: b.total_amount, created_at: matchingInvoice.created_at });
+        processedBillingIds.add(b.id);
+        processedBillingIds.add(matchingInvoice.id);
+      } else {
+        groupedBillings.push({ ...b, isGrouped: false });
+        processedBillingIds.add(b.id);
+      }
+    }
+  });
+
+  // Reverse back to descending for UI display
+  groupedBillings.reverse();
 
   return (
     <div className="container">
@@ -283,8 +368,29 @@ export default function ProjectDetail() {
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <div>
-            <h1 style={{ color: 'white', fontSize: '32px', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>{project.id}</h1>
-            <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '16px', marginTop: '4px', display: 'flex', gap: '16px' }}>
+            {isEditingName ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                <input 
+                  type="text" 
+                  value={editNameValue} 
+                  onChange={e => setEditNameValue(e.target.value)} 
+                  placeholder="กรอกชื่อโปรเจกต์ / Note"
+                  style={{ fontSize: '20px', padding: '8px 16px', borderRadius: '8px', border: 'none', width: '300px', outline: 'none' }}
+                  autoFocus
+                />
+                <button onClick={handleSaveName} style={{ padding: '8px 16px', background: 'white', color: 'var(--primary)', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>บันทึก</button>
+                <button onClick={() => { setIsEditingName(false); setEditNameValue(project.name || ''); }} style={{ padding: '8px 16px', background: 'transparent', color: 'white', border: '1px solid white', borderRadius: '8px', cursor: 'pointer' }}>ยกเลิก</button>
+              </div>
+            ) : (
+              <h1 style={{ color: 'white', fontSize: '32px', textShadow: '0 2px 4px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                {project.name || project.id}
+                {project.name && <span style={{ fontSize: '18px', background: 'rgba(255,255,255,0.2)', padding: '4px 12px', borderRadius: '8px' }}>{project.id}</span>}
+                <button onClick={() => setIsEditingName(true)} style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', transition: 'background 0.2s' }} title="แก้ไขชื่องาน">
+                  <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+              </h1>
+            )}
+            <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '16px', marginTop: '8px', display: 'flex', gap: '16px' }}>
               <span><i className="fa-solid fa-building"></i> ลูกค้า: {project.contacts?.name || '-'}</span>
               <span><i className="fa-solid fa-bullseye"></i> จุดประสงค์: {project.objective}</span>
               <span><i className="fa-solid fa-wallet"></i> บัญชี: {project.internal_accounts?.name || '-'}</span>
@@ -295,6 +401,11 @@ export default function ProjectDetail() {
               <div>
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>มูลค่าโครงการ (เปิดบิลแล้ว)</div>
                 <div style={{ fontSize: '20px', fontWeight: 'bold' }}>฿{formatMoney(totalAccruedIncome)}</div>
+                {totalWhtDeducted > 0 && (
+                  <div style={{ fontSize: '11px', color: '#fde68a', marginTop: '4px' }}>
+                    หัก ณ ที่จ่าย {whtRates.join(', ')}% (฿{formatMoney(totalWhtDeducted)})
+                  </div>
+                )}
               </div>
               <div>
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>ต้นทุนทั้งหมด</div>
@@ -517,7 +628,7 @@ export default function ProjectDetail() {
                     {q.id}
                     {q.items && q.items.length > 0 && (
                       <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                        {q.items.length} รายการ {q.vat_rate > 0 && '| มี VAT'} {q.wht_rate > 0 && `| หัก ${q.wht_rate}%`}
+                        {q.items.length} รายการ {q.vat_rate > 0 && `| มี VAT (฿${formatMoney(Number(q.vat_amount))})`} {q.wht_rate > 0 && `| หัก ${q.wht_rate}% (฿${formatMoney(Number(q.wht_amount))})`}
                       </div>
                     )}
                   </td>
@@ -596,31 +707,65 @@ export default function ProjectDetail() {
               </tr>
             </thead>
             <tbody>
-              {billings.length === 0 ? <tr><td colSpan="6" style={{textAlign:'center', padding:'20px'}}>ยังไม่มีรายการเรียกเก็บเงิน</td></tr> : null}
-              {billings.map(b => (
-                <tr key={b.id} style={{ borderBottom: '1px solid var(--border)' }}>
-                  <td style={{ padding: '16px 12px', fontWeight: 600, color: b.type === 'invoice' ? 'var(--primary)' : 'var(--secondary)' }}>{b.id}</td>
-                  <td>{b.type === 'invoice' ? 'ใบแจ้งหนี้' : 'ใบเสร็จรับเงิน'}</td>
-                  <td>{new Date(b.created_at).toLocaleDateString('th-TH')}</td>
-                  <td style={{ textAlign: 'right', fontWeight: 500 }}>฿{formatMoney(Number(b.total_amount))}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <span style={{ 
-                      background: b.status === 'รับเงินแล้ว' || b.status === 'ชำระแล้ว' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)', 
-                      color: b.status === 'รับเงินแล้ว' || b.status === 'ชำระแล้ว' ? 'var(--secondary)' : 'var(--warning)', 
-                      padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold' 
-                    }}>
-                      {b.status}
-                    </span>
-                  </td>
-                  <td style={{ textAlign: 'right' }}>
-                    {b.type === 'invoice' && b.status === 'รอชำระเงิน' && (
-                      <button onClick={() => handleReceivePayment(b)} style={{ background: 'var(--secondary)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
-                        <i className="fa-solid fa-hand-holding-dollar"></i> รับชำระเงิน
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {groupedBillings.length === 0 ? <tr><td colSpan="6" style={{textAlign:'center', padding:'20px'}}>ยังไม่มีรายการเรียกเก็บเงิน</td></tr> : null}
+              {groupedBillings.map(b => {
+                if (b.isGrouped) {
+                  return (
+                    <tr key={b.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                      <td style={{ padding: '16px 12px', fontWeight: 600 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          <div style={{ color: 'var(--primary)' }}>{b.invoice.id}</div>
+                          <div style={{ color: 'var(--secondary)' }}>{b.receipt.id}</div>
+                        </div>
+                      </td>
+                      <td>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          <div style={{ color: 'var(--text-muted)' }}>ใบแจ้งหนี้</div>
+                          <div style={{ color: 'var(--text-muted)' }}>ใบเสร็จรับเงิน</div>
+                        </div>
+                      </td>
+                      <td>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          <div style={{ color: 'var(--text-muted)' }}>{new Date(b.invoice.created_at).toLocaleDateString('th-TH')}</div>
+                          <div style={{ color: 'var(--text-muted)' }}>{new Date(b.receipt.created_at).toLocaleDateString('th-TH')}</div>
+                        </div>
+                      </td>
+                      <td style={{ textAlign: 'right', fontWeight: 500 }}>฿{formatMoney(Number(b.total_amount))}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <span style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--secondary)', padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold' }}>
+                          รับเงินแล้ว
+                        </span>
+                      </td>
+                      <td style={{ textAlign: 'right' }}></td>
+                    </tr>
+                  );
+                } else {
+                  return (
+                    <tr key={b.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                      <td style={{ padding: '16px 12px', fontWeight: 600, color: b.type === 'invoice' ? 'var(--primary)' : 'var(--secondary)' }}>{b.id}</td>
+                      <td>{b.type === 'invoice' ? 'ใบแจ้งหนี้' : 'ใบเสร็จรับเงิน'}</td>
+                      <td>{new Date(b.created_at).toLocaleDateString('th-TH')}</td>
+                      <td style={{ textAlign: 'right', fontWeight: 500 }}>฿{formatMoney(Number(b.total_amount))}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <span style={{ 
+                          background: b.status === 'รับเงินแล้ว' || b.status === 'ชำระแล้ว' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)', 
+                          color: b.status === 'รับเงินแล้ว' || b.status === 'ชำระแล้ว' ? 'var(--secondary)' : 'var(--warning)', 
+                          padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold' 
+                        }}>
+                          {b.status}
+                        </span>
+                      </td>
+                      <td style={{ textAlign: 'right' }}>
+                        {b.type === 'invoice' && b.status === 'รอชำระเงิน' && (
+                          <button onClick={() => handleReceivePayment(b)} style={{ background: 'var(--secondary)', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
+                            <i className="fa-solid fa-hand-holding-dollar"></i> รับชำระเงิน
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                }
+              })}
             </tbody>
           </table>
         </div>
@@ -658,9 +803,13 @@ export default function ProjectDetail() {
                  )}
                </div>
 
-               <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', alignItems: 'flex-end', marginBottom: '16px' }}>
+               <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: '16px', alignItems: 'flex-end', marginBottom: '16px' }}>
                  <div>
-                   <label style={{display:'block', marginBottom:'8px', fontSize:'13px', fontWeight:500}}>รายละเอียด</label>
+                   <label style={{display:'block', marginBottom:'8px', fontSize:'13px', fontWeight:500}}>เลขที่อ้างอิง/ใบเสร็จ <span style={{color: 'red'}}>*</span></label>
+                   <input type="text" required value={newExpense.reference_no} onChange={e=>setNewExpense({...newExpense, reference_no: e.target.value})} className="form-control" placeholder="เช่น INV-001" style={{width:'100%', padding:'10px', borderRadius:'8px', border:'1px solid var(--border)'}} />
+                 </div>
+                 <div>
+                   <label style={{display:'block', marginBottom:'8px', fontSize:'13px', fontWeight:500}}>รายละเอียด <span style={{color: 'red'}}>*</span></label>
                    <input type="text" required value={newExpense.desc} onChange={e=>setNewExpense({...newExpense, desc: e.target.value})} className="form-control" placeholder="เช่น ค่าวัสดุ, ค่าแรงช่าง" style={{width:'100%', padding:'10px', borderRadius:'8px', border:'1px solid var(--border)'}} />
                  </div>
                  <div>
@@ -706,21 +855,38 @@ export default function ProjectDetail() {
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'left', color: 'var(--text-muted)' }}>
                 <th style={{ padding: '12px' }}>วันที่</th>
+                <th>เลขอ้างอิง</th>
                 <th>รายละเอียด</th>
                 <th>ซัพพลายเออร์</th>
                 <th style={{ textAlign: 'right' }}>จำนวนเงิน (บาท)</th>
               </tr>
             </thead>
             <tbody>
-              {expenses.length === 0 ? <tr><td colSpan="4" style={{textAlign:'center', padding:'20px'}}>ยังไม่มีค่าใช้จ่าย</td></tr> : null}
+              {expenses.length === 0 ? <tr><td colSpan="5" style={{textAlign:'center', padding:'20px'}}>ยังไม่มีค่าใช้จ่าย</td></tr> : null}
               {expenses.map(e => (
                 <tr key={e.id} style={{ borderBottom: '1px solid var(--border)' }}>
                   <td style={{ padding: '16px 12px' }}>{new Date(e.created_at).toLocaleDateString('th-TH')}</td>
+                  <td>
+                    {editingRefExpenseId === e.id ? (
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <input type="text" value={editRefExpenseValue} onChange={ev => setEditRefExpenseValue(ev.target.value)} className="form-control" style={{ width: '120px', padding: '4px 8px' }} autoFocus />
+                        <button onClick={() => handleSaveExpenseRef(e.id)} style={{ background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer' }}><i className="fa-solid fa-check"></i></button>
+                        <button onClick={() => setEditingRefExpenseId(null)} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer' }}><i className="fa-solid fa-xmark"></i></button>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: 500, color: 'var(--primary)' }}>{e.reference_no || '-'}</span>
+                        <button onClick={() => { setEditingRefExpenseId(e.id); setEditRefExpenseValue(e.reference_no || ''); }} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}><i className="fa-solid fa-pen"></i></button>
+                      </div>
+                    )}
+                  </td>
                   <td>{e.description}</td>
                   <td style={{ color: 'var(--text-muted)' }}>
                     {e.contacts?.name ? <><i className="fa-solid fa-truck-field"></i> {e.contacts.name}</> : '-'}
                   </td>
-                  <td style={{ textAlign: 'right', fontWeight: 500, color: 'var(--danger)' }}>-฿{formatMoney(Number(e.amount))}</td>
+                  <td style={{ textAlign: 'right', fontWeight: 500, color: 'var(--danger)' }}>
+                    -฿{formatMoney(Number(e.amount || 0) + Number(e.vat_amount || 0) - Number(e.wht_amount || 0))}
+                  </td>
                 </tr>
               ))}
             </tbody>
