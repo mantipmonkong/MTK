@@ -14,7 +14,9 @@ export default function InternalDashboard() {
   const [accounts, setAccounts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [activeTab, setActiveTab] = useState('accounts'); // 'accounts' or 'transactions'
+  const [activeTab, setActiveTab] = useState('accounts'); // 'accounts', 'transactions', 'company_fee'
+
+  const [companyFeePool, setCompanyFeePool] = useState({ total: 0, details: [] });
 
   const [showDepositForm, setShowDepositForm] = useState(false);
   const [depositData, setDepositData] = useState({ amount: '', source: 'salary', note: '', internal_account_id: '' });
@@ -45,16 +47,55 @@ export default function InternalDashboard() {
       const rawAccounts = accData || [];
 
       // 4. Fetch Projects with Billings and Expenses to calculate Profit -> Credit
+      // Fetch all projects globally for VAT logic
       const { data: projData } = await supabase
         .from('projects')
         .select(`
+          id,
+          objective,
+          status,
+          created_at,
           internal_account_id,
           billings ( total_amount, type, quotation_id ),
-          project_expenses ( amount, vat_amount ),
-          quotations ( id, wht_amount, total_amount )
+          project_expenses ( amount, vat_amount, is_tax_invoice, reference_no ),
+          quotations ( id, wht_amount, vat_amount, total_amount )
         `);
-
       const projects = projData || [];
+
+      // Fetch all expenses directly to catch orphaned expenses
+      const { data: expData } = await supabase.from('project_expenses').select('vat_amount, is_tax_invoice, reference_no, project_id');
+      const allExpenses = expData || [];
+
+      // Map payers
+      const payerMap = {};
+      withdrawals.forEach(w => {
+         if (Number(w.amount) < 0) {
+            const match = w.note?.match(/\(Ref: (.*?)\)/);
+            if (match && match[1]) {
+                payerMap[match[1]] = w.internal_account_id;
+            }
+         }
+      });
+
+      // Aggregate global purchase VAT
+      const purchaseVatByAcc = {};
+      
+      allExpenses.forEach(e => {
+         if (e.is_tax_invoice) {
+            let payerId = payerMap[e.reference_no];
+            if (!payerId && e.project_id) {
+                const proj = projects.find(p => p.id === e.project_id);
+                if (proj) payerId = proj.internal_account_id;
+            }
+            if (payerId) {
+               purchaseVatByAcc[payerId] = (purchaseVatByAcc[payerId] || 0) + Number(e.vat_amount || 0);
+            }
+         }
+      });
+
+      // Aggregate company fees globally
+      let globalCompanyFeeTotal = 0;
+      const globalCompanyFeeDetails = [];
 
       // Process accounts
       const processedAccounts = rawAccounts.map(acc => {
@@ -65,27 +106,72 @@ export default function InternalDashboard() {
         let totalIncome = 0; // For VAT tracking
 
         let totalWhtCredit = 0;
+        let totalSalesVat = 0;
+        let totalPurchaseVat = purchaseVatByAcc[acc.id] || 0;
 
         accProjects.forEach(p => {
           const receipts = p.billings ? p.billings.filter(b => b.type === 'receipt') : [];
           const inc = receipts.reduce((s,b)=>s+Number(b.total_amount), 0);
-          const exp = p.project_expenses ? p.project_expenses.reduce((s,e)=>s+Number(e.amount)+Number(e.vat_amount||0), 0) : 0;
           
           let wht = 0;
+          let salesVat = 0;
           receipts.forEach(b => {
              const q = p.quotations?.find(q => q.id === b.quotation_id);
              if(q && Number(q.total_amount) > 0) {
                  const proportion = Number(b.total_amount) / Number(q.total_amount);
                  wht += (Number(q.wht_amount || 0) * proportion);
+                 salesVat += (Number(q.vat_amount || 0) * proportion);
              }
           });
 
-          totalProfit += (inc - exp);
-          totalIncome += inc; // Mock VAT tracking simply using total income
+          const expAmountOnly = p.project_expenses ? p.project_expenses.reduce((s,e) => s + Number(e.amount), 0) : 0;
+          const expVatOnly = p.project_expenses ? p.project_expenses.reduce((s,e) => s + Number(e.vat_amount || 0), 0) : 0;
+          const totalExpensesProj = expAmountOnly + expVatOnly;
+          const netExpensesProj = totalExpensesProj - expVatOnly;
+
+          const salesBeforeVat = inc - salesVat;
+          const profitBeforeVat = salesBeforeVat - wht - netExpensesProj;
+          const creditBase = profitBeforeVat;
+          
+          let withdrawableProfit = 0;
+          let companyFee = 0;
+
+          if (creditBase > 0) {
+              if (p.status === 'เสร็จสิ้น') {
+                  withdrawableProfit = creditBase * 0.95;
+                  companyFee = creditBase * 0.05;
+              } else {
+                  withdrawableProfit = creditBase * 0.90;
+                  companyFee = creditBase * 0.05;
+              }
+          } else {
+              withdrawableProfit = creditBase;
+          }
+
+          if (companyFee > 0) {
+              globalCompanyFeeTotal += companyFee;
+              globalCompanyFeeDetails.push({
+                  accountId: acc.id,
+                  accountName: acc.name,
+                  projectId: p.id,
+                  projectName: p.objective,
+                  month: new Date(p.created_at).toLocaleDateString('th-TH', { month: 'short', year: 'numeric' }),
+                  amount: companyFee
+              });
+          }
+
+          totalProfit += withdrawableProfit;
+          totalIncome += inc;
           totalWhtCredit += wht;
+          totalSalesVat += salesVat;
         });
 
         const accWithdrawn = withdrawals.filter(w => w.internal_account_id === acc.id).reduce((s,w) => s + Number(w.amount), 0);
+        
+        // Calculate VAT cleared for this account
+        const totalVatCleared = withdrawals
+          .filter(w => w.internal_account_id === acc.id && (w.method === 'vat_clearance' || w.note?.startsWith('VAT_CLEARANCE')))
+          .reduce((s, w) => s + Number(w.amount), 0);
         
         // Calculate Personal Top-ups
         const personalDeposits = deposits.filter(d => d.internal_account_id === acc.id && d.source === 'personal_transfer');
@@ -96,8 +182,18 @@ export default function InternalDashboard() {
           creditLimit: (totalProfit > 0 ? totalProfit : 0) + totalPersonalDeposits,
           withdrawn: accWithdrawn,
           vatIncome: totalProfit > 0 ? totalProfit : 0,
-          whtCredit: totalWhtCredit
+          whtCredit: totalWhtCredit,
+          salesVat: totalSalesVat,
+          purchaseVat: totalPurchaseVat,
+          vatCleared: totalVatCleared,
+          vatPayable: totalSalesVat - totalPurchaseVat - totalVatCleared
         };
+      });
+
+      setAccounts(processedAccounts);
+      setCompanyFeePool({
+          total: globalCompanyFeeTotal,
+          details: globalCompanyFeeDetails.sort((a,b) => b.amount - a.amount)
       });
 
       setAccounts(processedAccounts);
@@ -246,17 +342,16 @@ export default function InternalDashboard() {
       )}
 
       {/* TABS */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', background: 'rgba(99,102,241,0.05)', padding: '6px', borderRadius: '12px', width: 'fit-content', border: '1px solid rgba(99,102,241,0.1)' }}>
-        <button 
-          onClick={() => setActiveTab('accounts')}
-          style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', background: activeTab === 'accounts' ? 'white' : 'transparent', color: activeTab === 'accounts' ? 'var(--primary)' : 'var(--text-muted)', fontWeight: activeTab === 'accounts' ? 'bold' : 'normal', cursor: 'pointer', transition: 'all 0.2s', boxShadow: activeTab === 'accounts' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none' }}>
-          <i className="fa-solid fa-users"></i> 1. รายชื่อบัญชีย่อย (Sub-Accounts)
-        </button>
-        <button 
-          onClick={() => setActiveTab('transactions')}
-          style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', background: activeTab === 'transactions' ? 'white' : 'transparent', color: activeTab === 'transactions' ? 'var(--primary)' : 'var(--text-muted)', fontWeight: activeTab === 'transactions' ? 'bold' : 'normal', cursor: 'pointer', transition: 'all 0.2s', boxShadow: activeTab === 'transactions' ? '0 2px 8px rgba(0,0,0,0.05)' : 'none' }}>
-          <i className="fa-solid fa-money-bill-transfer"></i> 2. รายรับ รายจ่าย
-        </button>
+      <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '8px', borderBottom: '1px solid var(--border)', marginBottom: '24px' }}>
+          <button onClick={() => setActiveTab('accounts')} className={activeTab === 'accounts' ? 'tab-active' : 'tab-inactive'} style={{ padding: '12px 24px', borderRadius: '12px', border: 'none', background: activeTab === 'accounts' ? 'var(--primary)' : 'transparent', color: activeTab === 'accounts' ? 'white' : 'var(--text-muted)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <i className="fa-solid fa-users"></i> บัญชีย่อยทั้งหมด
+          </button>
+          <button onClick={() => setActiveTab('transactions')} className={activeTab === 'transactions' ? 'tab-active' : 'tab-inactive'} style={{ padding: '12px 24px', borderRadius: '12px', border: 'none', background: activeTab === 'transactions' ? 'var(--primary)' : 'transparent', color: activeTab === 'transactions' ? 'white' : 'var(--text-muted)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <i className="fa-solid fa-money-check-dollar"></i> รายการเคลื่อนไหว
+          </button>
+          <button onClick={() => setActiveTab('company_fee')} className={activeTab === 'company_fee' ? 'tab-active' : 'tab-inactive'} style={{ padding: '12px 24px', borderRadius: '12px', border: 'none', background: activeTab === 'company_fee' ? '#3b82f6' : 'transparent', color: activeTab === 'company_fee' ? 'white' : 'var(--text-muted)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <i className="fa-solid fa-building"></i> กองกลางบริษัท (5%)
+          </button>
       </div>
 
       {activeTab === 'accounts' && (
@@ -296,6 +391,22 @@ export default function InternalDashboard() {
                         <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>เหลือเบิกได้ (Available)</div>
                         <div style={{ fontSize: '15px', fontWeight: 600, color: 'var(--secondary)' }}>฿{formatMoney(available)}</div>
                       </div>
+                      
+                      <div style={{ gridColumn: '1 / -1', borderTop: '1px dashed rgba(0,0,0,0.1)', paddingTop: '12px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', alignItems: 'center' }}>
+                        <div>
+                           <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>VAT ขาย (สะสม)</div>
+                           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-main)' }}>฿{formatMoney(acc.salesVat || 0)}</div>
+                        </div>
+                        <div>
+                           <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>VAT ซื้อ (สะสม)</div>
+                           <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-main)' }}>฿{formatMoney(acc.purchaseVat || 0)}</div>
+                        </div>
+                        <div style={{ background: acc.vatPayable > 0 ? 'rgba(244,63,94,0.1)' : (acc.vatPayable < 0 ? 'rgba(16,185,129,0.1)' : 'rgba(0,0,0,0.05)'), padding: '6px 8px', borderRadius: '8px', textAlign: 'center' }}>
+                           <div style={{ fontSize: '11px', fontWeight: 600, color: acc.vatPayable > 0 ? 'var(--danger)' : (acc.vatPayable < 0 ? 'var(--secondary)' : 'var(--text-muted)') }}>{acc.vatPayable > 0 ? 'ยอดส่ง ภ.พ.30' : (acc.vatPayable < 0 ? 'ยอดรอเคลมคืน' : 'ยอดส่ง ภ.พ.30')}</div>
+                           <div style={{ fontSize: '14px', fontWeight: 'bold', color: acc.vatPayable > 0 ? 'var(--danger)' : (acc.vatPayable < 0 ? 'var(--secondary)' : 'var(--text-muted)') }}>฿{formatMoney(Math.abs(acc.vatPayable || 0))}</div>
+                        </div>
+                      </div>
+
                       {acc.whtCredit > 0 && (
                         <div style={{ gridColumn: '1 / -1', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '12px', marginTop: '-4px' }}>
                           <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}><i className="fa-solid fa-file-invoice-dollar" style={{ color: '#eab308' }}></i> เครดิตภาษีหัก ณ ที่จ่าย (รอเคลมคืน)</div>
@@ -304,27 +415,72 @@ export default function InternalDashboard() {
                       )}
                     </div>
 
-                    <div style={{ width: '100%', height: '6px', background: 'var(--border)', borderRadius: '4px', overflow: 'hidden', marginBottom: '16px' }}>
-                      <div style={{ height: '100%', width: `${progressPercent}%`, background: progressPercent > 90 ? 'var(--danger)' : 'var(--primary)' }}></div>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', borderTop: '1px dashed var(--border)' }}>
-                      <div>
-                        <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>ยอดรายรับจด VAT: </span>
-                        <span style={{ fontSize: '14px', fontWeight: 600, color: vatWarning ? 'var(--danger)' : 'var(--text-main)' }}>฿{formatMoney(acc.vatIncome)} / 1.8M</span>
-                      </div>
-                      {vatWarning ? (
-                        <span style={{ background: 'var(--danger)', color: 'white', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 'bold' }}><i className="fa-solid fa-triangle-exclamation"></i> ทะลุ 1.8 ล้าน</span>
-                      ) : vatAlert ? (
-                        <span style={{ background: 'var(--warning)', color: 'white', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 'bold' }}><i className="fa-solid fa-triangle-exclamation"></i> ใกล้ทะลุเป้า</span>
-                      ) : (
-                        <span style={{ background: 'var(--secondary)', color: 'white', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 'bold' }}><i className="fa-solid fa-check"></i> ปลอดภัย</span>
-                      )}
-                    </div>
                   </div>
                 </Link>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'company_fee' && (
+        <div style={{ animation: 'fadeIn 0.3s ease-in-out' }}>
+          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #1e3a8a, #3b82f6)', padding: '32px', borderRadius: '24px', boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.4)', color: 'white', marginBottom: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: '16px', fontWeight: 500, marginBottom: '8px' }}>ยอดเงินกองกลางบริษัทสะสม (Company Fund 5%)</div>
+              <div style={{ fontSize: '48px', fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>฿{formatMoney(companyFeePool.total)}</div>
+              <div style={{ marginTop: '12px', fontSize: '14px', color: 'white', background: 'rgba(255,255,255,0.2)', padding: '8px 16px', borderRadius: '20px', display: 'inline-block', backdropFilter: 'blur(4px)' }}>รอเคลียร์ยอด / ปันผลช่วงสิ้นปี</div>
+            </div>
+            <div style={{ fontSize: '80px', opacity: 0.2 }}>
+              <i className="fa-solid fa-building-columns"></i>
+            </div>
+          </div>
+
+          <h2 style={{ fontSize: '20px', marginBottom: '24px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}>
+            <i className="fa-solid fa-list-ul" style={{ color: '#3b82f6' }}></i> รายการที่มาของเงิน (แยกตามโปรเจกต์)
+          </h2>
+
+          <div style={{ background: 'var(--surface)', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+            {companyFeePool.details.length === 0 ? (
+              <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>ไม่มีข้อมูลเงินกองกลางบริษัทในขณะนี้</div>
+            ) : (
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ background: 'rgba(0,0,0,0.02)', borderBottom: '1px solid var(--border)' }}>
+                    <th style={{ padding: '16px 24px', textAlign: 'left', fontSize: '13px', color: 'var(--text-muted)', fontWeight: 600 }}>บัญชีย่อยที่หักเงิน</th>
+                    <th style={{ padding: '16px 24px', textAlign: 'left', fontSize: '13px', color: 'var(--text-muted)', fontWeight: 600 }}>ประจำเดือน</th>
+                    <th style={{ padding: '16px 24px', textAlign: 'left', fontSize: '13px', color: 'var(--text-muted)', fontWeight: 600 }}>โปรเจกต์ต้นทาง</th>
+                    <th style={{ padding: '16px 24px', textAlign: 'right', fontSize: '13px', color: 'var(--text-muted)', fontWeight: 600 }}>จำนวนเงิน (5%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {companyFeePool.details.map((item, index) => (
+                    <tr key={index} style={{ borderBottom: '1px solid var(--border)', transition: 'background 0.2s' }} onMouseOver={e => e.currentTarget.style.background = 'rgba(59,130,246,0.05)'} onMouseOut={e => e.currentTarget.style.background = 'transparent'}>
+                      <td style={{ padding: '16px 24px' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{item.accountName}</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>ID: {item.accountId}</div>
+                      </td>
+                      <td style={{ padding: '16px 24px' }}>
+                        <div style={{ fontWeight: 500, color: 'var(--text-main)' }}>{item.month}</div>
+                      </td>
+                      <td style={{ padding: '16px 24px' }}>
+                        <div style={{ fontWeight: 500 }}>
+                          <Link href={`/projects/${item.projectId}`} style={{ color: '#3b82f6', textDecoration: 'none' }}>
+                            {item.projectName || 'ไม่ระบุชื่อ'}
+                          </Link>
+                        </div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                          ID: {item.projectId}
+                        </div>
+                      </td>
+                      <td style={{ padding: '16px 24px', textAlign: 'right', fontWeight: 'bold', color: '#3b82f6', fontSize: '16px' }}>
+                        ฿{formatMoney(item.amount)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       )}

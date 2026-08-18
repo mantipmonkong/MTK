@@ -8,6 +8,7 @@ export default function ContactsPage() {
   const [isLoading, setIsLoading] = useState(true);
   
   const [showForm, setShowForm] = useState(false);
+  const [editingContactId, setEditingContactId] = useState(null);
   const [filterType, setFilterType] = useState('all'); // 'all', 'customer', 'supplier'
   const [newContact, setNewContact] = useState({ name: '', type: 'customer', tax_id: '', phone: '', address: '' });
 
@@ -36,27 +37,66 @@ export default function ContactsPage() {
     e.preventDefault();
     if (!newContact.name) return;
     
-    const { data, error } = await supabase
-      .from('contacts')
-      .insert([
-        { 
+    if (editingContactId) {
+      const { data, error } = await supabase
+        .from('contacts')
+        .update({ 
           name: newContact.name, 
           type: newContact.type, 
           tax_id: newContact.tax_id, 
           phone: newContact.phone,
           address: newContact.address
-        }
-      ])
-      .select();
+        })
+        .eq('id', editingContactId)
+        .select();
 
-    if (error) {
-      console.error('Error inserting contact:', error);
-      alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+      if (error) {
+        console.error('Error updating contact:', error);
+        alert('เกิดข้อผิดพลาดในการอัปเดตข้อมูล');
+      } else {
+        setContacts(contacts.map(c => c.id === editingContactId ? data[0] : c));
+        resetForm();
+      }
     } else {
-      setContacts([data[0], ...contacts]);
-      setShowForm(false);
-      setNewContact({ name: '', type: 'customer', tax_id: '', phone: '', address: '' });
+      const { data, error } = await supabase
+        .from('contacts')
+        .insert([
+          { 
+            name: newContact.name, 
+            type: newContact.type, 
+            tax_id: newContact.tax_id, 
+            phone: newContact.phone,
+            address: newContact.address
+          }
+        ])
+        .select();
+
+      if (error) {
+        console.error('Error inserting contact:', error);
+        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+      } else {
+        setContacts([data[0], ...contacts]);
+        resetForm();
+      }
     }
+  };
+
+  const resetForm = () => {
+    setShowForm(false);
+    setEditingContactId(null);
+    setNewContact({ name: '', type: 'customer', tax_id: '', phone: '', address: '' });
+  };
+
+  const handleEditClick = (contact) => {
+    setNewContact({
+      name: contact.name,
+      type: contact.type,
+      tax_id: contact.tax_id || '',
+      phone: contact.phone || '',
+      address: contact.address || ''
+    });
+    setEditingContactId(contact.id);
+    setShowForm(true);
   };
 
   const handleDelete = async (id) => {
@@ -160,7 +200,7 @@ export default function ContactsPage() {
             <i className="fa-solid fa-file-export"></i> Export Excel
           </button>
 
-          <button onClick={() => setShowForm(!showForm)} className="btn-primary" style={{ padding: '10px 16px', borderRadius: '8px', border: 'none', color: 'white', background: 'var(--primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: 'var(--shadow-sm)' }}>
+          <button onClick={() => {resetForm(); setShowForm(!showForm)}} className="btn-primary" style={{ padding: '10px 16px', borderRadius: '8px', border: 'none', color: 'white', background: 'var(--primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: 'var(--shadow-sm)' }}>
             <i className="fa-solid fa-user-plus"></i> เพิ่มคู่ค้าใหม่
           </button>
         </div>
@@ -168,7 +208,7 @@ export default function ContactsPage() {
 
       {showForm && (
         <div className="doc-card" style={{ background: 'var(--surface)', padding: '24px', borderRadius: '20px', boxShadow: 'var(--shadow-md)', marginBottom: '32px', border: '1px solid var(--border)' }}>
-          <h3 style={{ marginBottom: '16px', fontSize: '16px', color: 'var(--primary)', borderBottom: '2px solid var(--primary)', display: 'inline-block', paddingBottom: '4px' }}>เพิ่มคู่ค้าใหม่</h3>
+          <h3 style={{ marginBottom: '16px', fontSize: '16px', color: 'var(--primary)', borderBottom: '2px solid var(--primary)', display: 'inline-block', paddingBottom: '4px' }}>{editingContactId ? 'แก้ไขข้อมูลคู่ค้า' : 'เพิ่มคู่ค้าใหม่'}</h3>
           <form onSubmit={handleAddContact} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
             <div className="form-group">
               <label style={{ display: 'block', fontSize: '13px', marginBottom: '6px', fontWeight: 500 }}>ชื่อบริษัท / ร้านค้า <span style={{color: 'red'}}>*</span></label>
@@ -194,7 +234,7 @@ export default function ContactsPage() {
               <input type="text" value={newContact.address} onChange={e => setNewContact({...newContact, address: e.target.value})} className="form-control" style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)' }} />
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', gap: '12px', gridColumn: '1 / -1' }}>
-              <button type="button" onClick={() => setShowForm(false)} className="btn-outline" style={{ padding: '10px 24px', borderRadius: '8px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer' }}>ยกเลิก</button>
+              <button type="button" onClick={resetForm} className="btn-outline" style={{ padding: '10px 24px', borderRadius: '8px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer' }}>ยกเลิก</button>
               <button type="submit" style={{ padding: '10px 24px', borderRadius: '8px', border: 'none', color: 'white', background: 'var(--primary)', cursor: 'pointer', fontWeight: 'bold' }}>บันทึกข้อมูล</button>
             </div>
           </form>
@@ -224,6 +264,7 @@ export default function ContactsPage() {
               <th>ประเภท</th>
               <th>เลขประจำตัวผู้เสียภาษี</th>
               <th>เบอร์โทรศัพท์</th>
+              <th>ที่อยู่</th>
               <th style={{ textAlign: 'right' }}>จัดการ</th>
             </tr>
           </thead>
@@ -259,8 +300,10 @@ export default function ContactsPage() {
                   </td>
                   <td style={{ color: 'var(--text-muted)' }}>{c.tax_id || '-'}</td>
                   <td style={{ color: 'var(--text-muted)' }}>{c.phone || '-'}</td>
+                  <td style={{ color: 'var(--text-muted)', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={c.address}>{c.address || '-'}</td>
                   <td style={{ textAlign: 'right' }}>
-                    <button onClick={() => handleDelete(c.id)} className="btn-icon" style={{ border: 'none', background: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '6px' }}><i className="fa-solid fa-trash-can"></i></button>
+                    <button onClick={() => handleEditClick(c)} className="btn-icon" style={{ border: 'none', background: 'none', color: 'var(--primary)', cursor: 'pointer', padding: '6px', marginRight: '4px' }} title="แก้ไข"><i className="fa-solid fa-pen-to-square"></i></button>
+                    <button onClick={() => handleDelete(c.id)} className="btn-icon" style={{ border: 'none', background: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '6px' }} title="ลบ"><i className="fa-solid fa-trash-can"></i></button>
                   </td>
                 </tr>
               ))

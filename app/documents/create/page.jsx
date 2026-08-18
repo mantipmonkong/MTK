@@ -1,6 +1,8 @@
 "use client";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 export default function CreateDocument() {
   const [items, setItems] = useState([
@@ -9,6 +11,8 @@ export default function CreateDocument() {
     { id: 3, desc: 'ค่าแรงผสมปูนและเทพื้นคอนกรีต', type: 'labor', qty: 1, price: 8500 }
   ]);
   const [applyWht, setApplyWht] = useState(true);
+  const documentRef = useRef(null);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Totals
   const subTotal = items.reduce((sum, item) => sum + (item.qty * item.price), 0);
@@ -34,6 +38,33 @@ export default function CreateDocument() {
 
   const formatMoney = (num) => num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+  const exportToPDF = async () => {
+    if (!documentRef.current) return;
+    setIsExporting(true);
+    try {
+      const canvas = await html2canvas(documentRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('quotation.pdf');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('เกิดข้อผิดพลาดในการสร้าง PDF');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="container">
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -44,13 +75,19 @@ export default function CreateDocument() {
           <Link href="/documents" className="btn-outline" style={{ textDecoration: 'none', padding: '10px 16px', borderRadius: '8px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <i className="fa-solid fa-arrow-left"></i> กลับ
           </Link>
-          <button className="btn-primary" style={{ padding: '10px 16px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', border: 'none', color: 'white', background: 'var(--primary)', cursor: 'pointer' }}>
-            <i className="fa-solid fa-floppy-disk"></i> บันทึก & สร้าง PDF
+          <button 
+            onClick={exportToPDF} 
+            disabled={isExporting}
+            className="btn-primary" 
+            style={{ padding: '10px 16px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', border: 'none', color: 'white', background: isExporting ? 'var(--text-muted)' : 'var(--primary)', cursor: isExporting ? 'not-allowed' : 'pointer' }}
+          >
+            <i className={`fa-solid ${isExporting ? 'fa-spinner fa-spin' : 'fa-floppy-disk'}`}></i> 
+            {isExporting ? 'กำลังสร้าง PDF...' : 'บันทึก & สร้าง PDF'}
           </button>
         </div>
       </div>
 
-      <div className="doc-card" style={{ background: 'var(--surface)', padding: '32px', borderRadius: '20px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border)' }}>
+      <div ref={documentRef} className="doc-card" style={{ background: 'var(--surface)', padding: '32px', borderRadius: '20px', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border)' }}>
         <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '30px' }}>
           <div className="form-group">
             <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500, color: 'var(--text-muted)' }}>ลูกค้า (Customer)</label>

@@ -13,6 +13,11 @@ export default function Navigation({ children }) {
         setIsMobileMenuOpen(false);
     }, [pathname]);
 
+    // Bypass layout for standalone pages like quotation
+    if (pathname === '/quotation') {
+        return <>{children}</>;
+    }
+
     return (
         <>
             {/* Sidebar Overlay */}
@@ -35,6 +40,9 @@ export default function Navigation({ children }) {
                     </Link>
                     <Link href="/documents" className={`menu-item ${pathname?.startsWith('/documents') ? 'active' : ''}`}>
                         <i className="fa-solid fa-file-lines"></i> รวมเอกสาร
+                    </Link>
+                    <Link href="/accounting/expense" className={`menu-item ${pathname === '/accounting/expense' ? 'active' : ''}`}>
+                        <i className="fa-solid fa-cart-shopping"></i> ใบสั่งซื้อ/บันทึกค่าใช้จ่าย
                     </Link>
                     <Link href="/contacts" className={`menu-item ${pathname?.startsWith('/contacts') ? 'active' : ''}`}>
                         <i className="fa-solid fa-users"></i> ข้อมูลลูกค้า/ซัพพลายเออร์

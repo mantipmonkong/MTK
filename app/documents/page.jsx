@@ -189,11 +189,12 @@ export default function DocumentsList() {
                 <th>วันที่และเวลา</th>
                 <th style={{ textAlign: 'right' }}>ยอดรวม</th>
                 <th style={{ textAlign: 'center' }}>สถานะ</th>
+                <th style={{ textAlign: 'right' }}>จัดการ</th>
               </tr>
             </thead>
             <tbody>
               {filteredDocs.length === 0 ? (
-                <tr><td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>ไม่พบเอกสารตามเงื่อนไขที่เลือก</td></tr>
+                <tr><td colSpan="7" style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>ไม่พบเอกสารตามเงื่อนไขที่เลือก</td></tr>
               ) : filteredDocs.map((doc, idx) => (
                 <tr key={`${doc.id}-${idx}`} style={{ borderBottom: '1px solid var(--border)', transition: 'background 0.2s' }} className="table-row-hover">
                   <td style={{ padding: '16px' }}>
@@ -227,6 +228,15 @@ export default function DocumentsList() {
                     <span className={getStatusStyle(doc.status, doc.type)}>
                       {doc.status}
                     </span>
+                  </td>
+                  <td style={{ textAlign: 'right' }}>
+                    <button 
+                      onClick={() => window.open(`/${doc.type === 'quotation' ? 'quotation' : 'invoice'}?id=${doc.id}`, '_blank')} 
+                      style={{ background: 'none', color: '#6366f1', border: 'none', padding: '6px', cursor: 'pointer', fontSize: '16px' }} 
+                      title="พิมพ์ / บันทึก PDF"
+                    >
+                      <i className="fa-solid fa-print"></i>
+                    </button>
                   </td>
                 </tr>
               ))}

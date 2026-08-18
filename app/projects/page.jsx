@@ -12,7 +12,7 @@ export default function ProjectsDashboard() {
   const [showForm, setShowForm] = useState(false);
   const [newProject, setNewProject] = useState({ internalAccount: '', objective: 'ขายสินค้า', customer: '', name: '' });
   
-  const [viewMode, setViewMode] = useState('grid');
+  const [viewMode, setViewMode] = useState('list');
   const [filterCustomer, setFilterCustomer] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterAccount, setFilterAccount] = useState('');
@@ -154,12 +154,12 @@ export default function ProjectsDashboard() {
 
   return (
     <div className="container">
-      <div className="page-header" style={{ background: 'linear-gradient(135deg, var(--primary), #8b5cf6)', padding: '32px', borderRadius: '20px', boxShadow: 'var(--shadow-md)', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="page-header header-container" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', borderRadius: '20px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)', color: 'white', padding: '32px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(255,255,255,0.1)' }}>
         <div className="page-title">
-          <h1 style={{ color: 'white', fontSize: '28px', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>จัดการโปรเจกต์ (Projects)</h1>
-          <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '16px', marginTop: '8px' }}>บริหารจัดการงาน, ใบเสนอราคา และคุมต้นทุนแบบครบวงจร</p>
+          <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '800', letterSpacing: '-0.5px', textShadow: '0 2px 10px rgba(0,0,0,0.5)', margin: 0 }}>จัดการโปรเจกต์ (Projects)</h1>
+          <p style={{ color: '#94a3b8', fontSize: '16px', marginTop: '8px', fontWeight: '400', letterSpacing: '0.2px' }}>บริหารจัดการงาน, ใบเสนอราคา และคุมต้นทุนแบบครบวงจร</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)} style={{ padding: '12px 24px', borderRadius: '12px', border: 'none', color: 'var(--primary)', background: 'white', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', fontSize: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+        <button onClick={() => setShowForm(!showForm)} style={{ padding: '12px 24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.2)', color: 'white', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600', fontSize: '15px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)', transition: 'all 0.2s' }} onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'} onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}>
           <i className="fa-solid fa-plus"></i> สร้างโปรเจกต์ใหม่
         </button>
       </div>
@@ -167,7 +167,7 @@ export default function ProjectsDashboard() {
       {showForm && (
         <div className="doc-card" style={{ background: 'var(--surface)', padding: '32px', borderRadius: '20px', boxShadow: 'var(--shadow-md)', marginBottom: '32px', border: '1px solid var(--border)' }}>
           <h3 style={{ marginBottom: '20px', fontSize: '18px', fontWeight: 600, borderBottom: '2px solid var(--primary)', display: 'inline-block', paddingBottom: '8px' }}>ข้อมูลโปรเจกต์ใหม่</h3>
-          <form onSubmit={handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          <form onSubmit={handleCreate} className="project-form-grid">
             
             <div className="form-group">
               <label style={{ display: 'block', fontSize: '14px', marginBottom: '8px', fontWeight: 500 }}>1. บัญชีภายใน (Track งานของใคร)</label>
@@ -214,8 +214,8 @@ export default function ProjectsDashboard() {
       )}
 
       {/* Toolbar */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center', margin: '24px 0', background: 'var(--surface)', padding: '16px 24px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', flex: 1 }}>
+      <div className="toolbar-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'space-between', alignItems: 'center', margin: '24px 0', background: 'var(--surface)', padding: '16px 24px', borderRadius: '16px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
+        <div className="filters-group" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <i className="fa-solid fa-filter" style={{ color: 'var(--text-muted)' }}></i>
             <select value={filterMonth} onChange={e => setFilterMonth(e.target.value)} className="form-control" style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--border)', minWidth: '150px' }}>
@@ -275,7 +275,7 @@ export default function ProjectsDashboard() {
           <p style={{ color: 'var(--text-muted)' }}>ลองเปลี่ยนตัวกรอง หรือสร้างโปรเจกต์ใหม่</p>
         </div>
       ) : viewMode === 'grid' ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '24px' }}>
+        <div className="projects-grid">
           {filteredProjects.map(proj => (
             <Link href={`/projects/${proj.id}`} key={proj.id} style={{ textDecoration: 'none', color: 'inherit' }}>
               <div className="doc-card" style={{ background: 'var(--surface)', borderRadius: '20px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', transition: 'all 0.2s', cursor: 'pointer', height: '100%' }}>
@@ -334,28 +334,28 @@ export default function ProjectsDashboard() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {filteredProjects.map(proj => (
              <Link href={`/projects/${proj.id}`} key={proj.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div className="doc-card" style={{ background: 'var(--surface)', borderRadius: '16px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', padding: '16px 24px', transition: 'all 0.2s', cursor: 'pointer' }}>
-                   <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, var(--primary), #8b5cf6)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px', marginRight: '16px', flexShrink: 0 }}>
+                <div className="doc-card projects-list-item" style={{ background: 'var(--surface)', borderRadius: '16px', boxShadow: 'var(--shadow-sm)', border: '1px solid var(--border)', transition: 'all 0.2s', cursor: 'pointer' }}>
+                   <div className="list-item-icon" style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, var(--primary), #8b5cf6)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '14px', marginRight: '16px', flexShrink: 0 }}>
                      {proj.id.split('-')[0]}
                    </div>
-                   <div style={{ flex: 1, minWidth: '150px' }}>
+                   <div className="list-item-title" style={{ flex: 1, minWidth: '150px' }}>
                      <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--primary)', marginBottom: '2px' }}>{proj.name || proj.id}</h3>
-                     <p style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                     <p style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
                        <span style={{ background: 'rgba(0,0,0,0.05)', padding: '2px 6px', borderRadius: '4px' }}>{proj.objective}</span>
                        {proj.name && <span>({proj.id})</span>}
                      </p>
                    </div>
-                   <div style={{ flex: 1.5, minWidth: '200px' }}>
+                   <div className="list-item-customer" style={{ flex: 1.5, minWidth: '200px' }}>
                      <div style={{ fontSize: '14px', fontWeight: 500 }}>{proj.contacts?.name || 'Unknown'}</div>
                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>ลูกค้า</div>
                    </div>
-                   <div style={{ width: '120px' }}>
+                   <div className="list-item-date" style={{ width: '120px' }}>
                      <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{new Date(proj.created_at).toLocaleDateString('th-TH')}</div>
                    </div>
-                   <div style={{ width: '140px', textAlign: 'right' }}>
+                   <div className="list-item-status" style={{ width: '140px', textAlign: 'right' }}>
                      <span style={getStatusStyle(proj.status)}>{proj.status}</span>
                    </div>
-                   <button onClick={(e) => handleDeleteProject(e, proj.id)} className="btn-icon" style={{ border: 'none', background: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '8px', marginLeft: '24px', flexShrink: 0 }} title="ลบโปรเจกต์">
+                   <button onClick={(e) => handleDeleteProject(e, proj.id)} className="btn-icon list-item-actions" style={{ border: 'none', background: 'none', color: 'var(--danger)', cursor: 'pointer', padding: '8px', marginLeft: '24px', flexShrink: 0 }} title="ลบโปรเจกต์">
                      <i className="fa-solid fa-trash-can"></i>
                    </button>
                 </div>
@@ -368,6 +368,93 @@ export default function ProjectsDashboard() {
           transform: translateY(-5px);
           box-shadow: var(--shadow-md) !important;
           border-color: var(--primary) !important;
+        }
+
+        .header-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 32px;
+        }
+        
+        .project-form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px;
+        }
+        
+        .projects-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+          gap: 24px;
+        }
+
+        .projects-list-item {
+          display: flex;
+          align-items: center;
+          padding: 16px 24px;
+        }
+
+        /* iPad / Tablet */
+        @media (max-width: 1024px) {
+          .projects-grid {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          }
+          .header-container {
+            padding: 24px;
+          }
+          .projects-list-item {
+            flex-wrap: wrap;
+            gap: 12px;
+          }
+          .list-item-customer {
+             flex: 1 1 100% !important;
+          }
+          .list-item-status {
+             width: auto !important;
+             text-align: left !important;
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+          .header-container {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px;
+          }
+          .page-title h1 {
+            font-size: 24px !important;
+          }
+          .project-form-grid {
+            grid-template-columns: 1fr;
+          }
+          .projects-grid {
+            grid-template-columns: 1fr;
+          }
+          .filters-group {
+            flex-direction: column;
+            width: 100%;
+          }
+          .filters-group > div {
+            width: 100%;
+          }
+          .filters-group select {
+            width: 100%;
+          }
+          .projects-list-item {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .list-item-icon {
+            margin-bottom: 8px;
+          }
+          .list-item-actions {
+            margin-left: 0 !important;
+            margin-top: 12px;
+            align-self: flex-end;
+          }
         }
       `}</style>
     </div>

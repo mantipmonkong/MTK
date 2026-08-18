@@ -17,6 +17,8 @@ export default function AccountingDashboard() {
   const [allDeposits, setAllDeposits] = useState([]);
   const [paidPayrolls, setPaidPayrolls] = useState([]);
   const [paidCorpExpenses, setPaidCorpExpenses] = useState([]);
+  const [fundWithdrawals, setFundWithdrawals] = useState([]);
+  const [projects, setProjects] = useState([]);
   
   const [activeTab, setActiveTab] = useState('sales_tax'); // sales_tax, purchase_tax, wht
 
@@ -65,6 +67,25 @@ export default function AccountingDashboard() {
     const { data: ceData } = await supabase.from('corporate_expenses').select('*').eq('is_paid', true).eq('payment_method', 'bank');
     if (ceData) setPaidCorpExpenses(ceData);
 
+    // 7. Fetch Fund Withdrawals to know how much money left the company bank
+    const { data: fwData } = await supabase.from('fund_withdrawals').select('*');
+    if (fwData) setFundWithdrawals(fwData);
+
+    // 8. Fetch projects for breakdown calculation
+    const { data: projData } = await supabase
+      .from('projects')
+      .select(`
+        id,
+        objective,
+        status,
+        created_at,
+        internal_account_id,
+        billings ( total_amount, type, quotation_id ),
+        project_expenses ( amount, vat_amount, is_tax_invoice, reference_no ),
+        quotations ( id, wht_amount, vat_amount, total_amount )
+      `);
+    if (projData) setProjects(projData);
+
     setIsLoading(false);
   };
 
@@ -76,11 +97,27 @@ export default function AccountingDashboard() {
     if (!quote) return null;
     
     // For simplicity, assuming the receipt amount is the quote total_amount.
-    // So VAT of this receipt = quote.vat_amount
-    const isFullPayment = bill.total_amount >= quote.total_amount;
-    const vat = isFullPayment ? quote.vat_amount : (bill.total_amount * 7 / 107); // rough estimate if partial
-    const subTotal = isFullPayment ? quote.sub_total : (bill.total_amount * 100 / 107);
-    const wht = isFullPayment ? quote.wht_amount : 0;
+    // bill.total_amount is the Gross amount (Subtotal + VAT)
+    // Compare it to the quotation's total_amount (which is also Gross amount)
+    const isFullPayment = bill.total_amount >= (quote.total_amount - 1);
+    
+    let vat = 0;
+    let subTotal = 0;
+    let wht = 0;
+
+    if (isFullPayment) {
+      vat = quote.vat_amount;
+      subTotal = quote.sub_total;
+      wht = quote.wht_amount;
+    } else {
+      // Partial payment back-calculation from GROSS amount
+      const rv = quote.vat_rate > 0 ? 0.07 : 0;
+      const rw = quote.wht_rate > 0 ? (quote.wht_rate / 100) : 0;
+      
+      subTotal = bill.total_amount / (1 + rv);
+      vat = subTotal * rv;
+      wht = subTotal * rw;
+    }
     
     return {
       ...bill,
@@ -89,6 +126,7 @@ export default function AccountingDashboard() {
       subTotal: quote.vat_rate > 0 ? subTotal : bill.total_amount,
       vatAmount: quote.vat_rate > 0 ? vat : 0,
       whtAmount: wht,
+      whtStatus: bill.status?.includes('[CLAIMED]') ? 'CLAIMED' : 'PENDING',
       hasVat: quote.vat_rate > 0
     };
   }).filter(Boolean);
@@ -109,10 +147,100 @@ export default function AccountingDashboard() {
   const totalBankPayroll = paidPayrolls.reduce((sum, p) => sum + Number(p.net_pay) + Number(p.social_security) + Number(p.tax_deduction), 0);
   const totalBankCorpExpenses = paidCorpExpenses.reduce((sum, e) => sum + Number(e.amount), 0);
   
-  const mainCompanyBalance = totalCompanyIncome - totalCompanyExpense - totalBankPayroll - totalBankCorpExpenses;
+  // Real withdrawals (money leaving company to personal accounts)
+  const realWithdrawals = fundWithdrawals
+    .filter(w => w.method !== 'vat_clearance' && !w.note?.startsWith('VAT_CLEARANCE'))
+    .reduce((sum, w) => sum + Number(w.amount), 0);
+
+  const totalVatCleared = fundWithdrawals
+    .filter(w => w.method === 'vat_clearance' || w.note?.startsWith('VAT_CLEARANCE'))
+    .reduce((sum, w) => sum + Number(w.amount), 0);
+  
+  const mainCompanyBalance = totalCompanyIncome - totalCompanyExpense - totalBankPayroll - totalBankCorpExpenses - realWithdrawals;
 
   // --- Net Tax ---
   const netVatPayable = totalSalesVat - totalPurchaseVat;
+
+  const totalReceiptsAmount = totalCompanyIncome;
+  const totalWithdrawnAmount = realWithdrawals;
+
+  // --- Breakdown Calculation ---
+  let globalCompanyFee = 0;
+  let globalHeldBack = 0;
+  let globalProfitForCredit = 0;
+
+  projects.forEach(p => {
+    const receipts = p.billings ? p.billings.filter(b => b.type === 'receipt') : [];
+    const inc = receipts.reduce((s,b)=>s+Number(b.total_amount), 0);
+    
+    let wht = 0;
+    let salesVat = 0;
+    receipts.forEach(b => {
+       const q = p.quotations?.find(q => q.id === b.quotation_id);
+       if(q && Number(q.total_amount) > 0) {
+           const proportion = Number(b.total_amount) / Number(q.total_amount);
+           wht += (Number(q.wht_amount || 0) * proportion);
+           salesVat += (Number(q.vat_amount || 0) * proportion);
+       }
+    });
+
+    const expAmountOnly = p.project_expenses ? p.project_expenses.reduce((s,e) => s + Number(e.amount), 0) : 0;
+
+    const salesBeforeVat = inc - salesVat;
+    const profitBeforeVat = salesBeforeVat - wht - expAmountOnly;
+    const creditBase = profitBeforeVat;
+    
+    let withdrawableProfit = 0;
+    let companyFee = 0;
+    let heldBack = 0;
+
+    if (creditBase > 0) {
+        if (p.status === 'เสร็จสิ้น') {
+            withdrawableProfit = creditBase * 0.95;
+            companyFee = creditBase * 0.05;
+        } else {
+            withdrawableProfit = creditBase * 0.90;
+            heldBack = creditBase * 0.05;
+            companyFee = creditBase * 0.05;
+        }
+    } else {
+        withdrawableProfit = creditBase;
+    }
+
+    globalCompanyFee += companyFee;
+    globalHeldBack += heldBack;
+    globalProfitForCredit += withdrawableProfit;
+  });
+
+  const totalPersonalDeposits = allDeposits.filter(d => d.source === 'personal_transfer').reduce((s,d)=>s+Number(d.amount), 0);
+  const globalCreditLimit = (globalProfitForCredit > 0 ? globalProfitForCredit : 0) + totalPersonalDeposits;
+  const globalAvailableCredit = globalCreditLimit - totalWithdrawnAmount;
+  
+  // VAT Reserve
+  const vatReserve = netVatPayable > 0 ? netVatPayable : 0;
+  
+  // What is left over (Unallocated or Pending)
+  const otherUnallocated = mainCompanyBalance - globalAvailableCredit - globalHeldBack - globalCompanyFee - vatReserve;
+
+  const toggleWhtStatus = async (bill) => {
+    const newWhtStatus = bill.whtStatus === 'CLAIMED' ? 'PENDING' : 'CLAIMED';
+    let newBillStatusText = bill.status || '';
+    
+    if (newWhtStatus === 'CLAIMED') {
+      if (!newBillStatusText.includes('[CLAIMED]')) {
+        newBillStatusText += ' [CLAIMED]';
+      }
+    } else {
+      newBillStatusText = newBillStatusText.replace(' [CLAIMED]', '');
+    }
+
+    const { error } = await supabase.from('billings').update({ status: newBillStatusText }).eq('id', bill.id);
+    if (!error) {
+      setBillings(billings.map(b => b.id === bill.id ? { ...b, status: newBillStatusText } : b));
+    } else {
+      alert('เกิดข้อผิดพลาด: ' + error.message);
+    }
+  };
 
   if (isLoading) return <div className="container" style={{padding: '40px', textAlign: 'center'}}>กำลังโหลดข้อมูลทางบัญชี...</div>;
 
@@ -135,17 +263,52 @@ export default function AccountingDashboard() {
         </div>
       </div>
 
-      {/* MAIN COMPANY BALANCE */}
-      <div style={{ background: 'linear-gradient(135deg, #0f172a, #1e293b)', padding: '24px', borderRadius: '16px', color: 'white', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: 'var(--shadow-md)', border: '1px solid var(--border)' }}>
-        <div>
-          <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', marginBottom: '8px' }}>ยอดเงินคงเหลือในบัญชีบริษัทหลัก (Main Company Balance)</div>
-          <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#10b981' }}>฿{formatMoney(mainCompanyBalance)}</div>
-          <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '8px' }}>
-            รายรับทั้งหมด: ฿{formatMoney(totalCompanyIncome)} | รายจ่ายโปรเจกต์ทั้งหมด: ฿{formatMoney(totalCompanyExpense)}
+      {/* MAIN COMPANY BALANCE & BREAKDOWN */}
+      <div style={{ background: 'var(--surface)', borderRadius: '16px', border: '1px solid var(--border)', marginBottom: '24px', overflow: 'hidden', boxShadow: 'var(--shadow-md)' }}>
+        <div style={{ background: 'linear-gradient(135deg, #0f172a, #1e293b)', padding: '24px', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px', marginBottom: '8px' }}>ยอดเงินคงเหลือในบัญชีบริษัทหลัก (Main Company Balance)</div>
+            <div style={{ fontSize: '36px', fontWeight: 'bold', color: '#10b981' }}>฿{formatMoney(mainCompanyBalance)}</div>
+            <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '8px' }}>
+              รายรับ: ฿{formatMoney(totalCompanyIncome)} | รายจ่ายรวม: ฿{formatMoney(totalCompanyExpense + totalBankPayroll + totalBankCorpExpenses)} | เงินโอนออก (เบิกส่วนตัว): ฿{formatMoney(realWithdrawals)}
+            </div>
+          </div>
+          <div>
+            <i className="fa-solid fa-wallet" style={{ fontSize: '48px', color: 'rgba(255,255,255,0.1)' }}></i>
           </div>
         </div>
-        <div>
-          <i className="fa-solid fa-wallet" style={{ fontSize: '48px', color: 'rgba(255,255,255,0.1)' }}></i>
+        
+        {/* Breakdown Items */}
+        <div style={{ padding: '20px', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', background: 'var(--background)' }}>
+          <div style={{ padding: '16px', background: 'white', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>เครดิตคงเหลือเบิกได้</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--primary)' }}>฿{formatMoney(globalAvailableCredit)}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>ยอดกำไรหลังหักเบิก (ส่วนตัว)</div>
+          </div>
+          
+          <div style={{ padding: '16px', background: 'white', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>ยอดรอเคลียร์รวม (5%)</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#f59e0b' }}>฿{formatMoney(globalHeldBack)}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>สะสมเพื่อรอตัดเข้าเครดิต</div>
+          </div>
+          
+          <div style={{ padding: '16px', background: 'white', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>หักเข้ากองกลางบริษัท (5%)</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#3b82f6' }}>฿{formatMoney(globalCompanyFee)}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>รายได้ของบริษัทหลัก</div>
+          </div>
+          
+          <div style={{ padding: '16px', background: 'white', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>กันสำรองจ่าย VAT</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#ef4444' }}>฿{formatMoney(vatReserve)}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>เตรียมนำส่งสรรพากร</div>
+          </div>
+          
+          <div style={{ padding: '16px', background: 'white', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>ยอดเงินคงค้างอื่นๆ</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#64748b' }}>฿{formatMoney(otherUnallocated)}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>รอรับหัก ณ ที่จ่าย หรือยังไม่จัดสรร</div>
+          </div>
         </div>
       </div>
 
@@ -168,7 +331,10 @@ export default function AccountingDashboard() {
           <div className="stat-value" style={{ fontSize: '18px', fontWeight: 'bold', color: netVatPayable > 0 ? '#f43f5e' : '#10b981', marginBottom: '0' }}>
             {netVatPayable > 0 ? 'นำส่ง: ' : 'ขอคืน: '} ฿{formatMoney(Math.abs(netVatPayable))}
           </div>
-          <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>ภาษีขาย - ภาษีซื้อ</div>
+          <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px', display: 'flex', justifyContent: 'space-between' }}>
+            <span>ภาษีขาย - ภาษีซื้อ</span>
+            {totalVatCleared > 0 && <span style={{ color: '#10b981', fontWeight: 600 }}>เคลียร์มาแล้ว: ฿{formatMoney(totalVatCleared)}</span>}
+          </div>
         </div>
 
         <div className="stat-card" style={{ background: 'var(--surface)', padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--border)', borderLeft: '4px solid #f59e0b', minWidth: '180px' }}>
@@ -318,9 +484,19 @@ export default function AccountingDashboard() {
                   <td style={{ textAlign: 'right' }}>฿{formatMoney(item.subTotal)}</td>
                   <td style={{ textAlign: 'right', fontWeight: 500, color: '#f59e0b' }}>฿{formatMoney(item.whtAmount)}</td>
                   <td style={{ textAlign: 'center' }}>
-                    <span style={{ padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' }}>
-                      รอเอกสารทวิ 50
-                    </span>
+                    {item.whtStatus === 'CLAIMED' ? (
+                      <button 
+                        onClick={() => toggleWhtStatus(item)}
+                        style={{ padding: '6px 12px', borderRadius: '20px', border: 'none', fontSize: '12px', fontWeight: 'bold', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', cursor: 'pointer', transition: 'all 0.2s', width: '100%' }}>
+                        <i className="fa-solid fa-check"></i> ได้รับเอกสารแล้ว
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={() => toggleWhtStatus(item)}
+                        style={{ padding: '6px 12px', borderRadius: '20px', border: 'none', fontSize: '12px', fontWeight: 'bold', background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', cursor: 'pointer', transition: 'all 0.2s', width: '100%' }}>
+                        รอเอกสารทวิ 50
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

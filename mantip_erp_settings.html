@@ -135,9 +135,20 @@
             border: 1px solid var(--border);
             border-radius: 8px;
             width: 300px;
+            max-width: 100%;
             outline: none;
             transition: border-color 0.2s;
             font-family: 'Prompt', sans-serif;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-main);
+            cursor: pointer;
+            margin-right: 15px;
         }
 
         .topbar-search input:focus {
@@ -484,10 +495,48 @@
             border-color: var(--primary);
         }
 
-        /* Responsive */
+        /* Responsive iPad / Tablet */
         @media (max-width: 1024px) {
             .charts-section, .data-section {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .topbar {
+                padding: 0 15px;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .topbar-search {
+                display: none; /* Hide search on small screens or make it a button */
+            }
+            .container {
+                padding: 15px;
+            }
+            .user-profile > div {
+                display: none; /* Hide name on mobile */
+            }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .btn-primary {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -529,8 +578,13 @@
     <main class="main-content">
         <!-- Topbar -->
         <header class="topbar">
-            <div class="topbar-search">
-                <input type="text" placeholder="ค้นหาเอกสาร, คู่ค้า...">
+            <div style="display: flex; align-items: center;">
+                <button class="mobile-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('active')">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="topbar-search">
+                    <input type="text" placeholder="ค้นหาเอกสาร, คู่ค้า...">
+                </div>
             </div>
             <div class="topbar-actions">
                 <button class="icon-btn">
